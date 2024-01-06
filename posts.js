@@ -1,8 +1,9 @@
-
-    let postPlace = document.querySelector('.mid-body');
-
-      console.log("hello\n");
-      
+$.ajax({
+  url: "http://localhost/MitraPark/server/api/get-posts.php",
+  type: "POST",
+  success: (x) => {
+    let postPlace = document.querySelector(".mid-body");
+    x.forEach((postItem) => {
       postPlace.innerHTML += `
   
       <div class="post-item">
@@ -12,29 +13,37 @@
           </div>
           <div class="post-item-head-right">
               <div class="post-user">
-                  <span>Alen Pariyar</span>
+                  <span>${postItem.user_first_name+" "+postItem.user_last_name}</span>
               </div>
               <div class="post-details">
-                  <span>Public</span>
+                  <span>${postItem.post_visibility}</span>
                   <span>|</span>
-                  <span>2023 Oct 10</span>
+                  <span>${postItem.published_date} | ${postItem.published_time}</span>
               </div>
           </div>
       </div>
       <div class="post-item-body">
-          <span>Hello World</span>
-          <img height="300px" src="./birthday.png" alt="" srcset="">
+          <span>${postItem.post_text}</span>
+          <img height="300px" src=".${postItem.media_url}" alt="" srcset="">
       </div>
       <div class="post-item-footer">
           <div class="like-container">
               <img height="20px" src="./heart-outline.svg">
-              <span>10K</span>
+              <span>${postItem.post_likes_count}</span>
           </div>
           <div class="comment-container">
               <img height="20px" src="./comment-outline.svg">
-              <span>1K</span>
+              <span>${postItem.post_comments_count}</span>
           </div>
       </div>
   </div>
 
 `;
+    });
+  },
+  error: () => {
+    console.log("error");
+  },
+});
+
+console.log("hello\n");

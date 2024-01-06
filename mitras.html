@@ -103,4 +103,22 @@
         </div>
     </div>
 </body>
+<script src="./assets/scripts/jquery.js"></script>
+<script>
+    $.ajax({
+        url:'./server/api/get-posts.php',
+        type: "POST",
+        success: function(x)
+            {
+                console.log("success " + x);
+            },
+            error : function(x)
+            {
+                console.log("fail");
+                console.log(x);
+            }
+        
+    }
+    )
+</script>
 </html>
