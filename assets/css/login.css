@@ -1,0 +1,94 @@
+*{
+    font-family: poppins;
+}
+
+body{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: space-around;
+    margin: 0px;
+}
+
+.left, .right{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0px;
+    padding: 0px;
+    width: 50%;
+}
+
+.right{
+    background-color: #E4E4E4;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+#logo
+{
+    height: 50vh;
+}
+
+.inp-fields{
+    height: 40px;
+    width: 50%;
+    margin: 5px;
+    border-radius: 12px;
+    border: none;
+    outline: 0px solid rgba(39, 158, 255, 0.313);
+    padding-left: 20px;
+    transition: 0.5s;
+    font-size: large;
+}
+
+.inp-fields:focus{
+    outline: 2px solid rgba(39, 158, 255, 0.368);
+}
+
+a{
+    text-decoration: none;
+}
+
+.btn{
+    padding: 5px 40px 5px 40px;
+    background-color: #6c757d;
+    border-radius: 20px;
+    color: black;
+    font-size: large;
+    cursor: pointer;
+    color: white;
+}
+
+form
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-btn{
+    margin: 20px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+}
+
+
+#underline
+{
+    background-color: rgb(123, 123, 123);
+    padding: 0.8px;
+    width: 250px;
+    margin: 20px;
+}
+
+.page-title
+{
+    font-size: xx-large;
+    margin-bottom: 20px;
+}
