@@ -54,7 +54,53 @@ $mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['logo'];
     let passwordField = document.getElementById("password");
     let submitBtn =document.getElementById("submit");
 
-    
+    // Rule for Email Field
+    let emailRule = /^[a-z0-9._-]+@[a-z0-9]+\.[a-z0-9]{2,4}$/;
+
+    let allowEmail = false;
+    let allowPassword = false;
+
+    submitBtn.disabled = true;
+    submitBtn.style.cursor = "not-allowed";
+    submitBtn.style.backgroundColor = "#6c757d";
+
+
+    // Controls submit button by validating email and password field
+    function controlSubmit()
+    {
+        if(allowEmail == true && allowPassword == true)
+        {
+            submitBtn.disabled = false;
+            submitBtn.style.cursor = "pointer";
+            submitBtn.style.backgroundColor = "#28a745";
+        }else{
+            submitBtn.disabled = true;
+            submitBtn.style.cursor = "not-allowed";
+            submitBtn.style.backgroundColor = "#6c757d";
+        }
+    }
+
+    emailField.addEventListener("keyup",()=>{
+        if(emailRule.test(emailField.value))
+        {
+            allowEmail = true;
+        }else{
+            allowEmail = false;
+        }
+
+        controlSubmit();
+    });
+
+
+    passwordField.addEventListener("keyup",()=>{
+        if(passwordField.value.length >= 8 && passwordField.value.length <=16 )
+        {
+            allowPassword = true;
+        }else{
+            allowPassword = false;
+        }
+        controlSubmit();
+    });
 </script>
 
 </html>
