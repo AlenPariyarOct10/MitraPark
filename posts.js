@@ -1,58 +1,40 @@
-let posts = new XMLHttpRequest();
-posts.open('POST',"./server/get-posts-api.php",true);
-posts.send();
 
-posts.onreadystatechange = function()
-{
-  if (this.readyState == 4 && this.status == 200) {
-    let postsResponse = JSON.parse(this.responseText);
     let postPlace = document.querySelector('.mid-body');
-    postsResponse.forEach((post)=>{
+
+      console.log("hello\n");
       
       postPlace.innerHTML += `
   
       <div class="post-item">
       <div class="post-item-head">
           <div class="post-item-head-left">
-              <img class="profile-picture-holder" src="/MitraPark/${
-                imageResponse[0]["media_url"]
-              }" alt="" srcset="">
+              <img class="profile-picture-holder" src="/MitraPark/alen-profile.jpg" alt="" srcset="">
           </div>
           <div class="post-item-head-right">
               <div class="post-user">
-                  <span>${
-                    userInfo["user_first_name"] +
-                    " " +
-                    userInfo["user_mid_name"] +
-                    " " +
-                    userInfo["user_last_name"]
-                  }</span>
+                  <span>Alen Pariyar</span>
               </div>
               <div class="post-details">
-                  <span>${post["post_visibility"]}</span>
+                  <span>Public</span>
                   <span>|</span>
-                  <span>${post["published_time"]}</span>
+                  <span>2023 Oct 10</span>
               </div>
           </div>
       </div>
       <div class="post-item-body">
-          <span>${post["post_text"]}</span>
+          <span>Hello World</span>
           <img height="300px" src="./birthday.png" alt="" srcset="">
       </div>
       <div class="post-item-footer">
           <div class="like-container">
               <img height="20px" src="./heart-outline.svg">
-              <span>${post["post_likes_count"]}</span>
+              <span>10K</span>
           </div>
           <div class="comment-container">
               <img height="20px" src="./comment-outline.svg">
-              <span>${post["post_comments_count"]}</span>
+              <span>1K</span>
           </div>
       </div>
   </div>
 
 `;
-    })
-  }
- 
-}
