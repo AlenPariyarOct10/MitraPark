@@ -1,11 +1,21 @@
 <?php
 
 include_once("./server/db_connection.php");
+include_once("./server/validation.php");
+include_once("./server/functions.php");
 
-$aboutSite = $connection->query("SELECT * FROM `about_system`");
+$aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
-$mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['logo'];
+
+$mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['system_logo'];
+
+if(isset($_POST['email']) && isset($_POST['password']))
+{
+    $email = htmlspecialchars($_POST['email']);
+    $psw = htmlspecialchars($_POST['password']);
+    loginUser($email, $psw);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +24,7 @@ $mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['logo'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login -
-        <?php echo $aboutSite['name']; ?>
+        <?php echo $aboutSite['system_name']; ?>
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,15 +40,24 @@ $mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['logo'];
     <div class="left">
         <img id="logo" src="<?php echo $mainLogo; ?>" alt="mitrapark-logo">
         <h1>
-            <?php echo $aboutSite['name']; ?>
+            <?php echo $aboutSite['system_name']; ?>
         </h1>
-        <span>
-            <?php echo $aboutSite['description']; ?>
+        <span id="description">
+            <?php echo $aboutSite['system_description']; ?>
         </span>
     </div>
     <div class="right">
+    <?php    
+    if(isset($_GET['1'])){echo '
+    <div class="signup-success">Account created Successfully. Please Login to continue.</div>
+        ';}
+    if(isset($_GET['loginFirst'])){
+        echo '<div class="signup-success">Please Login to continue.</div>';
+    }
+
+    ?>
         <span class="page-title">Login</span>
-        <form action="get_login.php" method="post">
+        <form action="login.php" method="post">
             <input placeholder="Email" class="inp-fields" type="email" name="email" id="email">
             <input placeholder="Password" class="inp-fields" type="password" name="password" id="password">
             <button type="submit" id="submit" class="btn login-btn">Login</button>
@@ -46,7 +65,8 @@ $mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['logo'];
         
         <a href="">Forgot Password</a>
         <div id="underline"></div>
-        <a class="btn" href="">Create a account</a>
+        <a class="btn" href="signup.php">Create a account</a>
+       
     </div>
 </body>
 <script>

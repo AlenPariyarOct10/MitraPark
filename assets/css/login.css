@@ -35,7 +35,7 @@ body{
 
 .inp-fields{
     height: 40px;
-    width: 50%;
+    width: 80%;
     margin: 5px;
     border-radius: 12px;
     border: none;
@@ -72,12 +72,11 @@ form
 }
 
 .login-btn{
-    margin: 20px;
+    /* margin: 5px; */
     border: none;
     background-color: #28a745;
     color: white;
 }
-
 
 #underline
 {
@@ -91,4 +90,82 @@ form
 {
     font-size: xx-large;
     margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    body {
+        height: 120vh;
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        margin: 0px;
+        flex-direction: column;
+        background-color: #E4E4E4;
+    }
+
+    #logo
+    {
+        margin-top: 35px;
+        height: 20vh;
+    }
+
+    .left, .right{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+    }
+
+    .left{
+        height: 30vh;
+        background-color: #E4E4E4;
+    }
+
+    .right{
+        height: 90vh;
+    }
+
+    #description{
+        display: none;
+    }
+    
+    .page-title{
+        margin-bottom: 0px;
+    }
+    .inp-fields{
+        width: 80%;
+    }
+  }
+
+  .single-line{
+    display: flex;
+    width: 85%;
+  }
+
+.fa-circle-xmark{
+    color: #c82333;
+}
+
+.fa-circle-check{
+    color: #28a745;
+}
+
+p{
+    margin: 0px;
+    padding: 0px;
+}
+
+#verification-status{
+    margin-top: 10px;
+}
+
+.signup-success{
+    font-size: small;
+    background-color: rgba(34, 255, 0, 0.45);
+    padding: 8px;
+    border-radius: 10px;
+    color: rgba(0, 0, 0, 0.797);
 }

@@ -1,24 +1,51 @@
 <?php
-
     include_once("db_connection.php");
-
-    $params = json_decode(file_get_contents("php://input"),true);
-
-    $uid = $params['uid'];
-    $mediaType = $params['mediaType'];
-
-    $selectMediaQuery = "SELECT * FROM `mp_media` WHERE `author_id`='$uid' AND `media_type`='$mediaType'";
-    
-    if($mediaType == "profile")
+    function createUser($fname, $lname, $email, $phone, $password)
     {
-        $image = $connection->query($selectMediaQuery);
-        $image = $image->fetch_all(MYSQLI_ASSOC);
-        print_r(json_encode($image));
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $currentDateTime = date("Y-m-d h:i:s");
+        $insertQuery = "INSERT INTO `users`(`fname`, `lname`, `phone`, `email`, `password`, `createdDateTime`) VALUES 
+        ('$fname','$lname','$phone','$email','$hashedPassword','$currentDateTime')";
+        $GLOBALS['connection']->query($insertQuery);
+
+        if($GLOBALS['connection']->affected_rows >0)
+        {
+            if(!isset($_SESSION)){session_start();}
+            $_SESSION['userCreated'] = true;
+            header('Location: login.php?1');
+        }
     }
-    
+
+    function searchUser($email, $password)
+    {
+        $hasEmail = "select * from users where `email`='$email'";
+        $hasEmail = $GLOBALS['connection']->query($hasEmail);
+        if($GLOBALS['connection']->affected_rows == 0)
+        {
+            echo "fail";
+            return false;
+        }else{
+            
+            $getPassword = mysqli_fetch_array($hasEmail);   
+            return password_verify($password, $getPassword['password']);
 
 
+        }
+    }
 
+    function loginUser($email, $password)
+    {
+       if(searchUser($email, $password)==false)
+       {
+            if(!isset($_SESSION)){session_start();}
+            $_SESSION['userNotFound'] = true;
+            $_SESSION['loggedIn'] = false;
+       }else{
+            if(!isset($_SESSION)){session_start();}
+            $_SESSION['loggedIn'] = true;
+            header("Location: feed.php");
+       }
+    }
 
 
 ?>
