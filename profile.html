@@ -1,115 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="assets/css/mitras-style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./assets/css/profile.css" />
-    <title>Profile -</title>
-  </head>
-  <body>
-    <div class="navbar">
-      <div class="left-nav-part">MitraPark</div>
-      <div class="center-nav-part">
-        <i class="fa-solid fa-house"></i>
-        <i class="fa-regular fa-message"></i>
-        <i class="fa-solid fa-user-group active-tab"></i>
-      </div>
-      <div class="right-nav-part">
-        <img class="profile-picture-holder" src="alen-profile.jpg" />
-      </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/css/mitras-style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/css/profile.css" />
+
+  <title>Profile -</title>
+</head>
+
+<body>
+  <div class="navbar">
+    <div class="left-nav-part">MitraPark</div>
+    <div class="center-nav-part">
+      <i class="fa-solid fa-house"></i>
+      <i class="fa-regular fa-message"></i>
+      <i class="fa-solid fa-user-group active-tab"></i>
     </div>
-    <div class="body">
-      <div class="left-nav">
-        <div class="left-top">
-          <div class="left-inner-heading">
-            <span class="dim-label"> Suggested Mitras </span>
-            <hr class="label-underline" />
-          </div>
-          <div class="left-inner-body">
-            <div class="mitra-request-list-item" id="request-1">
-              <a class="redirect-to-profile" href="#profile-link">
-                <img class="mitra-request-profile-list" src="anjali.jpg" />
-                <span class="uname"> Anjali Thapa </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="left-bottom">
-          <div class="left-inner-heading">
-            <span class="dim-label"> Online Mitras </span>
-            <hr class="label-underline" />
-          </div>
-          <div class="left-inner-body">
-            <div class="mitra-request-list-item" id="request-1">
-              <a class="redirect-to-profile" href="#profile-link">
-                <img class="mitra-request-profile-list" src="kpoli.jpg" />
-                <span class="uname"> KP Oli </span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mid-body">
-        <div class="left-inner-body inner-mid-body">
-    
-            <div id="profile-img-holder" class="image-holder">
-              <img src="./alen-profile.jpg" class="profile-img" />
-              <div id="overlay-button">
-                Change
-              </div>
-            </div>
-          
-          <span class="name-placeholder">Alen Pariyar</span>
-          <span class="dim-label">
-            `A curious guy who experiments with ${code}.`
-          </span>
+    <div class="right-nav-part">
+      <img class="profile-picture-holder" src="alen-profile.jpg" />
+    </div>
+  </div>
+  <div class="body">
+    <div class="left-nav">
+      <div class="left-top">
+        <div class="left-inner-heading">
+          <span class="dim-label"> Suggested Mitras </span>
           <hr class="label-underline" />
-          <span class="dim-label"> Add Permanent Address </span>
-          <span class="dim-label"> Add Temporary Address </span>
-          <span class="dim-label"> Add Educational Institution </span>
-          <span class="dim-label"> Select Gender </span>
+        </div>
+        <div class="left-inner-body">
+          <div class="mitra-request-list-item" id="request-1">
+            <a class="redirect-to-profile" href="#profile-link">
+              <img class="mitra-request-profile-list" src="anjali.jpg" />
+              <span class="uname"> Anjali Thapa </span>
+            </a>
+          </div>
         </div>
       </div>
-      <div class="right-nav">
-        <a class="right-nav-item" id="my-profile" href="#my-profile">
-          <img class="right-nav-item-img" src="alen-profile.jpg" />
-          <span>My Profile</span>
-        </a>
-        <hr />
-        <a class="right-nav-item" href="#setting">
-          <img class="right-nav-item-img" src="settings.png" />
-          <span>Setting</span>
-        </a>
+      <div class="left-bottom">
+        <div class="left-inner-heading">
+          <span class="dim-label"> Online Mitras </span>
+          <hr class="label-underline" />
+        </div>
+        <div class="left-inner-body">
+          <div class="mitra-request-list-item" id="request-1">
+            <a class="redirect-to-profile" href="#profile-link">
+              <img class="mitra-request-profile-list" src="kpoli.jpg" />
+              <span class="uname"> KP Oli </span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-  </body>
-  <script src="./assets/scripts/jquery.js"></script>
-  <script>
-    $.ajax({
-      url: "./server/api/get-posts.php",
-      type: "POST",
-      success: function (x) {
-        console.log("success " + x);
-      },
-      error: function (x) {
-        console.log("fail");
-        console.log(x);
-      },
-    });
-  </script>
+    <div class="mid-body">
+
+      <div class="left-inner-body inner-mid-body">
+        
+        <label for="profileUpload">
+        <div id="profile-img-holder" class="image-holder">
+          <img src="./alen-profile.jpg" id="profile-img" class="profile-img" />
+          <div id="overlay-button">
+            Change
+          </div>
+        </div>
+        <input style="display: none;" type="file" name="profileUpload" id="profileUpload">
+      </label>
+
+        <span class="name-placeholder">Alen Pariyar</span>
+        <span class="dim-label">
+          `A curious guy who experiments with ${code}.`
+        </span>
+        <hr class="label-underline" />
+        <span class="dim-label"> Add Permanent Address </span>
+        <span class="dim-label"> Add Temporary Address </span>
+        <span class="dim-label"> Add Educational Institution </span>
+        <span class="dim-label"> Select Gender </span>
+      </div>
+    </div>
+    <div class="right-nav">
+      <a class="right-nav-item" id="my-profile" href="#my-profile">
+        <img class="right-nav-item-img" src="alen-profile.jpg" />
+        <span>My Profile</span>
+      </a>
+      <hr />
+      <a class="right-nav-item" href="#setting">
+        <img class="right-nav-item-img" src="./assets/images/settings.png" />
+        <span>Setting</span>
+      </a>
+    </div>
+  </div>
+</body>
+<script src="./assets/scripts/jquery.js"></script>
+<script>
+
+  let profileImg = document.getElementById("profile-img");
+  let changeBtn = document.getElementById("overlay-button");
+  changeBtn.style.opacity = 0;
+  document.getElementById('profile-img-holder').addEventListener("mouseenter", (() => {
+    profileImg.style.opacity = 0.5;
+    changeBtn.style.opacity = 1;
+    document.body.style.cursor = "pointer";
+
+  }));
+  document.getElementById('profile-img-holder').addEventListener("mouseleave", (() => {
+    profileImg.style.opacity = 1;
+    changeBtn.style.opacity = 0;
+    document.body.style.cursor = "default";
+  }));
+
+  document.getElementById('profile-img-holder').addEventListener("click", () => {
+    let formData = new FormData();
+    let profileImg = $("#profileUpload")[0].files[0];
+
+    if (profileImg) {
+      formData.append('file', profileImg);
+
+      $.ajax({
+        url: 'testFile.php',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          let success = '<div class="label-success">Profile updated successfully.</div>';
+          let profileDiv = document.querySelectorAll('.inner-mid-body')[0];
+          profileDiv.innerHTML = success + profileDiv.innerHTML;
+        },
+        error: function (xhr, status, error) {
+          let failure = '<div class="label-failure">Unable to update profile.</div>';
+          let profileDiv = document.querySelectorAll('.inner-mid-body')[0];
+          profileDiv.innerHTML = failure + profileDiv.innerHTML;
+        }
+      });
+    } else {
+      console.error("No file selected.");
+    }
+  });
+
+
+</script>
+
 </html>

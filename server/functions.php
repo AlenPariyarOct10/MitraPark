@@ -25,11 +25,8 @@
             echo "fail";
             return false;
         }else{
-            
             $getPassword = mysqli_fetch_array($hasEmail);   
             return password_verify($password, $getPassword['password']);
-
-
         }
     }
 
@@ -43,6 +40,10 @@
        }else{
             if(!isset($_SESSION)){session_start();}
             $_SESSION['loggedIn'] = true;
+            $getUserData = "select * from users where `email`='$email'";
+            $getUserData = $GLOBALS['connection']->query($getUserData);
+            $getUserData = mysqli_fetch_assoc($getUserData);
+            $_SESSION['user'] = $getUserData;
             header("Location: feed.php");
        }
     }

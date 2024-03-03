@@ -12,13 +12,35 @@
 
 .name-placeholder{
     font-size: x-large;
-    position:relative;
 }
 
-#profile-img-holder:hover #overlay-button{
-    background-color: rebeccapurple;
+#profile-img-holder
+{
+    position: relative;
+}
+
+
+#overlay-button{
+    font-size: large;
+    font-weight: bold;
+    opacity: 0;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    
+    top: 45%;
+    left: 30%;
+}
+
+
+.label-success{
+    font-size: small;
+    background-color: rgba(34, 255, 0, 0.45);
+    padding: 8px;
+    border-radius: 10px;
+    color: rgba(0, 0, 0, 0.797);
+}
+.label-failure{
+    font-size: small;
+    background-color: rgba(255, 0, 0, 0.45);
+    padding: 8px;
+    border-radius: 10px;
+    color: rgba(0, 0, 0, 0.797);
 }

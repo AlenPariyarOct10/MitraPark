@@ -1,18 +1,18 @@
 <?php
-    include_once("../db_connection.php");
-    include_once("../headers.php");
-    
+    include_once("../../server/db_connection.php");
 
     $query = "
     SELECT 
-        post.published_date, post.post_text, post.post_likes_count, 
-        post.post_comments_count, post.post_visibility, post.published_time, 
-        media.media_url, user.user_active_status, 
-        user.user_first_name, user.user_mid_name, user.user_last_name
-    FROM mp_posts post
-    INNER JOIN mp_media media ON post.post_id = media.post_id
-    INNER JOIN mp_users user ON post.post_author = user.user_id
-";
+        posts.post_id, posts.author_id, posts.content, posts.visibility, posts.created_date_time, posts.media, 
+        users.uid, users.fname, users.lname, users.profile_picture
+    FROM 
+        posts
+    INNER JOIN 
+        users ON posts.author_id = users.uid
+    ORDER BY 
+        posts.created_date_time DESC
+    ";
+    
     $result = mysqli_query($connection,$query);
     $allPosts = Array();
     

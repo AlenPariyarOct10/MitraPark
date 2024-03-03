@@ -4,6 +4,10 @@
     font-family: 'Poppins';
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+  }
+
 .navbar{
     display: flex;
     justify-content: space-between;
@@ -23,6 +27,10 @@
     align-items: center;
     justify-content: space-around;
     font-size: larger;
+}
+
+.center-nav-part i:hover{
+    cursor: pointer;
 }
 
 .profile-picture-holder
@@ -58,9 +66,9 @@
 {
     width: calc(100%/3);
     height: 100vh;
-    /* overflow-y:scroll; */
-    /* overflow-x:auto; */
+    overflow-y:scroll;
     scroll-behavior: smooth;
+    padding: 20px;
 }
 .right-nav{
     width: calc(100%/4);
@@ -157,9 +165,16 @@ a{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-left: 40px;
-    margin-right: 40px;
-    width: 80%;
+   
+}
+
+.post-bottom-element{
+    width: 100%;
+    text-align: center;
+}
+
+.post-bottom-element:hover{
+    background-color: #b4b4b489;
 }
 
 #reach-select
@@ -223,6 +238,7 @@ a{
 
 .post-item-footer
 {
+    padding: 10px;
     display: flex;
     justify-content: space-around;
 }
@@ -239,4 +255,12 @@ a{
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+.label-success{
+    font-size: small;
+    background-color: rgba(34, 255, 0, 0.45);
+    padding: 8px;
+    border-radius: 10px;
+    color: rgba(0, 0, 0, 0.797);
 }
