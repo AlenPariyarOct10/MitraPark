@@ -7,6 +7,7 @@ if (isset($_POST)) {
     include_once("../db_connection.php");
     var_dump($_POST);
     var_dump($_SESSION['user']['uid']);
+    $uid=$_SESSION['user']['uid'];
 
     $selectAll = "SELECT * FROM likes WHERE post_id='{$_POST['postId']}'";
 
@@ -17,7 +18,8 @@ if (isset($_POST)) {
         $insertLike = "INSERT INTO `likes`(`post_id`, `liked_by`, `created_date_time`) VALUES ('{$_POST['postId']}','{$_SESSION['user']['uid']}',now())";
         $connection->query($insertLike);
     }else{
-        $deleteLike = 'DELETE FROM `likes` WHERE 0=';
+        $deleteLike = 'DELETE FROM `likes` WHERE `liked_by`=$uid';
+        $connection->query($deleteLike);
     }
     var_dump(mysqli_fetch_array($result));
     

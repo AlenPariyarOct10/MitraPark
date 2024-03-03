@@ -27,9 +27,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link rel='stylesheet' href='style.css'>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css'
-        integrity='sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=='
-        crossorigin='anonymous' referrerpolicy='no-referrer' />
+    <link rel="stylesheet" href="./assets/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/fontawesome.css">
     <link rel='preconnect' href='https://fonts.googleapis.com'>
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
     <link
@@ -48,9 +47,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             <?php echo $aboutSite['system_name']; ?>
         </div>
         <div class='center-nav-part'>
-            <i class='fa-solid fa-house active-tab'></i>
-            <i class='fa-regular fa-message'></i>
-            <i class='fa-solid fa-user-group'></i>
+            <a href="feed.php"><i class='fa-solid fa-house active-tab'></i></a>
+            <a href="kurakani.html"><i class='fa-regular fa-message'></i></a>
+            <a href="mitras.html"><i class='fa-solid fa-user-group'></i></a>
         </div>
         <div class='right-nav-part'>
             <img class='profile-picture-holder' src='alen-profile.jpg'>

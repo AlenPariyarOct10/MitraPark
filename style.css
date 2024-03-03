@@ -264,3 +264,7 @@ a{
     border-radius: 10px;
     color: rgba(0, 0, 0, 0.797);
 }
+
+.like-count{
+    padding: 5px;
+}

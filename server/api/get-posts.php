@@ -4,11 +4,13 @@
     $query = "
     SELECT 
         posts.post_id, posts.author_id, posts.content, posts.visibility, posts.created_date_time, posts.media, 
-        users.uid, users.fname, users.lname, users.profile_picture
+        users.uid, users.fname, users.lname, users.profile_picture, likes.liked_by as liked
     FROM 
         posts
     INNER JOIN 
         users ON posts.author_id = users.uid
+    LEFT JOIN 
+        likes ON posts.post_id = likes.post_id
     ORDER BY 
         posts.created_date_time DESC
     ";
@@ -21,6 +23,7 @@
         array_push($allPosts, $row);
     }
     print_r(json_encode($allPosts));
+
     
 
 

@@ -1,10 +1,16 @@
+body{
+    height: 100vh;
+}
 .mid-body
 {
+    height: 98vh;
     border: 1px solid black;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
+    margin: 0px;
+    padding: 5px;
 }
 
 
@@ -12,7 +18,11 @@
 {
     display: flex;
     flex-direction: column;
+    /* justify-content: flex-end; */
     width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 .message-container
@@ -36,7 +46,7 @@
 {
     background-color: black;
     color: white;
-    padding: 10px;
+    padding: 5px;
     border-radius: 50px 50px 50px 0px;
 }
 
@@ -44,8 +54,53 @@
 {
     background-color: rgb(194, 194, 194);
     color: rgb(0, 0, 0);
-    padding: 10px;
+    padding: 5px;
     border-radius: 50px 50px 0px 50px;
 }
+
+.message-field{
+    border: 1px solid rgb(59, 59, 59);
+    width: 90%;
+   padding: 10px;
+   border-radius: 10px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+#sendBtn{
+    cursor: pointer;
+    color: rgb(108, 108, 108);
+}
+#sendBtn:hover{
+    cursor: pointer;
+    color: rgb(41, 116, 255);
+}
+
+#message-text{
+    height: 100%;
+    border: none;
+    width: 100%;
+}
+#message-text:active{
+    border: none;
+    outline: none;
+}
+#message-text:focus{
+    border: none;
+    outline: none;
+}
+
+.message-head{
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid black;
+    border-radius: 20px;
+    background-color: rgb(230, 230, 230);
+}
+.redirect-to-profile{
+    display: flex;
+}
+
 
 

@@ -4,6 +4,7 @@ async function fetchPosts() {
         url: "./server/api/get-posts.php",
         type: "POST",
         success: (data) => {
+          console.log(JSON.parse(data));
           resolve(JSON.parse(data));
         },
         error: (error) => {
@@ -69,7 +70,7 @@ async function fetchPosts() {
             </div>
             <div class="post-item-footer">
               <div data-id=${postItem.post_id} class="like-container">
-                <img height="20px" src="./assets/images/heart-outline.svg">
+                <img height="20px" src=${(postItem.liked!=null)?"./assets/images/heart-solid.svg":"./assets/images/heart-outline.svg"}>
                 <span></span>
               </div>
               <div class="comment-container">
