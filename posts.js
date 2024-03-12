@@ -13,6 +13,7 @@ async function fetchPosts() {
       });
     });
   }
+  
 
     function likeHandeler() {
     console.log("hello");
@@ -23,7 +24,14 @@ async function fetchPosts() {
             console.log(item.dataset.id);
             console.log(item.childNodes[1].src);
             let id = item.dataset.id;
-            item.childNodes[1].src = '/MitraPark/assets/images/heart-solid.svg';
+            let src = item.childNodes[1].src;
+  
+            if(src.includes("assets/images/heart-solid.svg"))
+            {
+              item.childNodes[1].src = "./assets/images/heart-outline.svg";
+            }else{
+              item.childNodes[1].src = "./assets/images/heart-solid.svg";
+            }
 
             $.ajax({
                 url: "./server/api/addLike.php",
@@ -71,7 +79,7 @@ async function fetchPosts() {
             <div class="post-item-footer">
               <div data-id=${postItem.post_id} class="like-container">
                 <img height="20px" src=${(postItem.liked!=null)?"./assets/images/heart-solid.svg":"./assets/images/heart-outline.svg"}>
-                <span></span>
+                <span class="like-count">0</span>
               </div>
               <div class="comment-container">
                 <img height="20px" src="./assets/images/comment-outline.svg">
@@ -87,7 +95,6 @@ async function fetchPosts() {
     }
   }
   
-  // Call the renderPosts function to fetch and render posts asynchronously
   renderPosts().then(() => {
     likeHandeler();
 }).catch(error => {

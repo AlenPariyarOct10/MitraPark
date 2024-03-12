@@ -1,30 +1,31 @@
 <?php
-if (isset($_POST)) {
-    include_once("../db_connection.php");
-    if (!isset($_SESSION)) {
-        session_start();
+session_start();
+include_once("../db_connection.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_SESSION['user']['uid'])) {
+        $uid = $_SESSION['user']['uid'];
+        $postId = $_POST['postId'];
+
+        $selectAll = "SELECT * FROM likes WHERE post_id = ?";
+        $stmt = $connection->prepare($selectAll);
+        $stmt->bind_param("i", $postId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows == 0) {
+            $insertLike = "INSERT INTO `likes`(`post_id`, `liked_by`, `created_date_time`) VALUES (?, ?, now())";
+            $stmt = $connection->prepare($insertLike);
+            $stmt->bind_param("ii", $postId, $uid);
+            $stmt->execute();
+        } else {
+            $deleteLike = 'DELETE FROM `likes` WHERE `liked_by` = ? AND `post_id` = ?';
+            $stmt = $connection->prepare($deleteLike);
+            $stmt->bind_param("ii", $uid, $postId);
+            $stmt->execute();
+        }
+    } else {
+        echo "User not logged in.";
     }
-    include_once("../db_connection.php");
-    var_dump($_POST);
-    var_dump($_SESSION['user']['uid']);
-    $uid=$_SESSION['user']['uid'];
-
-    $selectAll = "SELECT * FROM likes WHERE post_id='{$_POST['postId']}'";
-
-    $result = $connection->query($selectAll);
-
-    if(mysqli_affected_rows($connection)==0)
-    {
-        $insertLike = "INSERT INTO `likes`(`post_id`, `liked_by`, `created_date_time`) VALUES ('{$_POST['postId']}','{$_SESSION['user']['uid']}',now())";
-        $connection->query($insertLike);
-    }else{
-        $deleteLike = 'DELETE FROM `likes` WHERE `liked_by`=$uid';
-        $connection->query($deleteLike);
-    }
-    var_dump(mysqli_fetch_array($result));
-    
-    
-   
-
 }
 ?>

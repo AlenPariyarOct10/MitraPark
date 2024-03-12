@@ -48,7 +48,6 @@ if (isset($_POST)) {
         $filePath = $_GLOBALS['fileName'];
         $insertPostQuery = "INSERT INTO `posts`(`content`, `author_id`, `created_date_time`, `media`, `visibility`) VALUES ('$text','$uid',now(),'$filePath','$visibility')";
         $connection->query($insertPostQuery);
-
         header("Location: ../../feed.php");
         
     } else {
