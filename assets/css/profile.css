@@ -44,3 +44,105 @@
     border-radius: 10px;
     color: rgba(0, 0, 0, 0.797);
 }
+
+ /* The Modal (background) */
+ .modal {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  } 
+
+  .profile-img-holder{
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  .profile-img-holder label{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+  }
+
+  .profile-img-holder  label:hover{
+    background-color: #bdbdbd;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+
+  .form-datas{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .inner-form-element{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inner-form-element label{
+    font-size: small;
+  }
+
+
+
+.form-innner-row{
+    width: 100%;
+    margin: 10px;
+}
+
+.inner-form-element input, .inner-form-element select{
+    padding: 6px;
+}
+
+#profile-form-submit{
+    padding: 10px 30px;
+    border: none;
+    background-color: #3bd45f;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#profile-form-submit:hover{
+    background-color: #46f16e;
+}
+
+.length-validate{
+  color: #888;
+
+
+}

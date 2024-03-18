@@ -1,5 +1,17 @@
+<?php
+
+include_once('./parts/entryCheck.php');
+include_once('./server/db_connection.php');
+include_once('./server/validation.php');
+include_once('./server/functions.php');
+
+$aboutSite = $connection->query('SELECT * FROM `system_data`');
+$aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
+    
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,24 +19,14 @@
     <link rel="stylesheet" href="assets/css/mitras-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">      
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
     <title>Kurakani Station</title>
 </head>
+
 <body>
-    <div class="navbar">
-        <div class="left-nav-part">
-            MitraPark
-        </div>
-        <div class="center-nav-part">
-            <i class="fa-solid fa-house"></i>
-            <i class="fa-regular fa-message"></i>
-            <i class="fa-solid fa-user-group active-tab"></i>
-        </div>
-        <div class="right-nav-part">
-            <img class="profile-picture-holder" src="alen-profile.jpg">
-        </div>
-    </div>
+    <?php include_once("./parts/navbar.php") ?>
     <div class="body">
         <div class="left-nav">
             <div class="left-top">
@@ -65,11 +67,19 @@
             </div>
         </div>
         <div class="mid-body">
+            <div class="search-field">
+                <input placeholder="Search" type="text" id="search-field-inp">
+                <i class="fas fa-search"></i>
+            </div>
+            <div id="searchResult" class="left-inner-body" style="width: 100%; text-align:center;">
+                
+            </div>
+            <hr>
             <span class="dim-label">
                 Your mitras
             </span>
             <hr>
-            <div class="left-inner-body">
+            <!-- <div class="left-inner-body">
                 <div class="mitra-request-list-item" id="request-1">
                     <a class="redirect-to-profile" href="#profile-link">
                         <img class="mitra-request-profile-list" src="anjali.jpg">
@@ -88,37 +98,55 @@
                         </span>
                     </a>
                 </div>
-            </div>
+            </div> -->
         </div>
-        <div class="right-nav">
-            <a class="right-nav-item" id="my-profile" href="#my-profile">
-                <img class="right-nav-item-img" src="alen-profile.jpg">
-                <span>My Profile</span>
-            </a>
-            <hr>
-            <a class="right-nav-item" href="#setting">
-                <img class="right-nav-item-img" src="settings.png">
-                <span>Setting</span>
-            </a>
-        </div>
+        <?php
+        include_once("./parts/rightSidebar.php")
+        ?>
     </div>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
 <script>
-    $.ajax({
-        url:'./server/api/get-posts.php',
-        type: "POST",
-        success: function(x)
-            {
-                console.log("success " + x);
-            },
-            error : function(x)
-            {
-                console.log("fail");
-                console.log(x);
-            }
+    let searchBox = document.getElementById("search-field-inp");
+
+    searchBox.addEventListener("keyup", (() => {
         
-    }
-    )
+        $.ajax({
+        url: './server/api/getUsers.php',
+        type: "POST",
+        data: {search: searchBox.value},
+        success: function(items) {
+            let itemsArr = JSON.parse(items);
+            let searchResultShow =document.getElementById("searchResult");
+            console.log(JSON.parse(items));
+            if(itemsArr.length==0)
+            {
+                searchResultShow.innerHTML = '<span style="text-align: center;" cl ass="uname">  No result found </span>';
+            }else{
+                searchResultShow.innerHTML = "";
+                itemsArr.map((profile)=>(
+                    
+                    searchResultShow.innerHTML += `
+                    <div class="mitra-request-list-item" id="request-1">
+                    <a class="redirect-to-profile" href="#profile-link">
+                        <img class="mitra-request-profile-list" src="${(profile.profile_picture!=null)?profile.profile_picture:"./assets/images/user.png"}">
+                        <span class="uname">
+                            ${profile.name}
+                        </span>
+                    </a>
+                </div>
+                    `
+                ));
+            }
+        },
+        error: function(x) {
+            console.log("fail");
+            console.log(x);
+        }
+
+    })
+    }));
+    
 </script>
+
 </html>

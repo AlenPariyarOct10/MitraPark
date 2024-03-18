@@ -96,8 +96,7 @@
     align-items: center;
 }
 .mitra-request-control-btn{
-   border: 1px solid black;
-   
+    background-color: #d8d8d8;
    padding:4px 15px 4px 15px;
    border-radius: 20px;
     display: flex;
@@ -107,7 +106,7 @@
 }
 
 .mitra-request-control-btn:hover{
-    background-color: #79797968;
+    background-color: #c5c5c5;
     cursor: pointer;
     border: none;
 }

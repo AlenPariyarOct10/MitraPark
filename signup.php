@@ -7,6 +7,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 $mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['system_logo'];
 
 if (isset($_POST['submit'])) {
+    var_dump($_POST);
     $fname = htmlspecialchars($_POST['fname']);
     $lname = htmlspecialchars($_POST['lname']);
     $email = htmlspecialchars($_POST['email']);
