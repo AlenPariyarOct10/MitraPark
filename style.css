@@ -102,13 +102,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 110px;
 }
 
 .mitra-request-control-btn:hover{
     background-color: #c5c5c5;
     cursor: pointer;
     border: none;
+}
+
+.mitra-request-control-btn span{
+    padding-left: 5px;
 }
 
 .right-nav-item-img{
@@ -139,6 +142,13 @@ a{
 .active-tab
 {
     color: #00ADB5;
+}
+
+
+
+.active-side-tab{
+    background-color: rgba(156, 156, 156, 0.507);
+    border-radius: 20px;
 }
 
 .add-post
@@ -266,4 +276,16 @@ a{
 
 .like-count{
     padding: 5px;
+}
+
+@media (max-width: 767px) {
+    .left-nav{
+        display: none;
+    }
+    .right-nav{
+        display: none;
+    }
+    .mid-body{
+        width: 100%;
+    }
 }

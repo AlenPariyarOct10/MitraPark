@@ -7,13 +7,13 @@
                 </div>
                 <hr>
                 <div class="post-bottom">
-                    <select name="visibile-mode" class="post-bottom-element" id="reach-select">
+                    <select style="cursor: pointer;" name="visibile-mode" class="post-bottom-element" id="reach-select">
                         <option value="public">Public</option>
                         <option value="private">Private</option>
                         <option value="mitras">Mitra's</option>
                     </select>
-                    <div class="post-bottom-element">
-                        <label for='file'>Photo / Video</label>
+                    <div style="cursor: pointer;" class="post-bottom-element">
+                        <label style="cursor: pointer;" for='file'>Photo</label>
                         <input type='file' accept=".jpg, .jpeg, .png" style='display: none;' name='file' id='file'>
                     </div>
                     <button type="submit" id="share-btn" class="post-bottom-element">

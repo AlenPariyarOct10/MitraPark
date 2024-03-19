@@ -13,8 +13,6 @@ if (isset($_POST)) {
     
 
     if (isset($_FILES['file'])) {
-    
-       
         $img = $_FILES['file'];
         $fileName = $_FILES['file']['name'];
         $fileTempName = $_FILES['file']['tmp_name'];
@@ -24,7 +22,6 @@ if (isset($_POST)) {
         $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         if (in_array($fileExtension, $validFileType)) {
-           
             $validFile = true;
             $newName = uniqid() . "." . $fileExtension;
             move_uploaded_file($fileTempName, $path . $newName);
@@ -40,10 +37,12 @@ if (isset($_POST)) {
         $validVisibility = true;
     }
 
-    if ((strlen($text) > 0 || $img != NULL) && $validVisibility && $validFile) {
+    if ((strlen($text) > 0 || $img != NULL) && $validVisibility) {
         if (!isset($_SESSION)) {
             session_start();
         }
+
+
         $uid = $_SESSION['user']['uid'];
         $filePath = $_GLOBALS['fileName'];
         $insertPostQuery = "INSERT INTO `posts`(`content`, `author_id`, `created_date_time`, `media`, `visibility`) VALUES ('$text','$uid',now(),'$filePath','$visibility')";

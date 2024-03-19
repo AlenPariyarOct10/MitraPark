@@ -1,5 +1,4 @@
 <?php
-
   include_once('./parts/entryCheck.php');
   include_once('./server/db_connection.php');
   include_once('./server/validation.php');
@@ -7,13 +6,9 @@
 
   $aboutSite = $connection->query('SELECT * FROM `system_data`');
   $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
-  
-  var_dump($_SESSION['user']);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,8 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/css/profile.css" />
-
-  <title>Profile - </title>
+  <title>Profile - MitraPark</title>
 </head>
 
 <body>
@@ -38,15 +32,15 @@
       <div class="left-inner-body inner-mid-body">
         <label for="profileUpload">
           <div id="profile-img-holder" class="image-holder">
-            <img src=".<?php echo "./MitraPark".$_SESSION['user']['profile_picture']; ?>" id="profile-img" class="profile-img" />
+            <img src=".<?php echo "./MitraPark/".$_SESSION['user']['profile_picture']; ?>" id="profile-img" class="profile-img" />
             <div id="overlay-button">Change</div>
           </div>
           <input style="display: none" type="file" name="profileUpload" id="profileUpload" />
         </label>
 
-        <span class="name-placeholder">Alen Pariyar</span>
+        <span class="name-placeholder"><?php echo $_SESSION['user']['fname']." ".$_SESSION['user']['lname']; ?></span>
         <span class="dim-label">
-          `A curious guy who experiments with ${code}.`
+        <?php echo $_SESSION['user']['bio']; ?>
         </span>
         <hr class="label-underline" />
 
@@ -57,17 +51,12 @@
               justify-content: space-around;
               width: 100%;
             ">
-          <a class="mitra-request-control-btn">
-            <img src="./assets/images/add-mitra.png" height="30px" alt="" />
-            <span>Add Mitra</span>
-          </a>
-          <a class="mitra-request-control-btn" style="display: flex; justify-content: space-around">
-            <i style="color: rgb(78, 78, 78)" class="fa-solid fa-message"></i>
-            <span>Kurakani</span>
-          </a>
           <a id="myBtn" class="mitra-request-control-btn" style="display: flex; justify-content: space-around">
             <i style="color: rgb(78, 78, 78)" class="fa-regular fa-pen-to-square"></i>
             <span>Edit Profile</span>
+          </a>
+          <a class="mitra-request-control-btn" style="display: flex; justify-content: space-around">
+            <i style="color: rgb(78, 78, 78); font-size:18pt;" class="fa-solid fa-gear"></i>
           </a>
           <!-- Trigger/Open The Modal -->
 
@@ -146,7 +135,6 @@
                           while($row = mysqli_fetch_assoc($result))
                           {
                             echo "<option value=".$row['location_id'].">".$row['location_name']."</option>";
-                             
                           }
 
                         ?>
@@ -166,7 +154,6 @@
                           while($row = mysqli_fetch_assoc($result))
                           {
                             echo "<option value=".$row['inst_id'].">".$row['institution_name']."</option>";
-                            
                           }
 
                         ?>
@@ -184,10 +171,29 @@
           </div>
         </div>
         <hr class="label-underline" />
-        <span class="dim-label"> Add Permanent Address </span>
-        <span class="dim-label"> Add Temporary Address </span>
-        <span class="dim-label"> Add Educational Institution </span>
-        <span class="dim-label"> Select Gender </span>
+        <?php 
+            $p_address_id = $_SESSION['user']['p_address_id'];
+            $paddress = mysqli_query($connection, "SELECT `location_name` from `locations` WHERE `location_id`='$p_address_id'");
+            $paddress = mysqli_fetch_assoc($paddress);
+
+            $t_address_id = $_SESSION['user']['t_address_id'];
+            $taddress = mysqli_query($connection, "SELECT `location_name` from `locations` WHERE `location_id`='$t_address_id'");
+            $taddress = mysqli_fetch_assoc($taddress);
+
+            $academic_institution_id = $_SESSION['user']['academic_institution_id'];
+            $academic_institution = mysqli_query($connection, "SELECT `institution_name` FROM `academic_institution` WHERE `inst_id`='$academic_institution_id'");
+            $academic_institution = mysqli_fetch_assoc($academic_institution);
+            
+        ?>
+        <div style="display:flex; flex-direction:column;">
+        <?php if(isset($paddress['location_name'])){ echo '<span class="dim-label"><i class="fa-solid fa-location-dot"></i> From <b>'.$paddress['location_name'].'</b></span>'; } ?>
+        <?php if(isset($taddress['location_name'])){ echo '<span class="dim-label"><i class="fa-solid fa-location-dot"></i> Lives in <b>'.$taddress['location_name'].'</b></span>'; } ?>
+        <?php if(isset($academic_institution['institution_name'])){ echo '<span class="dim-label"><i class="fa-solid fa-graduation-cap"></i> Studied in <b>'.$academic_institution['institution_name'].'</b></span>'; } ?>
+        <?php if(isset($_SESSION['user']['gender'])){ echo  ($_SESSION['user']['gender']!=null)? '<span class="dim-label">Gender <b>'.ucfirst($_SESSION['user']['gender']).'</b></span>': ""; } ?>
+        <hr class="label-underline" />
+        </div>
+        
+
       </div>
     </div>
     <?php include_once("./parts/rightSidebar.php") ?>
@@ -222,18 +228,21 @@
         formData.append("file", profileImg);
 
         $.ajax({
-          url: "testFile.php",
+          url: "uploadProfile.php",
           type: "POST",
           data: formData,
           contentType: false,
           processData: false,
           success: function(response) {
+            console.log(response);
             let success =
               '<div class="label-success">Profile updated successfully.</div>';
             let profileDiv = document.querySelectorAll(".inner-mid-body")[0];
             profileDiv.innerHTML = success + profileDiv.innerHTML;
           },
           error: function(xhr, status, error) {
+            console.log(xhr, status, error);
+
             let failure =
               '<div class="label-failure">Unable to update profile.</div>';
             let profileDiv = document.querySelectorAll(".inner-mid-body")[0];
@@ -271,7 +280,6 @@
     }
   };
 
-
   let form = document.getElementById("profile-update-form");
   form.addEventListener("submit",(e)=>{
     e.preventDefault();
@@ -289,10 +297,18 @@
       academic_institution : formData.get("academic_institution")
     }
 
-    console.log(document.getElementsByTagName("label"));
-
-
-    console.log(userData);
+    $.ajax({
+      url: "./server/api/updateProfile.php",
+      type: "POST",
+      data: JSON.stringify(userData),
+      contentType: 'application/json',
+      success: (response)=>{
+        console.log(response);
+      },
+      error: (failed)=>{
+        console.log(failed);
+      }
+    })
     form.reset(); 
   })
 
@@ -314,7 +330,6 @@
 
   // Error Flag
   let hasError = false;
-
   const formInputFields = [[fname,fname_label,15, fname_error, 3], [lname,lname_label,15, lname_error, 3], [bio,bio_label,150, bio_error, 0]];
 
   fname_label.innerText = fname.value.length;
@@ -335,11 +350,7 @@
         item[3].innerText = "";
         hasError = false;
       }
-      
     })
-    
   })
-
 </script>
-
 </html>

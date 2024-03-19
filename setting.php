@@ -1,13 +1,13 @@
 <?php
 
-include_once('./parts/entryCheck.php');
-include_once('./server/db_connection.php');
-include_once('./server/validation.php');
-include_once('./server/functions.php');
+include_once ('./parts/entryCheck.php');
+include_once ('./server/db_connection.php');
+include_once ('./server/validation.php');
+include_once ('./server/functions.php');
 
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
-$aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
+$aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='stylesheet' href='style.css'>
+    <link rel='stylesheet' href='./style.css'>
     <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/fontawesome.css">
     <link rel='preconnect' href='https://fonts.googleapis.com'>
@@ -29,42 +29,43 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
         <?php echo $aboutSite['system_name']; ?>
     </title>
     <style>
-        
-        #share-btn{
-            border: none; 
+        #share-btn {
+            border: none;
             background-color: white;
             cursor: pointer;
         }
 
-        #share-btn:hover{
-            background-color: rgba(0, 0, 0, 0.2);
+        .center-body{
+            width: 40%;
         }
 
-        .comment-inp{
-            display: flex;
-            width: 100%;
-            align-items: center;
-            justify-content: center;
-        }
-        .comment-inp button{
-            padding: 0px 5px 0px 5px;
-        }
-        .comment-inp input{
-            width: 100%;
+        #share-btn:hover {
+            background-color: rgba(0, 0, 0, 0.2);
         }
     </style>
-    <?php echo "<script>localStorage.setItem('mp-uid','".$_SESSION['user']['uid']."')</script>";?>
+    <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
 
 </head>
 
 <body>
     <?php
-        include_once("./parts/navbar.php");
-        include_once("./parts/leftSidebar.php");
-        include_once("./parts/feed-midbody.php");
-        include_once("./parts/rightSidebar.php");
+    include_once ("./parts/navbar.php");
+    include_once ("./parts/leftSidebar.php");
+    ?>
+    <div class='center-body'>
+        <a class='right-nav-item' href='./setting'>
+            <img class='right-nav-item-img' src='./assets/images/key.png'>
+            <span>Change Password</span>
+        </a>
+        <a class='right-nav-item' href='./logout.php'>
+            <img class='right-nav-item-img' src='./assets/images/trash.png'>
+            <span>Delete Account</span>
+        </a>
+    </div>
+    <?php
+    include_once ("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>
-    <script src='posts.js'></script>
 </body>
+
 </html>

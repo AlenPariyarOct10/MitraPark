@@ -58,5 +58,17 @@
        }
     }
 
+    function refreshUserData()
+    {
+        $email = $_SESSION['user']['email'];
+        $getUserData = "select * from users where `email`='$email'";
+        $getUserData = $GLOBALS['connection']->query($getUserData);
+        $getUserData = mysqli_fetch_assoc($getUserData);
+        $_SESSION['user'] = $getUserData;
+
+        if($_SESSION['user']['profile_picture']==null){$_SESSION['user']['profile_picture']="/assets/images/user.png";}
+
+    }
+
 
 ?>

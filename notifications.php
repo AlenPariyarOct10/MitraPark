@@ -39,19 +39,6 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
         #share-btn:hover{
             background-color: rgba(0, 0, 0, 0.2);
         }
-
-        .comment-inp{
-            display: flex;
-            width: 100%;
-            align-items: center;
-            justify-content: center;
-        }
-        .comment-inp button{
-            padding: 0px 5px 0px 5px;
-        }
-        .comment-inp input{
-            width: 100%;
-        }
     </style>
     <?php echo "<script>localStorage.setItem('mp-uid','".$_SESSION['user']['uid']."')</script>";?>
 
