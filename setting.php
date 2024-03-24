@@ -61,6 +61,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             <img class='right-nav-item-img' src='./assets/images/trash.png'>
             <span>Delete Account</span>
         </a>
+        <a class='right-nav-item' href='./strict-mode.php'>
+            <img class='right-nav-item-img' src='./assets/images/trash.png'>
+            <span>Strict Mode</span>
+        </a>
     </div>
     <?php
     include_once ("./parts/rightSidebar.php");

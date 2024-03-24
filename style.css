@@ -129,7 +129,7 @@
 
 .right-nav-item:hover
 {
-    background-color: rgba(85, 85, 85, 0.507);
+    background-color: rgb(211, 211, 211);
     border-radius: 20px;
    
 }
@@ -233,6 +233,13 @@ a{
 }
 .post-item-head{
     display: flex;
+   
+    
+}
+
+.post-header-left{
+    display: flex;
+    flex-direction: column;
 }
 
 .post-item-head-right{

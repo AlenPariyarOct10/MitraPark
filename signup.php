@@ -7,15 +7,21 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 $mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['system_logo'];
 
 if (isset($_POST['submit'])) {
-    var_dump($_POST);
     $fname = htmlspecialchars($_POST['fname']);
     $lname = htmlspecialchars($_POST['lname']);
     $email = htmlspecialchars($_POST['email']);
     $phone = htmlspecialchars($_POST['phone']);
     $password = htmlspecialchars($_POST['password']);
     $cpassword = htmlspecialchars($_POST['cpassword']);
+    
+    if(isExistingUser($email, $phone))
+    {
+        header("signup.php?userExists");
+    }
     $check = false;
     $check = validate_signup($fname, $lname, $email, $phone, $password, $cpassword);
+
+    
 
     if($check && !isExistingUser($email, $phone))
     {
@@ -58,8 +64,8 @@ if (isset($_POST['submit'])) {
     <div class="right">
         <span class="page-title">Signup</span>
         <?php
-            if(isset($email) && isset($phone)){if(isExistingUser($email, $phone)){echo "User Already Exists";}}
-            if(isset($check)){if(!$check){echo '<div class="signup-error">Unable to signup. Please check your input and try again later.</div>';}}
+            if(isset($_GET['userExists'])){echo '<div class="signup-error">User already exists.</div>';}else
+            if(isset($check)){if(!$check){echo '<div class="signup-error">Unable to signup. x Please check your input and try again later.</div>';}}
         ?>
         
         <form action="signup.php" autocomplete="false" method="post">

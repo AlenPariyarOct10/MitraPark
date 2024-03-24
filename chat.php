@@ -22,8 +22,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="assets/css/mitras-style.css">
-
-
+    <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
         .mid-body {

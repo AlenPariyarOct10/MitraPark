@@ -48,7 +48,46 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
     <?php
         include_once("./parts/navbar.php");
         include_once("./parts/leftSidebar.php");
-        include_once("./parts/feed-midbody.php");
+    ?>
+    <div class="mid-body">
+    <div class="left-inner-heading">
+                    <span class="dim-label">
+                        Notifications
+                    </span>
+                    <hr class="label-underline">
+                </div>
+            <?php 
+            $uid = $_SESSION['user']['uid'];
+                // $query = "SELECT `post_id` FROM `posts` WHERE `author_id`='$uid'";
+                $getNotificationQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, type, created_date_time  FROM notifications n INNER JOIN users u ON triggered_by = u.uid WHERE n.type='like' AND `component_id` IN (SELECT `post_id` FROM `posts` WHERE `author_id`='$uid') ORDER BY created_date_time ASC";
+
+
+                $result = mysqli_query($connection, $getNotificationQuery);
+                while($row = mysqli_fetch_assoc($result))
+                {
+                    if($row['type']=='like')
+                    {
+                        echo '
+                        <a class="right-nav-item" id="my-profile" href="./profile.php">
+                        <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
+                        <div style="display:flex; flex-direction:column;">
+                            <span><b>'.$row['uname'].'</b> liked your post.</span>
+                            <span style="font-size: small; color: #373737;">5 minute ago</span>
+                        </div>
+                        
+                    </a>
+                    ';
+                    }
+                    
+                }
+                ?>
+
+
+
+
+</div>
+    
+    <?php
         include_once("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>

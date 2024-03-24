@@ -55,12 +55,12 @@
             <i style="color: rgb(78, 78, 78)" class="fa-regular fa-pen-to-square"></i>
             <span>Edit Profile</span>
           </a>
-          <a class="mitra-request-control-btn" style="display: flex; justify-content: space-around">
+          <a class="mitra-request-control-btn" style="display: flex; justify-content: space-around" href="setting.php"> 
             <i style="color: rgb(78, 78, 78); font-size:18pt;" class="fa-solid fa-gear"></i>
           </a>
-          <!-- Trigger/Open The Modal -->
+          
 
-          <!-- The Modal -->
+          <!-- Update Form -->
           <div id="myModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">

@@ -30,7 +30,6 @@
         $hasEmail = $GLOBALS['connection']->query($hasEmail);
         if($GLOBALS['connection']->affected_rows == 0)
         {
-            echo "fail";
             return false;
         }else{
             $getPassword = mysqli_fetch_array($hasEmail);   
@@ -71,4 +70,28 @@
     }
 
 
+  
+    function addNotification($type, $component_id, $triggered_by)
+    {
+            // Type : for which component the notification is generated?
+            // Component Id : id of component for which the notification is generated
+            // Triggered by (id) : who triggered the notificaition
+            // Alen:${triggeredBy} liked:${Type} your post${componentId}
+
+        $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`) VALUES ('{$type}', NOW(), '{$component_id}' , '{$triggered_by}')";
+        $GLOBALS['connection']->query($insertQuery);
+        echo "liked";
+    }
+
+    function removeNotification($type, $component_id, $triggered_by)
+    {
+            // Type : for which component the notification is generated?
+            // Component Id : id of component for which the notification is generated
+            // Triggered by (id) : who triggered the notificaition
+            // Alen:${triggeredBy} liked:${Type} your post${componentId}
+    
+        $deleteQuery = "DELETE FROM `notifications` WHERE `type`='{$type}' AND `component_id`='{$component_id}' AND `triggered_by`='{$triggered_by}'";
+        $GLOBALS['connection']->query($deleteQuery);
+
+    }
 ?>

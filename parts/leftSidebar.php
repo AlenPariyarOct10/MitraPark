@@ -32,9 +32,9 @@
                 <div class="left-inner-body">
                     <div class="mitra-request-list-item" id="request-1">
                         <a class="redirect-to-profile" href="#profile-link">
-                            <img class="mitra-request-profile-list" src="kpoli.jpg">
+                            <img class="mitra-request-profile-list" src="anjali.jpg">
                             <span class="uname">
-                                KP Oli
+                                Nirpesh Puri
                             </span>
                         </a>
                         <a class="mitra-request-control-btn">

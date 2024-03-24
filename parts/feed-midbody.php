@@ -21,4 +21,7 @@
                     </button>
                 </div>
             </form>
+            <div id="post-container">
+                
+            </div>
 </div>

@@ -11,7 +11,21 @@
 
     $uid = $_SESSION['user']['uid'];
     $threshold = strtotime("-5000 minutes");
-    $getMitras = "SELECT f.sender_id, f.acceptor_id, u.uid, concat(u.fname,' ',u.lname) as uname, u.profile_picture FROM `friends` f INNER JOIN `users` u ON u.uid = f.acceptor_id OR u.uid = f.sender_id";
+    $getMitras = "SELECT 
+    f.sender_id, 
+    f.acceptor_id, 
+    u.uid, 
+    CONCAT(u.fname, ' ', u.lname) AS uname, 
+    u.profile_picture 
+FROM 
+    `friends` f 
+INNER JOIN 
+    `users` u 
+ON 
+    u.uid = f.acceptor_id OR u.uid = f.sender_id 
+WHERE 
+    (f.acceptor_id = '$uid' OR f.sender_id = '$uid')
+";
 
     $result = mysqli_query($connection, $getMitras);
     $result = mysqli_fetch_all($result, MYSQLI_ASSOC);

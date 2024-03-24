@@ -18,7 +18,7 @@
     WHERE 
         posts.visibility = 'public'
         OR (posts.visibility = 'private' AND posts.author_id = '$uid')
-        OR (posts.visibility = 'mitra' AND posts.author_id IN (
+        OR (posts.visibility = 'mitras' AND posts.author_id IN (
             SELECT acceptor_id FROM friends WHERE sender_id = '$uid'
             UNION
             SELECT sender_id FROM friends WHERE acceptor_id = '$uid'

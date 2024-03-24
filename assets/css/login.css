@@ -169,3 +169,13 @@ p{
     border-radius: 10px;
     color: rgba(0, 0, 0, 0.797);
 }
+
+.signup-error{
+    font-size: small;
+    background-color: rgba(255, 0, 0, 0.45);
+    padding: 8px;
+    border-radius: 10px;
+    color: rgba(0, 0, 0, 0.797);
+}
+
+

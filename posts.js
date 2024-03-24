@@ -4,13 +4,11 @@ async function fetchPosts() {
           url: "./server/api/get-posts.php",
           type: "POST",
           success: (data) => {
-              console.log("data:");
-              console.log(data);
-              console.log(JSON.parse(data));
+       
               resolve(JSON.parse(data));
           },
           error: (error) => {
-              console.log("failed");
+     
               reject(error);
           }
       });
@@ -22,22 +20,20 @@ async function fetchPosts() {
 
 function likeHandeler() {
   let postLikes = document.querySelectorAll(".like-container");
-  console.log(postLikes);
+  
   postLikes.forEach((item) => {
       item.addEventListener("click", () => {
-          console.log(item.dataset.id);
-          console.log(item.childNodes[1].src);
           let id = item.dataset.id;
           let src = item.childNodes[1].src;
           let likeCount = item.childNodes[3];
 
           if (src.includes("assets/images/heart-solid.svg")) {
               likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
-              console.log(likeCount);
+            
               item.childNodes[1].src = "./assets/images/heart-outline.svg";
           } else {
               likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
-              console.log(likeCount)
+          
               item.childNodes[1].src = "./assets/images/heart-solid.svg";
           }
 
@@ -54,8 +50,6 @@ function likeHandeler() {
                   localStorage.getItem("mp-uid");
               }
           });
-
-
       })
       console.log(item);
   })
@@ -68,11 +62,9 @@ function likeHandeler() {
       console.log(postData.length);
       if(postData.length > 0)
       {
-        console.log("hereee");
-        
+
         postData.forEach(postItem => {
-          console.log("each");
-          
+
           if(postItem.profile_picture == null)
           {
             postItem.profile_picture = "/MitraPark/assets/images/user.png";
@@ -114,6 +106,9 @@ function likeHandeler() {
 function generatePostHTML(postItem, likedState) {
   const postHTML = `
             <div class="post-item">
+              <div style="display:flex; justify-content:end;">
+                <button style="border-radius:50%; border:none; padding:5px; background-color:white; cursor:pointer;">...</button>
+              </div>
               <div class="post-item-head">
                 <div class="post-item-head-left">
                   <img class="profile-picture-holder" src="${postItem.profile_picture}" alt="" srcset="">
@@ -129,12 +124,11 @@ function generatePostHTML(postItem, likedState) {
                   </div>
                 </div>
               </div>
-              <div class="post-item-body">
-                <span>${postItem.content}</span>
-                <img src=".${postItem.media}" alt="" srcset="">
-              </div>
+              <a href="./post.php?postId=${postItem.post_id}" class="post-item-body">
+                <span style="margin:5px;">${postItem.content}</span>
+                <img style="border-radius:10px;" src=".${postItem.media}" alt="" srcset="">
+              </a>
               <div class="post-item-footer">
-              
                 <div data-id=${postItem.post_id} class="like-container">
                   <img height="20px" src=${likedState}>
                   <span class="like-count">${postItem.like_count}</span>
@@ -143,22 +137,11 @@ function generatePostHTML(postItem, likedState) {
                   <img height="20px" src="./assets/images/comment-outline.svg">
                 </div>
               </div>
-              <hr>
-              <div class="comment-inp">
-                  <input id="post-comment-${postItem.post_id}" placeholder="Write comment" type="text"/>
-                  <button class="post-comment" onclick="postComment(${postItem.post_id})" id="comment-btn-${postItem.post_id}"> > </button>
-                </div>
-              <div>
-                <a href="postLikes.php?postId=${postItem.post_id}">Likes</a>
-                |
-                <a href="postComments.php?postId=${postItem.post_id}">Comments</a>
-
-              </div>
             </div>
           `;
 
   // Append the post HTML to the postPlace element
-  document.querySelector(".mid-body").innerHTML += postHTML;
+  document.querySelector("#post-container").innerHTML += postHTML;
   likeHandeler();
 }
   
@@ -177,7 +160,5 @@ function postComment(id)
 
 
   })
-
-  console.log(commentText.value);
   commentText.value = null;
 }

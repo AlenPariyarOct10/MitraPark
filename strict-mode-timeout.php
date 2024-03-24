@@ -23,7 +23,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login -
+    <title>Timeout -
         <?php echo $aboutSite['system_name']; ?>
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,71 +64,14 @@ if(isset($_POST['email']) && isset($_POST['password']))
     }
 
     ?>
-        <span class="page-title">Login</span>
-        <form action="login.php" method="post">
-            <input placeholder="Email" class="inp-fields" type="email" name="email" id="email">
-            <input placeholder="Password" class="inp-fields" type="password" name="password" id="password">
-            <button type="submit" id="submit" class="btn login-btn">Login</button>
-        </form>
-        
-        
-        <div id="underline"></div>
-        <a class="btn" href="signup.php">Create a account</a>
-       
+        <span class="page-title">Strict Mode - Timeout</span>
+        <div class="signup-error">Strict Mode is Active till the end of <?php echo date("M d, Y"); ?>.</div>
+        <a href="feed.php">Reload</a>
+        <a style="padding: 20px; margin:20px;background-color:lightgreen;" href="logout.php">Logout</a>
     </div>
 </body>
 <script>
-    let emailField = document.getElementById("email");
-    let passwordField = document.getElementById("password");
-    let submitBtn =document.getElementById("submit");
-
-    // Rule for Email Field
-    let emailRule = /^[a-z0-9._-]+@[a-z0-9]+\.[a-z0-9]{2,4}$/;
-
-    let allowEmail = false;
-    let allowPassword = false;
-
-    submitBtn.disabled = true;
-    submitBtn.style.cursor = "not-allowed";
-    submitBtn.style.backgroundColor = "#6c757d";
-
-
-    // Controls submit button by validating email and password field
-    function controlSubmit()
-    {
-        if(allowEmail == true && allowPassword == true)
-        {
-            submitBtn.disabled = false;
-            submitBtn.style.cursor = "pointer";
-            submitBtn.style.backgroundColor = "#28a745";
-        }else{
-            submitBtn.disabled = true;
-            submitBtn.style.cursor = "not-allowed";
-            submitBtn.style.backgroundColor = "#6c757d";
-        }
-    }
-
-    emailField.addEventListener("keyup",()=>{
-        if(emailRule.test(emailField.value))
-        {
-            allowEmail = true;
-        }else{
-            allowEmail = false;
-        }
-
-        controlSubmit();
-    });
-
-
-    passwordField.addEventListener("keyup",()=>{
-        if(passwordField.value.length >= 8 && passwordField.value.length <=16 )
-        {
-            allowPassword = true;
-        }else{
-            allowPassword = false;
-        }
-        controlSubmit();
-    });
+    
 </script>
 
 </html>

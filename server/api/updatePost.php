@@ -1,19 +1,21 @@
 <?php
-
+var_dump($_POST);
 if (isset($_POST)) {
 
     include_once("../db_connection.php");
-    $text = htmlspecialchars($_POST['post-text']);
-    $visibility = htmlspecialchars($_POST['visibile-mode']);
+    $text = htmlspecialchars($_POST['caption']);
+    $visibility = htmlspecialchars($_POST['visibility']);
     $img = NULL;
     $validVisibility = false;
     $validPostText = false;
     $validImg = false;
     $validFile = false;
+    $postId = $_POST['postId'];
+    echo "--hello";
+    var_dump($_FILES['file']);
  
-    
-
     if (isset($_FILES['file'])) {
+
         $img = $_FILES['file'];
         $fileName = $_FILES['file']['name'];
         $fileTempName = $_FILES['file']['tmp_name'];
@@ -27,8 +29,7 @@ if (isset($_POST)) {
             $newName = uniqid() . "." . $fileExtension;
             move_uploaded_file($fileTempName, $path . $newName);
             $_GLOBALS['fileName'] = '/user_uploads/' . $newName;
-        } else {
-           
+            $newFileName = '/user_uploads/' . $newName;
         }
     }
 
@@ -45,10 +46,18 @@ if (isset($_POST)) {
 
 
         $uid = $_SESSION['user']['uid'];
-        $filePath = $_GLOBALS['fileName'];
-        $insertPostQuery = "INSERT INTO `posts`(`content`, `author_id`, `created_date_time`, `media`, `visibility`) VALUES ('$text','$uid',now(),'$filePath','$visibility')";
-        $connection->query($insertPostQuery);
-        header("Location: ../../feed.php");
+       
+        if(isset($newFileName))
+        {
+            $updateProfileQuery = "UPDATE `posts` SET `content`='$text',`media`='$newFileName',`visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+        }else{
+            $updateProfileQuery = "UPDATE `posts` SET `content`='$text', `visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+        }
+
+        mysqli_query($connection, $updateProfileQuery);
+
+
+        header("Location: ../../post.php?postId=".$postId);
         
     } else {
         header("Location: ../../feed.php");
