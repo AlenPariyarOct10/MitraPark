@@ -24,6 +24,9 @@
             $result = array("strict-mode"=>true, "strict-lock"=>true);
             echo json_encode($result);
         }
+    }else{
+        $result = array("strict-mode"=>false, "strict-lock"=>false);
+            echo json_encode($result);
     }
 
     

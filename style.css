@@ -123,7 +123,7 @@
    display: flex;
    align-items: center;
    padding: 10px;
-   justify-content: center;
+   justify-content: space-evenly;
    margin: 10px;
 }
 

@@ -61,10 +61,33 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                 // $query = "SELECT `post_id` FROM `posts` WHERE `author_id`='$uid'";
                 $getNotificationQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, type, created_date_time  FROM notifications n INNER JOIN users u ON triggered_by = u.uid WHERE n.type='like' AND `component_id` IN (SELECT `post_id` FROM `posts` WHERE `author_id`='$uid') ORDER BY created_date_time ASC";
 
-
                 $result = mysqli_query($connection, $getNotificationQuery);
                 while($row = mysqli_fetch_assoc($result))
                 {
+           
+                      
+                        $created_timestamp = strtotime($row['created_date_time']);
+                        $time_elapsed = time() - $created_timestamp;
+                        
+                        // Determine the appropriate time unit to display
+                        if ($time_elapsed < 60) {
+                            $time_unit = 'second';
+                            $time_value = $time_elapsed;
+                        } elseif ($time_elapsed < 3600) {
+                            $time_unit = 'minute';
+                            $time_value = floor($time_elapsed / 60);
+                        } elseif ($time_elapsed < 86400) {
+                            $time_unit = 'hour';
+                            $time_value = floor($time_elapsed / 3600);
+                        } else {
+                            $time_unit = 'day';
+                            $time_value = floor($time_elapsed / 86400);
+                        }
+                        
+                        if ($time_value != 1) {
+                            $time_unit .= 's';
+                        }
+       
                     if($row['type']=='like')
                     {
                         echo '
@@ -72,7 +95,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
                         <div style="display:flex; flex-direction:column;">
                             <span><b>'.$row['uname'].'</b> liked your post.</span>
-                            <span style="font-size: small; color: #373737;">5 minute ago</span>
+                            <span style="font-size: small; color: #373737;">'.$time_value.' '.$time_unit.' ago</span>
                         </div>
                         
                     </a>
@@ -81,10 +104,6 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                     
                 }
                 ?>
-
-
-
-
 </div>
     
     <?php

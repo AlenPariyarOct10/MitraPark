@@ -53,7 +53,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     include_once ("./parts/leftSidebar.php");
     ?>
     <div class='center-body'>
-        <a class='right-nav-item' href='./setting'>
+        <a class='right-nav-item' href='./changePassword.php'>
             <img class='right-nav-item-img' src='./assets/images/key.png'>
             <span>Change Password</span>
         </a>
@@ -62,7 +62,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             <span>Delete Account</span>
         </a>
         <a class='right-nav-item' href='./strict-mode.php'>
-            <img class='right-nav-item-img' src='./assets/images/trash.png'>
+            <img class='right-nav-item-img' src='./assets/images/time.png'>
             <span>Strict Mode</span>
         </a>
     </div>

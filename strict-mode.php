@@ -10,27 +10,36 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
 
 <?php 
+$uid = $_SESSION['user']['uid'];
+$getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE()";
+$result = mysqli_query($connection, $getStrictModeInfo);
+$result = mysqli_fetch_assoc($result);
+
     if(session_status()!=PHP_SESSION_ACTIVE)
     {
         session_start();
     }
 
-    $uid = $_SESSION['user']['uid'];
-    if(isset($_POST['setMaxHours']))
+    if($result==null)
     {
-        $maxSeconds = $_POST['setMaxHours'];
-        $getNotifications = false;
-
-        if(isset($_POST['exceedTimeWarning']))
+        if(isset($_POST['setMaxHours']))
         {
-            $getNotifications = true;
+            
+            $maxSeconds = $_POST['setMaxHours'];
+            $getNotifications = 0;
+    
+            if(isset($_POST['exceedTimeWarning']))
+            {
+                $getNotifications = 1;
+            }
+    
+            $strictMode = 1;
+            $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`) VALUES ('$uid','$getNotifications',CURDATE(),'$maxSeconds','$strictMode','$maxSeconds')";
+            $result = mysqli_query($connection, $insertStrictMode);
         }
-
-        $strictMode = true;
-
-        $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`) VALUES ('$uid','$getNotifications',CURDATE(),'$maxSeconds','$strictMode','$maxSeconds')";
-        $result = mysqli_query($connection, $insertStrictMode);
     }
+    
+    
 
 ?>
 
@@ -95,6 +104,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE()";
         $result = mysqli_query($connection, $getStrictModeInfo);
         $result = mysqli_fetch_assoc($result);
+
     ?>
     <div class='mid-body'>
         <?php 

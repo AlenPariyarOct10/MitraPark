@@ -9,7 +9,7 @@
     <div class='center-nav-part'>
         <a href="feed.php"><i class='fa-solid fa-house <?php if (strpos($_SERVER['PHP_SELF'], "feed.php") != false) {
                                                             echo "active-tab";
-                                                        } ?>'></i><span id="unseenNotification" style="color: red;">ꞏ</span></a>
+                                                        } ?>'></i></a>
         <a href="kurakani.php"><i class='fa-regular fa-message <?php if (strpos($_SERVER['PHP_SELF'], "kurakani.php") != false) {
                                                                     echo "active-tab";
                                                                 } ?>'></i><span id="unseenNotification" style="color: red;">ꞏ</span></a>
@@ -44,7 +44,18 @@
             $.ajax({
                 url: "./server/api/strict-mode/update_strictMode.php",
                 success: function(msg) {
-                    console.log(msg);
+                    const strictModeStatus = JSON.parse(msg);
+                    console.log("finish");
+
+
+
+                    if(strictModeStatus['strict-mode']==true && strictModeStatus['strict-lock']==true)
+                    {
+                        console.log("finish");
+                        window.location.href = "feed.php";
+                        console.log("finish--");
+
+                    }
                 }
             })
         }
