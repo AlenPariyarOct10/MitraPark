@@ -87,131 +87,18 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
     <?php
         include_once("./parts/navbar.php");
         include_once("./parts/leftSidebar.php");
-
+        
         include_once("./parts/feed-midbody.php");
         ?>
-            <!-- Update Form -->
-          <div id="myModal" class="modal">
-            <!-- Modal content -->
-            <div class="modal-content">
-              <span id="closeModal" class="close">&times;</span>
-              <div>
-                <span style="text-decoration: underline;">Update Profile  </span><label id="form-submit-failed"></label>
-                <form class="form-datas profile-update-form" id="profile-update-form" method="post">
-                  <input type="file"  style="display: none" id="profile-img-uploader" />
-                  <div class="form-innner-row">
-                    <div class="inner-form-element">
-                      <label id="fname-label" for="fname">First name <span id="fname-error"></span> </label>
-                      <input name="fname" type="text" maxlength="15" id="fname" value="<?php echo $_SESSION['user']["fname"]; ?>" />
-                      <label class="length-validate" for="fname"> <span id="fname-count"> 0 </span> / 15</label>
-                    </div>
-                    <div class="inner-form-element">
-                      <label id="lname-label" for="lname">Last name <span id="lname-error"></span></label>
-                      <input name="lname" type="text" maxlength="15" id="lname" value="<?php echo $_SESSION['user']["lname"]; ?>" />
-                      <label class="length-validate" for="lname"> <span id="lname-count"> 0 </span> / 15</label>
-                    </div>
-                  </div>
-
-                  <div class="form-innner-row">
-                    <div class="inner-form-element">
-                      <label id="bio-label" for="bio">Bio <span id="bio-error"></span></label>
-                      <input name="bio" type="text" id="bio" maxlength="150" value="<?php echo $_SESSION['user']["bio"]; ?>" />
-                      <label class="length-validate" for="bio"> <span id="bio-count"> 0 </span> / 150</label>
-                    </div>
-                  </div>
-
-                  <div class="form-innner-row">
-                    <div class="inner-form-element">
-                      <label for="gender">Gender</label>
-                      <select name="gender" id="gender">
-                        <option value="NULL" <?php echo ($_SESSION['user']['gender']==null)? "selected":'';?> disabled>Select one</option>
-                        <option value="male" <?php echo ($_SESSION['user']['gender']=="male")? "selected":'';?>>Male</option>
-                        <option value="female" <?php echo ($_SESSION['user']['gender']=="female")? "selected":'';?>>Female</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-innner-row">
-                    <div class="inner-form-element">
-                      <label for="bio">Permanent Address</label>
-                      <select name="p_address" id="">
-                        <?php
-                          $result = $GLOBALS['connection']->query("SELECT * FROM `locations`  ORDER BY location_name ASC");
-                          ?>
-                          <option value="NULL" <?php echo ($_SESSION['user']['p_address_id']==null)?"selected":"";?> disabled>Select One</option>
-                          <?php
-                          
-                          while($row = mysqli_fetch_assoc($result))
-                          {
-                            echo "<option value=".$row['location_id'].">".$row['location_name']."</option>";
-                             $row['location_name'];
-                          }
-
-                        ?>
-
-                        
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-innner-row">
-                    <div class="inner-form-element">
-                      <label for="bio">Temporary Address</label>
-                      <select name="t_address" id="">
-                      <?php
-                          $result = $GLOBALS['connection']->query("SELECT * FROM `locations` ORDER BY location_name ASC");
-                          ?>
-                          <option value="NULL" <?php echo ($_SESSION['user']['t_address_id']==null)?"selected":"";?> disabled>Select One</option>
-                          <?php
-                          
-                          while($row = mysqli_fetch_assoc($result))
-                          {
-                            echo "<option value=".$row['location_id'].">".$row['location_name']."</option>";
-                          }
-
-                        ?>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-innner-row">
-                    <div class="inner-form-element">
-                      <label for="academic_institution">Academic Institution</label>
-                      <select name="academic_institution" id="academic_institution">
-                      <?php
-                          $result = $GLOBALS['connection']->query("SELECT * FROM `academic_institution`");
-                          ?>
-                          <option value="NULL" <?php echo ($_SESSION['user']['academic_institution_id']==null)?"selected":"";?> disabled>Select One</option>
-                          <?php
-                          
-                          while($row = mysqli_fetch_assoc($result))
-                          {
-                            echo "<option value=".$row['inst_id'].">".$row['institution_name']."</option>";
-                          }
-
-                        ?>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="form-inner-row">
-                    <div class="inner-form-element">
-                      <button id="profile-form-submit" type="submit">Save</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+           
         <?php
         include_once("./parts/rightSidebar.php");
     ?>
+    <script src='./assets/scripts/jquery.js'></script>
+
     <script>
         let modal =document.getElementById("myModal");
         let closeModal =document.getElementById("closeModal");
-
-        
-
-        
-            // modal.style.display = "block";
-        
-
         closeModal.addEventListener("click",()=>{
             modal.style.display = "none";
         })
@@ -219,7 +106,22 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 
     </script>
-    <script src='./assets/scripts/jquery.js'></script>
+    <script>
+    function getFriendRequests() {
+        let mitraRequestList = document.getElementById("mitraList");
+        $.ajax({
+            url: "./server/api/getFriendRequests.php",
+            success: function(success) {
+                mitraRequestList.innerHTML = success;
+            }
+        })
+    }
+
+    $(document).ready(getFriendRequests);
+    setInterval(() => {
+        getFriendRequests();
+    }, 5000);
+</script>
     <script src='posts.js'></script>
 </body>
 </html>

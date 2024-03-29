@@ -100,6 +100,20 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             background-color: bisque;
         }
 
+        .controlBtn {
+            padding: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .softRed:hover {
+            background-color: lightcoral;
+
+        }
+
+        .softGreen:hover {
+            background-color: lightgreen;
+        }
 
 
         .active-btn {
@@ -112,6 +126,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
         .modal-content {
             width: 50%;
+        }
+
+        .post-item {
+            margin-top: 5px;
+            margin-left: 0px;
+            margin-bottom: 5px;
+            margin-right: 0px;
         }
     </style>
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
@@ -152,9 +173,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             <hr class="label-underline">
         </div>
         <div class="post-item">
-            <div style="display:flex; justify-content:end;">
-                <button style="border-radius:50%; border:none; padding:5px; background-color:white; cursor:pointer;">...</button>
-            </div>
             <div class="post-item-head">
                 <div class="post-item-head-left">
                     <img class="profile-picture-holder" src="<?php echo './' . $getPost['profile_picture']; ?>" alt="" srcset="">
@@ -185,7 +203,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             </div>
             <div class="post-item-footer">
 
-                <div data-id=<?php echo $postId;?> class="like-container">
+                <div data-id=<?php echo $postId; ?> class="like-container">
                     <img id="likeState" height="20px" src="">
                     <span id="like-count" class="like-count">0</span>
                 </div>
@@ -196,8 +214,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             </div>
 
             <div class="comment-inp">
-                <input class="post-comment-inp" id="post-comment-<?php echo $postId;?>" placeholder="Write comment" type="text" />
-                <button style="cursor:pointer;" class="post-comment" onclick="postComment()" id="comment-btn-<?php echo $postId;?>"> <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i> </button>
+                <input class="post-comment-inp" id="post-comment-<?php echo $postId; ?>" placeholder="Write comment" type="text" />
+                <button style="cursor:pointer;" class="post-comment" onclick="postComment(<?php echo $postId; ?>)" id="comment-btn-<?php echo $postId; ?>"> <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i> </button>
             </div>
         </div>
         <?php
@@ -236,13 +254,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                 ?>
             </div>
-
-
-            <div class="comment-inp">
-                <input class="post-comment-inp" id="post-comment-<?php echo $postId ?>" placeholder="Write comment" type="text" />
-                <button style="cursor:pointer;" class="post-comment" onclick="postComment()" id="comment-btn-<?php echo $postId;?>"> <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i> </button>
-            </div>
-
         </div>
 
         <!-- Edit Post Modal -->
@@ -258,8 +269,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                                 <label id="fname-label" for="fname">Edit Text<span id="fname-error"></span> </label>
                                 <textarea name="caption" maxlength="999" id="caption"><?php echo $getPost['content']; ?></textarea>
                                 <input type="hidden" name="postId" value="<?php echo $postId; ?>">
-                                <label class="length-validate" for="fname"> <span id="fname-count"> 0 </span> /
-                                    15</label>
+                                <label class="length-validate" for="fname"> <
                             </div>
 
                             <div class="inner-form-element">
@@ -269,8 +279,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                                     <option value="mitras">mitras</option>
                                     <option value="private">private</option>
                                 </select>
-                                <label class="length-validate" for="fname"> <span id="fname-count"> 0 </span> /
-                                    15</label>
+                                <label class="length-validate" for="fname"> 
                             </div>
                             <?php if ($getPost['media'] == null || $getPost['media'] == "") { ?>
                                 <div class="post-item-body">
@@ -285,7 +294,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             <?php } else { ?>
                                 <div class="post-item-body">
                                     <label id="fname-label" for="fname">Media<span id="fname-error"></span> </label>
-                                    <button style="cursor: pointer;" type="button">Remove Image</button>
+                                    <!-- <button style="cursor: pointer;" type="button">Remove Image</button> -->
 
                                     <label style="margin: 10px;cursor:pointer;" class="post-item-body" for="post-img-uploader">
                                         <img style="border-radius:10px; width:30vw;" src=<?php echo "./" . $getPost['media']; ?> alt="" srcset="">
@@ -326,6 +335,31 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </div>
             </div>
         </div>
+
+        <!-- Delete Comment Modal -->
+        <div id="deleteCommentModal" class="modal">
+            <div class="modal-content">
+                <span class="closeModalBtn" class="close">&times;</span>
+                <div>
+                    <span style="text-decoration: underline;">Are you sure, you want to delete this comment?</span><label id="form-submit-failed"></label>
+                    <form action="./server/deleteComment.php" method="post">
+                        <input type="file" style="display: none" id="post-img-uploader" />
+                        <div class="form-innner-row">
+                            <div class="form-inner-row">
+                                <div style="display: flex; flex-direction: row;" class="inner-form-element">
+
+                                    <input style="background-color:tomato;" id="profile-form-submit" value="Yes" type="submit" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        
+
+
     </div>
     <?php
     include_once("./parts/rightSidebar.php");
@@ -334,35 +368,49 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     <script src='./assets/scripts/jquery.js'></script>
     <script>
+        function postComment(id) {
+            let commentText = document.getElementById("post-comment-" + id);
+            $.ajax({
+                url: "./server/api/insertComment.php",
+                type: "POST",
+                data: {
+                    postId: id,
+                    commentAuthor: localStorage.getItem("mp-uid"),
+                    commentContent: commentText.value
+                },
 
+
+            })
+            commentText.value = null;
+        }
         <?php
         if ($getAuthor['author_id'] === $uid) {
-            ?>
-        const editPostTriggerBtn = document.getElementById("editPost");
-        const deletePostTriggerBtn = document.getElementById("deletePost");
+        ?>
+            const editPostTriggerBtn = document.getElementById("editPost");
+            const deletePostTriggerBtn = document.getElementById("deletePost");
 
-        editPostTriggerBtn.addEventListener("click", () => editModal());
-        deletePostTriggerBtn.addEventListener("click", () => deletePostAlertModal());
+            editPostTriggerBtn.addEventListener("click", () => editModal());
+            deletePostTriggerBtn.addEventListener("click", () => deletePostAlertModal());
 
-        const deletePostAlertModal = () => {
-            $("#deletePostModal").slideToggle();
-            const closeModalBtn = document.getElementById("closeDelModal");
-            console.log("clicked");
-            $(".closeDelModal").click(() => {
-                $("#deletePostModal").slideUp(500);
-                console.log("clicked delete");
-            })
+            const deletePostAlertModal = () => {
+                $("#deletePostModal").slideToggle();
+                const closeModalBtn = document.getElementById("closeDelModal");
+                console.log("clicked");
+                $(".closeDelModal").click(() => {
+                    $("#deletePostModal").slideUp(500);
+                    console.log("clicked delete");
+                })
 
-            console.log("clicked");
-        }
+                console.log("clicked");
+            }
 
-        const editModal = () => {
-            $("#editPostModal").slideToggle(500);
-            const closeModalBtn = document.getElementById("closeModal");
-            closeModalBtn.addEventListener("click", () => {
-                $("#editPostModal").slideUp(500);
-            });
-        }
+            const editModal = () => {
+                $("#editPostModal").slideToggle(500);
+                const closeModalBtn = document.getElementById("closeModal");
+                closeModalBtn.addEventListener("click", () => {
+                    $("#editPostModal").slideUp(500);
+                });
+            }
 
         <?php
         }
@@ -377,23 +425,121 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         let likeCommentContainer = document.getElementById("like-comment-container");
 
 
-        const fetchComments = () => {
 
 
+        // Function to fetch comments for the corresponding post
+        function fetchComments() {
+            let postId = <?php echo $postId; ?>; // Get the post ID
+            let commentsContainer = document.getElementById("like-comment-container"); // Container to display comments
+
+            // Make an AJAX request to fetch comments
+            $(document).ready(() => {
+                $.ajax({
+                    url: "./server/api/getComments.php",
+                    type: "POST",
+                    data: {
+                        postId: postId
+                    },
+                    success: function(response) {
+                        // Update the comments container with the fetched comments
+                        const responseObj = JSON.parse(response);
+                        let commentBody = "";
+                        responseObj.forEach((item) => {
+                            commentBody += `
+                    <div class="post-item">
+                        <div class="post-item-head">
+                            <div class="post-item-head-left">
+                                <img class="profile-picture-holder" src="./${item.profile_picture}" alt="" srcset="">
+                            </div>
+                            <div class="post-item-head-right">
+                                <div class="post-user">
+                                    <span>${item.fname} ${item.lname}</span>
+                                </div>
+                                <div class="post-details">
+                                    <span>${item.created_date_time}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-item-body">
+                            <span id="content-<?php echo $uid; ?>" style="margin:5px;">${item.content}</span> 
+                        </div>
+                        ${(item.comment_by == <?php echo $uid; ?>) ? `<div class="controlBtns" style="margin:5px;"><button class="softGreen controlBtn editComment" data-id="${item.comment_id}" id="editComment-${item.comment_id}">Edit Comment</button><button class="softRed controlBtn deleteComment" data-id="${item.comment_id}" id="deleteComment-${item.comment_id}">Delete Commment</button></div>` : ""}
+                    </div>`;
+                        });
+                        commentsContainer.innerHTML = commentBody;
+
+                        // Add click event listener to editComment buttons
+                        $(".editComment").click(function(event) {
+                            // Access the data-id attribute of the clicked button
+                            const commentId = $(this).data("id");
+                            if(this.innerText != "Save")
+                            {
+                                this.innerText = "Save";
+                            $("#content-<?php echo $uid; ?>").append("<input type='text' id='updateText'/>");
+
+                            }else if(this.innerText == "Save")
+                            {
+                                $.ajax({
+                                    url: "./server/api/comments/updateComment.php",
+                                    type: 'POST',
+                                    data: {commentId: commentId, newComment: document.getElementById("updateText").value},
+                                    success:function(data)
+                                    {
+                                        fetchComments();
+                                    }
+                                });
+                            }
+                            // fetchComments();
+                        });
+
+                        $(".deleteComment").click(function(event) {
+                            // Access the data-id attribute of the clicked button
+                            const commentId = $(this).data("id");
+                            console.log(commentId);
+
+                            if(this.innerText != "Confirm Delete")
+                            {
+                                this.innerText = "Confirm Delete";
+                            }else{
+                                $.ajax({
+                                    url: "./server/api/comments/deleteComment.php",
+                                    type: 'POST',
+                                    data: {commentId: commentId},
+                                    success:function(data)
+                                    {
+                                        fetchComments();
+                                    }
+                                })
+
+                            }
+
+                            // fetchComments();
+
+                        });
+                    },
+                    error: function(error) {
+                        console.log("Error fetching comments:", error);
+                    }
+                });
+            });
         }
+
 
         getComments.addEventListener("click", () => {
             let getLikes = document.getElementById("getLikes");
-
             console.log("clicked");
             getLikes.classList.remove("active-btn");
             getComments.classList.add("active-btn");
             console.log(getLikes.classList);
             console.log(getComments.classList);
             console.log("clicked");
+            fetchComments();
+        })
 
-
-
+        getLikes.addEventListener("click", () => {
+            getLikes.classList.add("active-btn");
+            getComments.classList.remove("active-btn");
+            getPostsLikes();
         })
         $.ajax({
             url: "./server/api/getLikes.php",
@@ -434,7 +580,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
         function getPostsLikes() {
             let getLikes = document.getElementById("getLikes");
-
             let getComments = document.getElementById("getComments");
             let likedStateImg = document.getElementById("likeState");
             let likeCount = document.getElementById("like-count");
@@ -459,12 +604,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     let likesHtml = "";
                     likesObj.forEach((item) => {
                         likesHtml += `
-                <a class="right-nav-item" href="user.php?id=${item.uid}">
-            <img class="right-nav-item-img" src="${item.profile_picture}">
-            <span>${item.fname} ${item.lname}</span>
-        </a>
-                `;
-
+                                    <a class="right-nav-item" href="user.php?id=${item.uid}">
+                                            <img class="right-nav-item-img" src="${item.profile_picture}">
+                                            <span>${item.fname} ${item.lname}</span>
+                                    </a>
+                                    `;
                     })
 
                     likeCommentContainer.innerHTML = likesHtml;
@@ -512,7 +656,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         });
 
 
-
         function postComment(id) {
             let myUid = <?php echo $_SESSION['user']['uid']; ?>;
             let commentText = document.getElementById("post-comment-" + id);
@@ -526,9 +669,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 },
             })
             commentText.value = null;
+            fetchComments();
         }
-
-        setInterval(getPostsLikes, 30000);
     </script>
 </body>
 

@@ -1,9 +1,9 @@
 <?php
 
-include_once('./parts/entryCheck.php');
-include_once('./server/db_connection.php');
-include_once('./server/validation.php');
-include_once('./server/functions.php');
+include_once ('./parts/entryCheck.php');
+include_once ('./server/db_connection.php');
+include_once ('./server/validation.php');
+include_once ('./server/functions.php');
 
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
@@ -21,7 +21,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="stylesheet" href="./assets/css/fontawesome.css">
     <link rel='preconnect' href='https://fonts.googleapis.com'>
     <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
-    <link href='https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap' rel='stylesheet'>
+    <link
+        href='https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'
+        rel='stylesheet'>
     <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
     <title>Feed -
         <?php echo $aboutSite['system_name']; ?>
@@ -65,8 +67,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             align-items: center;
         }
 
-        input[type="submit"]
-        {
+        input[type="submit"] {
             margin-top: 10px;
             padding: 8px 20px 8px 20px;
             border: none;
@@ -75,19 +76,20 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             background-color: #C6EBC5;
         }
 
-        input[type="submit"]:hover{
-            background-color:#C6EBC5;
+        input[type="submit"]:hover {
+            background-color: #C6EBC5;
         }
-        
     </style>
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
 
 </head>
 
 <body>
+
+
     <?php
-    include_once("./parts/navbar.php");
-    include_once("./parts/leftSidebar.php");
+    include_once ("./parts/navbar.php");
+    include_once ("./parts/leftSidebar.php");
     ?>
     <div class="mid-body">
         <div class="left-inner-heading">
@@ -96,7 +98,20 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             </span>
             <hr class="label-underline">
         </div>
-        <form class="contents">
+        <?php
+        if (isset ($_POST['currentPassword']) && isset ($_POST['newPassword1']) && isset ($_POST['newPassword2'])) {
+            $currentPassword = htmlspecialchars($_POST['currentPassword']);
+            $newPassword1 = htmlspecialchars($_POST['newPassword1']);
+            $newPassword2 = htmlspecialchars($_POST['newPassword2']);
+
+            if (validate_password($currentPassword) && validate_cpassword($newPassword1, $newPassword2)) {
+                echo (changePassword($_SESSION['user']['uid'], $currentPassword, $newPassword1))?'<div class="signup-success">Password Changed Succesfully</div>':'<div class="signup-error">Unable to change password.</div>';
+            } else {
+                echo '<div class="signup-error">Invalid password.</div>';
+            }
+        }
+        ?>
+        <form class="contents" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
             <div class="form-item">
                 <label for="currentPassword">Current password</label>
                 <div class="inp-field">
@@ -123,7 +138,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         </form>
     </div>
     <?php
-    include_once("./parts/rightSidebar.php");
+    include_once ("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>
 </body>

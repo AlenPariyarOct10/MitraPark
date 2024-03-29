@@ -79,19 +79,21 @@ function noUser($aboutSite)
 if (isset ($_GET['id'])) {
 
     //prevent from XSS [convert script tags to special chars]
-    $uid = htmlspecialchars($_GET['id']);
+    $profileUid = htmlspecialchars($_GET['id']);
     if (session_status() != PHP_SESSION_ACTIVE) {
         session_start();
     }
     ;
     if (isset ($_SESSION['user']['uid'])) {
-        if ($_SESSION['user']['uid'] == $uid) {
+        if ($_SESSION['user']['uid'] == $profileUid) {
             header("Location: profile.php");
         }
     }
+   
 
-    $result = mysqli_query($connection, "SELECT * FROM users WHERE uid='$uid'");
-    $result = mysqli_query($connection, "SELECT CONCAT(u.fname, ' ', u.lname) AS uname, u.bio, lp.location_name as p_location_name, lt.location_name as t_location_name,institution_name, u.profile_picture, u.gender FROM users u LEFT JOIN locations lp ON lp.location_id = u.p_address_id LEFT JOIN locations lt ON lt.location_id = u.t_address_id LEFT JOIN academic_institution ai on ai.inst_id=u.academic_institution_id WHERE u.uid='$uid'");
+
+    $result = mysqli_query($connection, "SELECT * FROM users WHERE uid='$profileUid'");
+    $result = mysqli_query($connection, "SELECT CONCAT(u.fname, ' ', u.lname) AS uname, u.bio, lp.location_name as p_location_name, lt.location_name as t_location_name,institution_name, u.profile_picture, u.gender FROM users u LEFT JOIN locations lp ON lp.location_id = u.p_address_id LEFT JOIN locations lt ON lt.location_id = u.t_address_id LEFT JOIN academic_institution ai on ai.inst_id=u.academic_institution_id WHERE u.uid='$profileUid'");
     $result = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
     if ($result) {
@@ -106,9 +108,6 @@ if (isset ($_GET['id'])) {
         if ($profile_pic == null) {
             $profile_pic = "/assets/images/user.png";
         }
-
-
-
         ?>
         <!DOCTYPE html>
         <html lang="en">
@@ -130,10 +129,13 @@ if (isset ($_GET['id'])) {
         </head>
 
         <body>
+
             <?php
             include_once ("./parts/navbar.php");
             include_once ("./parts/leftSidebar.php");
             ?>
+
+
             <div class="mid-body">
                 <div class="left-inner-body inner-mid-body">
                     <label for="profileUpload">
@@ -164,19 +166,19 @@ if (isset ($_GET['id'])) {
                         $senderId = $_SESSION['user']['uid'];
 
                         // Check Request State - If this user has sent friend request to other or not
-                        $query = "SELECT * FROM `friend_requests` WHERE `sender_id`='$senderId' and `receiver_id`='$uid'";
+                        $query = "SELECT * FROM `friend_requests` WHERE `sender_id`='$senderId' and `receiver_id`='$profileUid'";
                         $requestStatus = mysqli_query($connection, $query);
                         $requestStatus = mysqli_fetch_array($requestStatus, MYSQLI_ASSOC);
 
 
                         //Check Request State - If i have received request from other side
-                        $query = "SELECT * FROM `friend_requests` WHERE `sender_id`='$uid' and `receiver_id`='$senderId'";
+                        $query = "SELECT * FROM `friend_requests` WHERE `sender_id`='$profileUid' and `receiver_id`='$senderId'";
                         $received_requestStatus = mysqli_query($connection, $query);
                         $received_requestStatus = mysqli_fetch_array($received_requestStatus, MYSQLI_ASSOC);
 
 
                         // Check if is friend or not
-                        $query = "SELECT * FROM `friends` WHERE `sender_id`='$senderId' AND `acceptor_id`='$uid' or `sender_id`='$uid' AND `acceptor_id`='$senderId'";
+                        $query = "SELECT * FROM `friends` WHERE `sender_id`='$senderId' AND `acceptor_id`='$profileUid' or `sender_id`='$profileUid' AND `acceptor_id`='$senderId'";
                         $IsFrientResult = mysqli_query($connection, $query);
                         $IsFrientResult = mysqli_fetch_array($IsFrientResult, MYSQLI_ASSOC);
 
@@ -184,7 +186,7 @@ if (isset ($_GET['id'])) {
 
 
                         if ($IsFrientResult !== null) {
-                            echo '<div id="mitraRequestHandleBtn" data-uid="' . $uid . '">
+                            echo '<div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
                                 <div data-mode="removeMitra" class="mitra-request-control-btn">
                                     <img src="./assets/images/remove.png" height="30px" alt="" />
                                     <span>Remove Mitra</span>
@@ -194,13 +196,13 @@ if (isset ($_GET['id'])) {
                         } else {
                             if ($received_requestStatus == null) {
                                 if ($requestStatus === null) {
-                                    echo '<div id="mitraRequestHandleBtn" data-uid="' . $uid . '">
+                                    echo '<div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
                                 <div  data-mode="sendRequest"  class="mitra-request-control-btn">
                                     <img src="./assets/images/add-mitra.png" height="30px" alt="" />
                                     <span>Add Mitra</span>
                                 </div></div>';
                                 } else {
-                                    echo '<div id="mitraRequestHandleBtn" data-uid="' . $uid . '">
+                                    echo '<div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
                                 <div data-mode="cancelRequest"  class="mitra-request-control-btn">
                                     <img src="./assets/images/remove.png" height="30px" alt="" />
                                     <span>Cancel Request</span>
@@ -208,7 +210,7 @@ if (isset ($_GET['id'])) {
                                 }
                             } else {
                                 echo '
-                                <div id="mitraRequestHandleBtn" data-uid="' . $uid . '">
+                                <div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
                                 <div data-mode="acceptRequest"  class="mitra-request-control-btn accept-reject">
                                     <img src="./assets/images/accept-request.png" height="30px" alt="" />
                                     <span>Accept Request</span>
@@ -237,6 +239,13 @@ if (isset ($_GET['id'])) {
                 </div>
             </div>
             <?php include_once ("./parts/rightSidebar.php") ?>
+
+
+            <?php 
+
+                        echo "Sender : ".$profileUid;
+                        echo "Receiver : ".$senderId;
+?>
         </body>
         <script src="./assets/scripts/jquery.js"></script>
         <script>
@@ -246,7 +255,7 @@ if (isset ($_GET['id'])) {
                     url: "./server/api/handleRequest.php",
                     type: 'post',
                     data: {
-                        messageTo: requestHandleBtn.dataset.uid,
+                        messageTo: <?php echo $profileUid; ?>,
                         mode: requestHandleBtn.childNodes[1].dataset.mode
                     },
                     success: function (success) {

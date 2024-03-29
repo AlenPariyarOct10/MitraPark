@@ -19,10 +19,61 @@
         {
             if(!isset($_SESSION)){session_start();}
             $_SESSION['userCreated'] = true;
-            echo "hello";
+     
             header('Location: login.php?1');
         }
     }
+
+    function changePassword($uid, $currentPassword, $newPassword)
+    {
+        // Fetch the hashed password associated with the provided user ID
+        $fetchPasswordQuery = "SELECT `password` FROM `users` WHERE `uid`='$uid'";
+        $result = mysqli_query($GLOBALS['connection'], $fetchPasswordQuery);
+        
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $hashedPassword = $row['password'];
+            
+            // Verify if the provided current password matches the hashed password
+            if (password_verify($currentPassword, $hashedPassword)) {
+                // Hash the new password
+                $newHashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                
+                // Update the password in the database
+                $updatePasswordQuery = "UPDATE `users` SET `password`='$newHashedPassword' WHERE `uid`='$uid'";
+                $updateResult = mysqli_query($GLOBALS['connection'], $updatePasswordQuery);
+                
+                if ($updateResult) {
+                    // Password updated successfully
+                    return true;
+                } else {
+                    // Error updating password
+                    return false;
+                }
+            } else {
+                // Current password does not match
+                return false;
+            }
+        } else {
+            // Error fetching password
+            return false;
+        }
+    }
+
+
+    function searchAdmin($email, $password)
+    {
+        $hasEmail = "select * from `admin` where `email`='$email'";
+        $hasEmail = $GLOBALS['connection']->query($hasEmail);
+        if($GLOBALS['connection']->affected_rows == 0)
+        {
+            return false;
+        }else{
+            $getPassword = mysqli_fetch_assoc($hasEmail); 
+            return password_verify($password, $getPassword['password']);
+        }
+    }
+    
 
     function searchUser($email, $password)
     {
@@ -39,7 +90,13 @@
 
     function loginUser($email, $password)
     {
-       if(searchUser($email, $password)==false)
+       if(searchAdmin($email, $password))
+       {
+     
+        if(!isset($_SESSION)){session_start();}
+        $_SESSION['loggedInAdmin'] = true;
+        header("Location: ./admin/index.php");
+       }else if(searchUser($email, $password)==false)
        {
             if(!isset($_SESSION)){session_start();}
             $_SESSION['userNotFound'] = true;
@@ -77,8 +134,15 @@
             // Component Id : id of component for which the notification is generated
             // Triggered by (id) : who triggered the notificaition
             // Alen:${triggeredBy} liked:${Type} your post${componentId}
+        
+        if(session_status()!=PHP_SESSION_ACTIVE)
+        {
+            session_start();
+        }
 
-        $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`) VALUES ('{$type}', NOW(), '{$component_id}' , '{$triggered_by}')";
+        $uid = $_SESSION['user']['uid'];
+
+        $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', NOW(), '{$component_id}' , '{$triggered_by}',{$uid})";
         $GLOBALS['connection']->query($insertQuery);
         echo "liked";
     }

@@ -47,18 +47,45 @@
                     const strictModeStatus = JSON.parse(msg);
                     console.log("finish");
 
+                    if(strictModeStatus['strict-mode']==true && strictModeStatus['strict-lock']==false)
+                    {
+                        $.ajax({
+                        url: "./server/api/strict-mode/check_strict_mode.php",
+                        type: "POST",
+                        success:function (getStatus)
+                        {
+                            getStatus =JSON.parse(getStatus);
+                            console.log(getStatus['getWarning']);
 
+                            if(getStatus['getWarning']==1 && getStatus['availableAccessSeconds']<=900)
+                            {
+                                $.ajax({
+                                    url: "./server/api/strict-mode/update_warning.php",
+                                    success:function ()
+                                    {
+                                        window.location.href = "timeOutWarn.php";
+                                    }
+                                })
+                            }
+                        },
+                        error:function()
+                        {
+                            console.log("failed");
+                        }
+                    })
+                    }
 
                     if(strictModeStatus['strict-mode']==true && strictModeStatus['strict-lock']==true)
                     {
-                        console.log("finish");
+                        
                         window.location.href = "feed.php";
-                        console.log("finish--");
+                        
 
                     }
                 }
             })
         }
+
         setInterval(() => {
             update_activity_datetime();
             update_strict_mode_timeout();

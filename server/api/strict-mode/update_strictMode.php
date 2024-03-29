@@ -12,10 +12,13 @@
     $result = mysqli_fetch_assoc($result);
 
 
+
+
     if($result != null)
     {
         if($result['availableAccessSeconds']>=0)
         {
+            
             $updateQuery = "UPDATE `strict_mode` SET `availableAccessSeconds`=`availableAccessSeconds` - 5 WHERE `endStrictDate`=CURDATE() AND `uid`='$uid'";
             mysqli_query($connection, $updateQuery);
             $result = array("strict-mode"=>true, "strict-lock"=>false);

@@ -48,6 +48,38 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
     <?php
         include_once("./parts/navbar.php");
         include_once("./parts/leftSidebar.php");
+        function timeAgo($postedTime) {
+            // Get current timestamp
+            $currentTime = time();
+            
+            // Convert posted time to timestamp
+            $postedTimestamp = strtotime($postedTime);
+            
+            // Calculate time difference in seconds
+            $timeDifference = $currentTime - $postedTimestamp;
+            
+            // Convert time difference to minutes, hours, days, months, or years
+            $minutes = floor($timeDifference / 60);
+            $hours = floor($timeDifference / (60 * 60));
+            $days = floor($timeDifference / (60 * 60 * 24));
+            $months = floor($timeDifference / (60 * 60 * 24 * 30));
+            $years = floor($timeDifference / (60 * 60 * 24 * 365));
+            
+            // Return time ago string
+            if ($years > 0) {
+                return $years . ($years > 1 ? ' years' : ' year') . ' ago';
+            } elseif ($months > 0) {
+                return $months . ($months > 1 ? ' months' : ' month') . ' ago';
+            } elseif ($days > 0) {
+                return $days . ($days > 1 ? ' days' : ' day') . ' ago';
+            } elseif ($hours > 0) {
+                return $hours . ($hours > 1 ? ' hours' : ' hour') . ' ago';
+            } elseif ($minutes > 0) {
+                return $minutes . ($minutes > 1 ? ' minutes' : ' minute') . ' ago';
+            } else {
+                return 'just now';
+            }
+        }
     ?>
     <div class="mid-body">
     <div class="left-inner-heading">
@@ -58,57 +90,48 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </div>
             <?php 
             $uid = $_SESSION['user']['uid'];
-                // $query = "SELECT `post_id` FROM `posts` WHERE `author_id`='$uid'";
-                $getNotificationQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, type, created_date_time  FROM notifications n INNER JOIN users u ON triggered_by = u.uid WHERE n.type='like' AND `component_id` IN (SELECT `post_id` FROM `posts` WHERE `author_id`='$uid') ORDER BY created_date_time ASC";
+                $getNotificationQuery = "SELECT CONCAT(fname, ' ', lname) AS uname, 
+                                profile_picture, 
+                                type, 
+                                created_date_time,
+                                triggered_by  
+                         FROM notifications n 
+                         INNER JOIN users u ON triggered_by = u.uid 
+                         WHERE n.type='like' 
+                               AND u.uid<>'$uid' 
+                               AND component_id IN (SELECT post_id FROM posts WHERE author_id='$uid') 
+                         ORDER BY created_date_time ASC";
 
                 $result = mysqli_query($connection, $getNotificationQuery);
                 while($row = mysqli_fetch_assoc($result))
                 {
-           
-                      
-                        $created_timestamp = strtotime($row['created_date_time']);
-                        $time_elapsed = time() - $created_timestamp;
-                        
-                        // Determine the appropriate time unit to display
-                        if ($time_elapsed < 60) {
-                            $time_unit = 'second';
-                            $time_value = $time_elapsed;
-                        } elseif ($time_elapsed < 3600) {
-                            $time_unit = 'minute';
-                            $time_value = floor($time_elapsed / 60);
-                        } elseif ($time_elapsed < 86400) {
-                            $time_unit = 'hour';
-                            $time_value = floor($time_elapsed / 3600);
-                        } else {
-                            $time_unit = 'day';
-                            $time_value = floor($time_elapsed / 86400);
-                        }
-                        
-                        if ($time_value != 1) {
-                            $time_unit .= 's';
-                        }
-       
+                
                     if($row['type']=='like')
                     {
                         echo '
-                        <a class="right-nav-item" id="my-profile" href="./profile.php">
-                        <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
-                        <div style="display:flex; flex-direction:column;">
-                            <span><b>'.$row['uname'].'</b> liked your post.</span>
-                            <span style="font-size: small; color: #373737;">'.$time_value.' '.$time_unit.' ago</span>
-                        </div>
-                        
-                    </a>
-                    ';
+                        <a class="right-nav-item" id="my-profile" href="./user.php?id='.$row['triggered_by'].'">
+                            <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
+                            <div style="display:flex; flex-direction:column;">
+                                <span><b>'.$row['uname'].'</b> liked your post.</span>
+                                <span style="font-size: small; color: #373737;">'.timeAgo($row['created_date_time']).' ago</span>
+                            </div>
+                        </a>
+                        ';
                     }
-                    
                 }
                 ?>
+                
 </div>
+
+<?php
+    $setSeenNotifications = "UPDATE `notifications` SET `seen_status`=1 WHERE `author_id`='$uid'";
+    $result = mysqli_query($connection, $setSeenNotifications);
+?>
     
     <?php
         include_once("./parts/rightSidebar.php");
     ?>
+    
     <script src='./assets/scripts/jquery.js'></script>
     <script src='posts.js'></script>
 </body>

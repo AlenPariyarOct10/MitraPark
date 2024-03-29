@@ -1,4 +1,9 @@
 <?php
+if(session_status()!=PHP_SESSION_ACTIVE)
+{
+    session_start();
+}
+
 
 include_once("./server/db_connection.php");
 include_once("./server/validation.php");
@@ -15,6 +20,8 @@ if(isset($_POST['email']) && isset($_POST['password']))
     $email = htmlspecialchars($_POST['email']);
     $psw = htmlspecialchars($_POST['password']);
     loginUser($email, $psw);
+
+
 }
 ?>
 <!DOCTYPE html>
