@@ -24,6 +24,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="stylesheet" href="assets/css/mitras-style.css">
     <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./assets/css/navbar.css">
+    <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+
     <style>
         .mid-body {
             height: 90vh;
