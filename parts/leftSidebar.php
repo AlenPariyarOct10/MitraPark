@@ -1,5 +1,5 @@
 <div class='body'>
-        <div class='left-nav'>
+        <div class='left-sidebar'>
             <div class='left-top'>
                 <div class='left-inner-heading'>
                     <span class='dim-label'>

@@ -6,6 +6,7 @@
 * {
     margin: 0px;
     font-family: 'poppins';
+    color: white;
 }
 
 #profile-info-uname {
@@ -213,7 +214,7 @@ body{
 
 .left-sidebar{
     width: 26%;
-    height: 100%;
+
     background-color: var(--mp-theme-bg);
 }
 
@@ -230,7 +231,6 @@ body{
 
 .right-sidebar{
     width: 26%;
-    height: 100%;
     background-color: var(--mp-theme-bg);
 }
 
@@ -255,7 +255,6 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 100%;
 }
 
 .modal-popup-head{

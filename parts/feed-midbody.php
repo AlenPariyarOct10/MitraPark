@@ -25,7 +25,7 @@
 
     </div>
     <div id="popup-upload-post">
-                <img class="modal-popup-head" height="80px" src="../assets/images/post.png" alt="" srcset="">
+                <img class="modal-popup-head" height="80px" src="./assets/images/post.png" alt="" srcset="">
                 <div class="post-uploader">
                     <div class="post-uploader-head">
                         <h3>Create post</h3>

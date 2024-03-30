@@ -1,10 +1,6 @@
 <script>
     // ----------------------------------------------------------------------//
     //  Toggle profile menu
-    
-    $("#nav-profile-img").click(() => {
-    console.log("clicked");
-});
 
         $("#nav-profile-img").click(() => {
         if ($("#profile-menu").hasClass("show")) {
@@ -101,5 +97,10 @@
         updateNewNotificationStatus();
         console.log("trigger");
     }, 5000);
+
+    
+
+
+    
 
 </script>

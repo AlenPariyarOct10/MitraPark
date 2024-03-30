@@ -1,4 +1,4 @@
-<div class='right-nav'>
+<div class='right-sidebar'>
 
     <a class='<?php if (str_contains($_SERVER['PHP_SELF'], "profile.php")) {
         echo "active-side-tab ";
