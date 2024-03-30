@@ -1,10 +1,16 @@
 <?php 
+    if(session_status() != PHP_SESSION_ACTIVE)
+    {
+        session_start();
+    }
 
     include_once("./server/db_connection.php");
+
+    var_dump($_FILES);
     
     if($_FILES['file']['name']!='')
     {
-        session_start();
+
         $fileName = $_FILES['file']['name'];
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
 
@@ -18,15 +24,17 @@
                 $uid = $_SESSION['user']['uid'];
                 $insert_pp = "UPDATE `users` SET `profile_picture`='$path' WHERE `uid`='$uid'";
                 $result = mysqli_query($connection, $insert_pp);
-                $getUserData = "select * from users where `email`='$email'";
+                $getUserData = "select * from users where `uid`='$uid'";
                 $getUserData = $connection->query($getUserData);
-                $getUserData = mysqli_fetch_assoc($getUserData);
-                var_dump(json_encode($getUserData));
-                
+                $getUserData = mysqli_fetch_assoc($getUserData); 
+                $_SESSION['user']['profile_picture'] = $path;
+                echo "changed : ".$_SESSION['user']['profile_picture'];
             }
-        }
-        
+        }  
     }
+    echo "changed : ".$_SESSION['user']['profile_picture'];
+
+    header("Location: profile.php");
     
 
 

@@ -1,7 +1,36 @@
+
+// function timeAgo(postedTime) {
+//   const postedDate = new Date(postedTime);
+//   const currentDate = new Date();
+//   const timeDifference = currentDate - postedDate;
+
+//   const seconds = Math.floor(timeDifference / 1000);
+//   const minutes = Math.floor(seconds / 60);
+//   const hours = Math.floor(minutes / 60);
+//   const days = Math.floor(hours / 24);
+//   const months = Math.floor(days / 30);
+//   const years = Math.floor(days / 365);
+
+//   if (years > 0) {
+//       return `${years} year${years > 1 ? 's' : ''} ago`;
+//   } else if (months > 0) {
+//       return `${months} month${months > 1 ? 's' : ''} ago`;
+//   } else if (days > 0) {
+//       return `${days} day${days > 1 ? 's' : ''} ago`;
+//   } else if (hours > 0) {
+//       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+//   } else if (minutes > 0) {
+//       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+//   } else {
+//       return 'just now';
+//   }
+// }
+
+
 async function fetchPosts() {
   return new Promise((resolve, reject) => {
       $.ajax({
-          url: "./server/api/get-posts.php",
+          url: "./server/api/posts/get-posts.php",
           type: "POST",
           success: (data) => {
        
@@ -102,7 +131,10 @@ function likeHandeler() {
     }
   }
 
-  // Function to generate post HTML with likedState parameter
+ 
+
+
+// Each Post Card parameters(postId, likedState)
 function generatePostHTML(postItem, likedState) {
   const postHTML = `
             <div class="post-item">
@@ -120,7 +152,7 @@ function generatePostHTML(postItem, likedState) {
                   <div class="post-details">
                     <span>${postItem.visibility}</span>
                     <span>|</span>
-                    <span>${postItem.created_date_time} </span>
+                    <span> </span>
                   </div>
                 </div>
               </div>
@@ -134,7 +166,8 @@ function generatePostHTML(postItem, likedState) {
                   <span class="like-count">${postItem.like_count}</span>
                 </div>
                 <div class="comment-container">
-                  <img height="20px" src="./assets/images/comment-outline.svg">
+                  <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
+                  <img height="20px" src="./assets/images/comment-outline.svg"></a>
                 </div>
               </div>
             </div>
@@ -145,20 +178,9 @@ function generatePostHTML(postItem, likedState) {
   likeHandeler();
 }
   
-// Call renderPosts
+
 renderPosts().catch(error => {
   console.error("Error rendering posts:", error);
 });
   
-function postComment(id)
-{  
-  let commentText = document.getElementById("post-comment-"+id);
-  $.ajax({
-    url: "./server/api/insertComment.php",
-    type: "POST",
-    data: {postId: id, commentAuthor: localStorage.getItem("mp-uid") , commentContent: commentText.value},
 
-
-  })
-  commentText.value = null;
-}

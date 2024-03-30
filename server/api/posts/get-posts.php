@@ -1,5 +1,5 @@
 <?php
-    include_once("../../server/db_connection.php");
+    include_once("../../../server/db_connection.php");
     if(session_status()!=PHP_SESSION_ACTIVE){
         session_start();
     }

@@ -17,7 +17,7 @@
         
     }else if($result['availableAccessSeconds']>=0)
     {
-        $result = array("strict-mode"=>true, "strict-lock"=>false);
+        $result = array("strict-mode"=>true, "strict-lock"=>false, "availableAccessSeconds"=>$result['availableAccessSeconds'], "getWarning"=>$result['getWarning']);
         
     }else{
         $result = array("strict-mode"=>true, "strict-lock"=>true);
