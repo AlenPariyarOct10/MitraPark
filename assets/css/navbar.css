@@ -1,12 +1,18 @@
 :root{
-    --mp-blue : rgb(26, 133, 255);
-    --mp-theme-bg : #111111;;
+    --mp-blue : #222831;
+    --mp-theme-bg : #FEFBF6;
 }
 
 * {
     margin: 0px;
     font-family: 'poppins';
+    color: rgb(0, 0, 0);
+}
+
+body{
+    background-color: var(--mp-theme-bg);
     color: white;
+
 }
 
 #profile-info-uname {
@@ -24,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--mp-theme-bg);
+    background-color: var(--mp-blue);
     position: relative;
     box-shadow: 0.1px 0.1px 1px 0.2px white;
 }
@@ -52,20 +58,28 @@
     height: 100%;
     width: 100%;
     text-align: center;
-    color: white;
-    border-top: 5px solid var(--mp-theme-bg);
-    border-bottom: 5px solid var(--mp-theme-bg);
+    color: #EEEEEE;
+    border-top: 5px solid var(--mp-blue);
+    border-bottom: 5px solid var(--mp-blue);
+}
+
+#user-nav .center-part a i{
+    
+    color: #EEEEEE;
 }
 
 #user-nav .center-part a:hover {
     background-color: rgba(115, 115, 115, 0.215);
-    color: rgb(93, 169, 255);
-    border-bottom: 5px solid rgb(93, 169, 255);
+    color:#EEEEEE;
+  
+
 }
 
 #user-nav .center-part .active{
-    color: var(--mp-blue);
-    border-bottom: 5px solid var(--mp-blue);
+    color: #EEEEEE;
+    border-bottom: 5px solid #EEEEEE;
+    border-top: 5px solid #EEEEEE;
+
     background-color: #49494947;
 
 }
@@ -222,11 +236,12 @@ body{
     background-color: var(--mp-theme-bg);
     width: 70%;
     height: 100vh;
-   
-    
 }
+
+
+ 
 ::-webkit-scrollbar{
-    width: 10px;
+    width: 2px;
 }
 
 .right-sidebar{
@@ -348,7 +363,11 @@ body{
     .left-sidebar{
         display: none;
     }
-    .mid-body{
+    #mid-body{
         width: 100%;
+    }
+
+    #popup-upload-post{
+        width: 80%;
     }
 }

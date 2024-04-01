@@ -52,14 +52,14 @@ function timeAgo(postedTime) {
             let src = item.childNodes[1].src;
             let likeCount = item.childNodes[3];
   
-            if (src.includes("assets/images/heart-solid.svg")) {
+            if (src.includes("assets/images/heart.png")) {
                 likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
               
-                item.childNodes[1].src = "./assets/images/heart-outline.svg";
+                item.childNodes[1].src = "./assets/images/heart-outline.png";
             } else {
                 likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
             
-                item.childNodes[1].src = "./assets/images/heart-solid.svg";
+                item.childNodes[1].src = "./assets/images/heart.png";
             }
   
             $.ajax({
@@ -105,7 +105,7 @@ function timeAgo(postedTime) {
                 let liked_byObj= likesObj.map((item)=>item.liked_by);
                 console.log(liked_byObj);
   
-                let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart-solid.svg":"./assets/images/heart-outline.svg";
+                let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart.png":"./assets/images/heart-outline.png";
                 console.log("index",likedState);
                 generatePostHTML(postItem, likedState);
               },
@@ -156,12 +156,12 @@ function timeAgo(postedTime) {
                 </a>
                 <div class="post-item-footer">
                   <div data-id=${postItem.post_id} class="like-container">
-                    <img height="20px" src=${likedState}>
+                    <img height="30px" src=${likedState}>
                     <span class="like-count">${postItem.like_count}</span>
                   </div>
                   <div class="comment-container">
                     <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
-                    <img height="20px" src="./assets/images/comment-outline.svg"></a>
+                    <img height="30px" src="./assets/images/comment-outline.svg"></a>
                   </div>
                 </div>
               </div>

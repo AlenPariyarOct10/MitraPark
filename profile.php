@@ -23,6 +23,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
   <link rel="stylesheet" href="./assets/css/profile.css" />
   <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+    
   <title>Profile - MitraPark</title>
 </head>
 

@@ -144,7 +144,7 @@
 
         $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', NOW(), '{$component_id}' , '{$triggered_by}',{$uid})";
         $GLOBALS['connection']->query($insertQuery);
-        echo "liked";
+
     }
 
     function removeNotification($type, $component_id, $triggered_by)

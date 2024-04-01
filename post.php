@@ -25,6 +25,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link href='https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap' rel='stylesheet'>
     <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./assets/css/profile.css">
+    <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+
+    <link rel="stylesheet" href="./assets/css/navbar.css">
+
     <title>Feed -
         <?php echo $aboutSite['system_name']; ?>
     </title>
@@ -134,6 +138,58 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             margin-bottom: 5px;
             margin-right: 0px;
         }
+
+        #heart-flow{
+            position: absolute;
+            height: 200px;
+            bottom: -100%;
+        }
+        #mid-body{
+            width: 35%;
+            height: 90vh;
+        }
+        #popup-upload-post
+        {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            border-radius: 20px;
+            background-color: var(--mp-theme-bg);
+            box-shadow: 0px 0px 20px 1px #fffbfb66;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #modal-wrapper {
+
+background: rgba(0, 0, 0, 0.7);
+width: 100%;
+height: 100%;
+position: fixed;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+display: none;
+}
+#closeModal {
+            top: 0;
+            left: 98%;
+            width: 9px;
+            height: 9px;
+            background-color: red;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+            position: absolute;
+            cursor: pointer;
+            color: white;
+        }
     </style>
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
 
@@ -165,6 +221,31 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     ?>
 
     <div id="mid-body" class="mid-body">
+    <div id="modal-wrapper">
+        <div id="popup-upload-post">
+            <img class="modal-popup-head" height="80px" src="./assets/images/warning.png" alt="" srcset="">
+            <div class="post-uploader">
+                <div id="closeModal">
+                    <p>x</p>
+                </div>
+                <div class="post-uploader-head">
+                    <h3>Report post</h3>
+                </div>
+                <hr class="section-break-hr">
+                <form action="./server/api/posts/report-post.php" method="POST" enctype="multipart/form-data">
+                    <div class="row-caption-container">
+                        <input type="hidden" name="postId" value="<?php echo $postId; ?>">
+                        <textarea name="reportContent" style="color: #222831;" placeholder="Specify about the problem." id="post-caption" required></textarea>
+                    </div>
+                    <div class="row-upload-controls post-upload-control">
+                        <input id="post-share-btn" type="submit" value="Submit" disabled>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <img id="heart-flow" src="./assets/images/heart-flow.png" alt="">
 
         <div class="left-inner-heading">
             <span class="dim-label">
@@ -199,16 +280,16 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     <?php echo $getPost['content']; ?>
                 </span>
 
-                <img style="border-radius:10px;" src="<?php echo "." . $getPost['media']; ?>" alt="" srcset="">
+                <img id="post-img" style="border-radius:10px;" src="<?php echo "." . $getPost['media']; ?>" alt="" srcset="">
             </div>
             <div class="post-item-footer">
 
                 <div data-id=<?php echo $postId; ?> class="like-container">
-                    <img id="likeState" height="20px" src="">
+                    <img id="likeState" onclick="reactAnimation()" height="30px" src="">
                     <span id="like-count" class="like-count">0</span>
                 </div>
                 <div class="comment-container">
-                    <img height="20px" src="./assets/images/comment-outline.svg">
+                    <img height="30px" src="./assets/images/comment-outline.svg">
                 </div>
 
             </div>
@@ -218,18 +299,28 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <button style="cursor:pointer;" class="post-comment" onclick="postComment(<?php echo $postId; ?>)" id="comment-btn-<?php echo $postId; ?>"> <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i> </button>
             </div>
         </div>
-        <?php
-        if ($getAuthor['author_id'] === $uid) {
-        ?>
+       
             <div class="post-item">
                 <div id="view-likes-comments" style="margin:5px;">
+                <?php
+        if ($getAuthor['author_id'] === $uid) {
+        ?>
                     <button id="editPost">Edit Post</button>
                     <button id="deletePost">Delete Post</button>
-                </div>
-            </div>
-        <?php
+                    <?php
         }
         ?>
+        <?php 
+        if($getAuthor['author_id'] !== $uid)
+        {
+            ?>
+                    <button id="reportPost">Report Post</button>
+                    <?php }?>
+                    
+                </div>
+            </div>
+       
+        
         <div class="post-item">
             <div id="view-likes-comments" style="margin:5px;">
                 <button id="getLikes">Likes</button>
@@ -255,6 +346,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 ?>
             </div>
         </div>
+        
 
         <!-- Edit Post Modal -->
         <div id="editPostModal" class="modal">
@@ -368,6 +460,24 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     <script src='./assets/scripts/jquery.js'></script>
     <script>
+        $("#post-caption").change(() => {
+    if ($("#post-caption").val().length > 0) {
+        $("#post-share-btn").removeAttr("disabled");
+    } else {
+        $("#post-share-btn").attr("disabled", "disabled");
+    }
+});
+
+
+        $("#reportPost").click(()=>{
+            $("#modal-wrapper").slideDown();
+
+        })
+        let modalWrapper = document.getElementById("modal-wrapper");
+        let closeModal = document.getElementById("closeModal");
+        closeModal.addEventListener("click", () => {
+            $("#modal-wrapper").slideUp();
+        });
         function postComment(id) {
             let commentText = document.getElementById("post-comment-" + id);
             $.ajax({
@@ -383,6 +493,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             })
             commentText.value = null;
         }
+
+
+
         <?php
         if ($getAuthor['author_id'] === $uid) {
         ?>
@@ -415,6 +528,17 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         <?php
         }
         ?>
+
+            function reactAnimation()
+            {
+                $("#heart-flow").animate({bottom: "-100%"}, 800);
+                $("#heart-flow").animate({bottom:"40%", height: "300px"}, 500);
+                $("#heart-flow").animate({bottom:"100%",height: "150px"}, 800);
+                $("#heart-flow").animate({bottom: "-100%", height: "150px"}, 0);
+            }
+
+    
+            
 
 
         let getLikes = document.getElementById("getLikes");
@@ -464,6 +588,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             <span id="content-<?php echo $uid; ?>" style="margin:5px;">${item.content}</span> 
                         </div>
                         ${(item.comment_by == <?php echo $uid; ?>) ? `<div class="controlBtns" style="margin:5px;"><button class="softGreen controlBtn editComment" data-id="${item.comment_id}" id="editComment-${item.comment_id}">Edit Comment</button><button class="softRed controlBtn deleteComment" data-id="${item.comment_id}" id="deleteComment-${item.comment_id}">Delete Commment</button></div>` : ""}
+                        <button class="softRed controlBtn replyComment" data-id="${item.comment_id}" id="replyComment-${item.comment_id}">Reply Commment</button>
                     </div>`;
                         });
                         commentsContainer.innerHTML = commentBody;
@@ -553,7 +678,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 let liked_byObj = likesObj.map((item) => item.liked_by);
                 console.log(liked_byObj);
 
-                let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1) ? "./assets/images/heart-solid.svg" : "./assets/images/heart-outline.svg";
+                let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1) ? "./assets/images/heart.png" : "./assets/images/heart-outline.png";
                 console.log("index", likedState);
                 likedStateImg.src = likedState;
                 likeCount.innerText = likesObj.length;
@@ -596,7 +721,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     let liked_byObj = likesObj.map((item) => item.liked_by);
                     console.log(liked_byObj);
 
-                    let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1) ? "./assets/images/heart-solid.svg" : "./assets/images/heart-outline.svg";
+                    let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1) ? "./assets/images/heart.png" : "./assets/images/heart-outline.png";
                     console.log("index", likedState);
                     likedStateImg.src = likedState;
                     likeCount.innerText = likesObj.length;
@@ -628,14 +753,14 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             let src = likedStateImg.src;
             let likeCount = document.getElementById("like-count");
 
-            if (src.includes("assets/images/heart-solid.svg")) {
+            if (src.includes("assets/images/heart.png")) {
                 likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
 
-                likedStateImg.src = "./assets/images/heart-outline.svg";
+                likedStateImg.src = "./assets/images/heart-outline.png";
             } else {
                 likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
 
-                likedStateImg.src = "./assets/images/heart-solid.svg";
+                likedStateImg.src = "./assets/images/heart.png";
             }
 
             $.ajax({

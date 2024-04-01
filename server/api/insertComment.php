@@ -12,8 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         {
             $insertComment = "INSERT INTO `comments`(`comment_by`, `content`, `created_date_time`, `post_id`) VALUES ('$commentAuthor','$commentText',NOW(),'$postId')";
             $insertCommentStatus = mysqli_query($connection, $insertComment);
-            
-            
+            addNotification("comment",$postId,$uid); 
         }
 
         
@@ -22,3 +21,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+

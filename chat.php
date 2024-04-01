@@ -216,8 +216,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                   
                 })
             }
-            
-            
         })
         scrollToBottom();
        
@@ -237,7 +235,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             mainChatContainer.innerHTML += newChat;
             messageBox.value = ""; // Clear message box
 
-            // Send message to server
+           
             $.ajax({
                 url: "./server/api/kurakani/sendMessage.php",
                 type: "POST",

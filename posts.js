@@ -1,30 +1,30 @@
 
-// function timeAgo(postedTime) {
-//   const postedDate = new Date(postedTime);
-//   const currentDate = new Date();
-//   const timeDifference = currentDate - postedDate;
+function timeAgo(postedTime) {
+  const postedDate = new Date(postedTime);
+  const currentDate = new Date();
+  const timeDifference = currentDate - postedDate;
 
-//   const seconds = Math.floor(timeDifference / 1000);
-//   const minutes = Math.floor(seconds / 60);
-//   const hours = Math.floor(minutes / 60);
-//   const days = Math.floor(hours / 24);
-//   const months = Math.floor(days / 30);
-//   const years = Math.floor(days / 365);
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
 
-//   if (years > 0) {
-//       return `${years} year${years > 1 ? 's' : ''} ago`;
-//   } else if (months > 0) {
-//       return `${months} month${months > 1 ? 's' : ''} ago`;
-//   } else if (days > 0) {
-//       return `${days} day${days > 1 ? 's' : ''} ago`;
-//   } else if (hours > 0) {
-//       return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-//   } else if (minutes > 0) {
-//       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-//   } else {
-//       return 'just now';
-//   }
-// }
+  if (years > 0) {
+      return `${years} year${years > 1 ? 's' : ''} ago`;
+  } else if (months > 0) {
+      return `${months} month${months > 1 ? 's' : ''} ago`;
+  } else if (days > 0) {
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+  } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else if (minutes > 0) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else {
+      return 'just now';
+  }
+}
 
 
 async function fetchPosts() {
@@ -56,14 +56,14 @@ function likeHandeler() {
           let src = item.childNodes[1].src;
           let likeCount = item.childNodes[3];
 
-          if (src.includes("assets/images/heart-solid.svg")) {
+          if (src.includes("assets/images/heart.png")) {
               likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
             
-              item.childNodes[1].src = "./assets/images/heart-outline.svg";
+              item.childNodes[1].src = "./assets/images/heart-outline.png";
           } else {
               likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
           
-              item.childNodes[1].src = "./assets/images/heart-solid.svg";
+              item.childNodes[1].src = "./assets/images/heart.png";
           }
 
           $.ajax({
@@ -109,7 +109,7 @@ function likeHandeler() {
               let liked_byObj= likesObj.map((item)=>item.liked_by);
               console.log(liked_byObj);
 
-              let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart-solid.svg":"./assets/images/heart-outline.svg";
+              let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart.png":"./assets/images/heart-outline.png";
               console.log("index",likedState);
               generatePostHTML(postItem, likedState);
             },
@@ -162,12 +162,12 @@ function generatePostHTML(postItem, likedState) {
               </a>
               <div class="post-item-footer">
                 <div data-id=${postItem.post_id} class="like-container">
-                  <img height="20px" src=${likedState}>
+                  <img height="30px" src=${likedState}>
                   <span class="like-count">${postItem.like_count}</span>
                 </div>
                 <div class="comment-container">
                   <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
-                  <img height="20px" src="./assets/images/comment-outline.svg"></a>
+                  <img height="30px" src="./assets/images/comment-outline.svg"></a>
                 </div>
               </div>
             </div>

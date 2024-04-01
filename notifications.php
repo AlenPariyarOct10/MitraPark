@@ -119,6 +119,17 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                             </div>
                         </a>
                         ';
+                    }else if($row['type']=='comment')
+                    {
+                        echo '
+                        <a class="right-nav-item" id="my-profile" href="./user.php?id='.$row['triggered_by'].'">
+                            <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
+                            <div style="display:flex; flex-direction:column;">
+                                <span><b>'.$row['uname'].'</b> commented in your post.</span>
+                                <span style="font-size: small; color: #373737;">'.timeAgo($row['created_date_time']).' ago</span>
+                            </div>
+                        </a>
+                        ';
                     }
                 }
                 ?>
