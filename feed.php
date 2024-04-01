@@ -93,11 +93,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
         
         include_once("./parts/feed-midbody.php");
         ?>
-<<<<<<< HEAD
-       
-=======
            
->>>>>>> c2db6fbe871326441ebb5483d80903191717467c
         <?php
         include_once("./parts/rightSidebar.php");
     ?>
@@ -106,20 +102,12 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
     <script>
         let modal =document.getElementById("myModal");
         let closeModal =document.getElementById("closeModal");
-<<<<<<< HEAD
-
-=======
->>>>>>> c2db6fbe871326441ebb5483d80903191717467c
         closeModal.addEventListener("click",()=>{
             modal.style.display = "none";
         })
 
         
     </script>
-<<<<<<< HEAD
-    <script src='./assets/scripts/jquery.js'></script>
-    <?php include_once("./parts/js-script-files/js-script.php"); ?>
-=======
     <script>
     function getFriendRequests() {
         let mitraRequestList = document.getElementById("mitraList");
@@ -136,7 +124,6 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
         getFriendRequests();
     }, 5000);
 </script>
->>>>>>> c2db6fbe871326441ebb5483d80903191717467c
     <script src='posts.js'></script>
 </body>
 </html>
