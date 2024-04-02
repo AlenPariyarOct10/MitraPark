@@ -139,17 +139,18 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             margin-right: 0px;
         }
 
-        #heart-flow{
+        #heart-flow {
             position: absolute;
             height: 200px;
             bottom: -100%;
         }
-        #mid-body{
+
+        #mid-body {
             width: 35%;
             height: 90vh;
         }
-        #popup-upload-post
-        {
+
+        #popup-comment{
             position: absolute;
             top: 50%;
             left: 50%;
@@ -162,19 +163,80 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             flex-direction: column;
             align-items: center;
         }
+
+        #popup-upload-post {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            border-radius: 20px;
+            background-color: var(--mp-theme-bg);
+            box-shadow: 0px 0px 20px 1px #fffbfb66;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            display: none;
+        }
+
+        .modal-position{
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            border-radius: 20px;
+            background-color: var(--mp-theme-bg);
+            box-shadow: 0px 0px 20px 1px #fffbfb66;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         #modal-wrapper {
 
-background: rgba(0, 0, 0, 0.7);
-width: 100%;
-height: 100%;
-position: fixed;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-display: none;
-}
-#closeModal {
+            background: rgba(0, 0, 0, 0.7);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: none;
+        }
+
+        .modal-wrapper{
+            background: rgba(0, 0, 0, 0.7);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: none;
+        }
+
+        #closeModal {
+            top: 0;
+            left: 98%;
+            width: 9px;
+            height: 9px;
+            background-color: red;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.5;
+            position: absolute;
+            cursor: pointer;
+            color: white;
+        }
+
+        .closeModal {
             top: 0;
             left: 98%;
             width: 9px;
@@ -221,31 +283,78 @@ display: none;
     ?>
 
     <div id="mid-body" class="mid-body">
-    <div id="modal-wrapper">
-        <div id="popup-upload-post">
-            <img class="modal-popup-head" height="80px" src="./assets/images/warning.png" alt="" srcset="">
-            <div class="post-uploader">
-                <div id="closeModal">
-                    <p>x</p>
-                </div>
-                <div class="post-uploader-head">
-                    <h3>Report post</h3>
-                </div>
-                <hr class="section-break-hr">
-                <form action="./server/api/posts/report-post.php" method="POST" enctype="multipart/form-data">
-                    <div class="row-caption-container">
-                        <input type="hidden" name="postId" value="<?php echo $postId; ?>">
-                        <textarea name="reportContent" style="color: #222831;" placeholder="Specify about the problem." id="post-caption" required></textarea>
+
+<?php ?>
+<!-- ALEN Report post modal -->
+        <div id="modal-wrapper">
+            <div id="popup-upload-post">
+                <img class="modal-popup-head" height="80px" src="./assets/images/warning.png" alt="" srcset="">
+                <div class="post-uploader">
+                    <div id="closeModal">
+                        <p>x</p>
                     </div>
-                    <div class="row-upload-controls post-upload-control">
-                        <input id="post-share-btn" type="submit" value="Submit" disabled>
+                    <div class="post-uploader-head">
+                        <h3>Report post</h3>
                     </div>
-                </form>
+                    <hr class="section-break-hr">
+                    <form id="reportPostForm" method="POST" enctype="multipart/form-data">
+                        <div class="row-caption-container">
+                            <input type="hidden" name="postId" value="<?php echo $postId; ?>">
+                            <textarea name="reportContent" style="color: #222831;" placeholder="Specify about the problem." id="post-caption" required></textarea>
+                        </div>
+                        <div class="row-upload-controls post-upload-control">
+                            <input id="post-share-btn" type="submit" value="Submit" disabled>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+<!-- End Report post modal -->
 
-    <img id="heart-flow" src="./assets/images/heart-flow.png" alt="">
+<!-- ALEN reply comment modal -->
+        <div class="modal-wrapper replyComment-modal">
+            <div id="popup-comment">
+                <img class="modal-popup-head" height="80px" src="./assets/images/reply.png" alt="" srcset="">
+                <div class="post-uploader">
+                    <div class="closeModal">
+                        <p>x</p>
+                    </div>
+                    <div class="post-uploader-head">
+                        <p>Replying to <span id="parent-comment-author">alen</span> </span>
+                    </div>
+                    <hr class="section-break-hr">
+                    <form id="replyCommentForm" method="POST" enctype="multipart/form-data">
+                        <div class="row-caption-container">
+                            <input type="hidden" id="parentCommentIdHolder" name="commentId" value="">
+                            <textarea name="replyCommentContent" style="color: #222831;" placeholder="Comment" id="reply-comment-content" required></textarea>
+                        </div>
+                        <div class="row-upload-controls post-upload-control">
+                            <input id="reply-comment-btn" type="submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+<!-- End comment modal -->
+
+      <!-- ALEN action result modal -->
+        <div id="action-result" class="modal-wrapper">
+            <div class="modal-position">
+                <img class="modal-popup-head" id="resultModalImg" height="80px" src="" alt="" srcset="">
+                <div class="post-uploader">
+                    <div class="closeModal">
+                        <p>x</p>
+                    </div>
+                    <div class="post-uploader-head">
+                        <h3 id="resultActionStatus"></h3>
+                        <span id="resultActionMessage"></span>
+                    </div>    
+                </div>
+            </div>
+        </div>
+        <!-- End Action result modal -->
+
+        <img id="heart-flow" src="./assets/images/heart-flow.png" alt="">
 
         <div class="left-inner-heading">
             <span class="dim-label">
@@ -299,28 +408,27 @@ display: none;
                 <button style="cursor:pointer;" class="post-comment" onclick="postComment(<?php echo $postId; ?>)" id="comment-btn-<?php echo $postId; ?>"> <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i> </button>
             </div>
         </div>
-       
-            <div class="post-item">
-                <div id="view-likes-comments" style="margin:5px;">
+
+        <div class="post-item">
+            <div id="view-likes-comments" style="margin:5px;">
                 <?php
-        if ($getAuthor['author_id'] === $uid) {
-        ?>
+                if ($getAuthor['author_id'] === $uid) {
+                ?>
                     <button id="editPost">Edit Post</button>
                     <button id="deletePost">Delete Post</button>
-                    <?php
-        }
-        ?>
-        <?php 
-        if($getAuthor['author_id'] !== $uid)
-        {
-            ?>
+                <?php
+                }
+                ?>
+                <?php
+                if ($getAuthor['author_id'] !== $uid) {
+                ?>
                     <button id="reportPost">Report Post</button>
-                    <?php }?>
-                    
-                </div>
+                <?php } ?>
+
             </div>
-       
-        
+        </div>
+
+
         <div class="post-item">
             <div id="view-likes-comments" style="margin:5px;">
                 <button id="getLikes">Likes</button>
@@ -346,7 +454,7 @@ display: none;
                 ?>
             </div>
         </div>
-        
+
 
         <!-- Edit Post Modal -->
         <div id="editPostModal" class="modal">
@@ -361,45 +469,45 @@ display: none;
                                 <label id="fname-label" for="fname">Edit Text<span id="fname-error"></span> </label>
                                 <textarea name="caption" maxlength="999" id="caption"><?php echo $getPost['content']; ?></textarea>
                                 <input type="hidden" name="postId" value="<?php echo $postId; ?>">
-                                <label class="length-validate" for="fname"> <
-                            </div>
+                                <label class="length-validate" for="fname">
+                                    < </div>
 
-                            <div class="inner-form-element">
-                                <label id="fname-label" for="fname">Visibility<span id="fname-error"></span> </label>
-                                <select name="visibility" id="visibility">
-                                    <option value="public">public</option>
-                                    <option value="mitras">mitras</option>
-                                    <option value="private">private</option>
-                                </select>
-                                <label class="length-validate" for="fname"> 
-                            </div>
-                            <?php if ($getPost['media'] == null || $getPost['media'] == "") { ?>
-                                <div class="post-item-body">
-                                    <label id="fname-label" for="fname">Media<span id="fname-error"></span> </label>
-                                    <label class="post-item-body" for="post-img-uploader">
-                                        <img id="postImage" name="postImage" style="display:none;" src="">
-                                        <label for="post-img-uploader">
-                                            Add Image
-                                        </label>
-                                    </label>
-                                </div>
-                            <?php } else { ?>
-                                <div class="post-item-body">
-                                    <label id="fname-label" for="fname">Media<span id="fname-error"></span> </label>
-                                    <!-- <button style="cursor: pointer;" type="button">Remove Image</button> -->
+                                        <div class="inner-form-element">
+                                            <label id="fname-label" for="fname">Visibility<span id="fname-error"></span> </label>
+                                            <select name="visibility" id="visibility">
+                                                <option value="public">public</option>
+                                                <option value="mitras">mitras</option>
+                                                <option value="private">private</option>
+                                            </select>
+                                            <label class="length-validate" for="fname">
+                                        </div>
+                                        <?php if ($getPost['media'] == null || $getPost['media'] == "") { ?>
+                                            <div class="post-item-body">
+                                                <label id="fname-label" for="fname">Media<span id="fname-error"></span> </label>
+                                                <label class="post-item-body" for="post-img-uploader">
+                                                    <img id="postImage" name="postImage" style="display:none;" src="">
+                                                    <label for="post-img-uploader">
+                                                        Add Image
+                                                    </label>
+                                                </label>
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="post-item-body">
+                                                <label id="fname-label" for="fname">Media<span id="fname-error"></span> </label>
+                                                <!-- <button style="cursor: pointer;" type="button">Remove Image</button> -->
 
-                                    <label style="margin: 10px;cursor:pointer;" class="post-item-body" for="post-img-uploader">
-                                        <img style="border-radius:10px; width:30vw;" src=<?php echo "./" . $getPost['media']; ?> alt="" srcset="">
-                                    </label>
-                                </div>
-                            <?php } ?>
+                                                <label style="margin: 10px;cursor:pointer;" class="post-item-body" for="post-img-uploader">
+                                                    <img style="border-radius:10px; width:30vw;" src=<?php echo "./" . $getPost['media']; ?> alt="" srcset="">
+                                                </label>
+                                            </div>
+                                        <?php } ?>
 
-                            <div class="form-inner-row">
-                                <div class="inner-form-element">
-                                    <button id="profile-form-submit" type="submit">Save</button>
-                                </div>
+                                        <div class="form-inner-row">
+                                            <div class="inner-form-element">
+                                                <button id="profile-form-submit" type="submit">Save</button>
+                                            </div>
+                                        </div>
                             </div>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -439,7 +547,6 @@ display: none;
                         <div class="form-innner-row">
                             <div class="form-inner-row">
                                 <div style="display: flex; flex-direction: row;" class="inner-form-element">
-
                                     <input style="background-color:tomato;" id="profile-form-submit" value="Yes" type="submit" />
                                 </div>
                             </div>
@@ -449,7 +556,7 @@ display: none;
             </div>
         </div>
 
-        
+
 
 
     </div>
@@ -460,17 +567,106 @@ display: none;
 
     <script src='./assets/scripts/jquery.js'></script>
     <script>
+
+        // $("#reply-comment-btn").click(()=>{
+        //    const replyIn = $("#parentCommentIdHolder").val();
+        //    const commentContent = $("#reply-comment-content").val();
+
+        //    console.table(replyIn, commentContent);
+
+           
+        // })
+
+
+        $(".closeModal").click(()=>{
+            $(".modal-wrapper").slideUp();
+            $(".modal-position").slideUp();
+        })
+
+        // ALEN : API - Report Post
+        $("#reportPostForm").submit((form) => {
+            form.preventDefault();
+            const formData = $(form.target).serializeArray();
+            const postId = formData[0].value;
+            const reportContent = formData[1].value;
+            $.ajax({
+                url: "./server/api/posts/report-post.php",
+                type: "POST",
+                data: {
+                    postId: postId,
+                    reportContent: reportContent,
+                },
+                success: function(success) {
+                    $("#reportPostForm")[0].reset();
+                    $("#popup-upload-post").hide();
+                    $("#modal-wrapper").slideUp();
+                    $("#action-result").slideDown();
+                    $("#resultModalImg").attr("src", "./assets/images/accept-request.png");
+                    $("#resultActionStatus").text("Success");
+                    $("#resultActionMessage").text("Post reported succesfully.");
+                },
+                error:function()
+                {
+                    $("#popup-upload-post").hide();
+                    $("#reportPostForm")[0].reset();
+                    $("#modal-wrapper").slideUp();
+                    $("#action-result").slideDown();
+                    $("#resultModalImg").attr("src", "./assets/images/remove.png");
+                    $("#resultActionStatus").text("Failed");
+                    $("#resultActionMessage").text("Unable to report the post.");
+                }
+            })
+        })
+        // ALEN : API - Reply Comment
+        $("#replyCommentForm").submit((form) => {
+            form.preventDefault();
+            const formData = $(form.target).serializeArray();
+            const commentId = formData[0].value;
+            const commentContent = formData[1].value;
+            $.ajax({
+                url: "./server/api/comments/insertReplyComment.php",
+                type: "POST",
+                data: {
+                    parent_comment_id: commentId,
+                    comment_content: commentContent,
+                    comment_author: <?php echo $uid; ?>
+
+                },
+                success: function(success) {
+                    $("#replyCommentForm")[0].reset();
+                    $("#popup-upload-post").hide();
+                    $(".replyComment-modal").slideUp();
+                    $("#action-result").slideDown();
+                    $("#resultModalImg").attr("src", "./assets/images/accept-request.png");
+                    $("#resultActionStatus").text("Success");
+                    $("#resultActionMessage").text("Comment sent.");
+                },
+                error:function(error)
+                {
+                    console.log(error);
+                    $("#replyCommentForm").hide();
+                    $("#replyCommentForm")[0].reset();
+                    $(".replyComment-modal").slideUp();
+                    $("#action-result").slideDown();
+                    $("#resultModalImg").attr("src", "./assets/images/remove.png");
+                    $("#resultActionStatus").text("Failed");
+                    $("#resultActionMessage").text("Unable to send comment.");
+                }
+            })
+        })
+
         $("#post-caption").change(() => {
-    if ($("#post-caption").val().length > 0) {
-        $("#post-share-btn").removeAttr("disabled");
-    } else {
-        $("#post-share-btn").attr("disabled", "disabled");
-    }
-});
+            if ($("#post-caption").val().length > 0) {
+                $("#post-share-btn").removeAttr("disabled");
+            } else {
+                $("#post-share-btn").attr("disabled", "disabled");
+            }
+        });
 
 
-        $("#reportPost").click(()=>{
+        $("#reportPost").click(() => {
             $("#modal-wrapper").slideDown();
+            $("#popup-upload-post").slideDown();
 
         })
         let modalWrapper = document.getElementById("modal-wrapper");
@@ -478,6 +674,7 @@ display: none;
         closeModal.addEventListener("click", () => {
             $("#modal-wrapper").slideUp();
         });
+
         function postComment(id) {
             let commentText = document.getElementById("post-comment-" + id);
             $.ajax({
@@ -488,8 +685,6 @@ display: none;
                     commentAuthor: localStorage.getItem("mp-uid"),
                     commentContent: commentText.value
                 },
-
-
             })
             commentText.value = null;
         }
@@ -497,6 +692,7 @@ display: none;
 
 
         <?php
+
         if ($getAuthor['author_id'] === $uid) {
         ?>
             const editPostTriggerBtn = document.getElementById("editPost");
@@ -513,8 +709,6 @@ display: none;
                     $("#deletePostModal").slideUp(500);
                     console.log("clicked delete");
                 })
-
-                console.log("clicked");
             }
 
             const editModal = () => {
@@ -529,17 +723,23 @@ display: none;
         }
         ?>
 
-            function reactAnimation()
-            {
-                $("#heart-flow").animate({bottom: "-100%"}, 800);
-                $("#heart-flow").animate({bottom:"40%", height: "300px"}, 500);
-                $("#heart-flow").animate({bottom:"100%",height: "150px"}, 800);
-                $("#heart-flow").animate({bottom: "-100%", height: "150px"}, 0);
-            }
-
-    
-            
-
+        function reactAnimation() {
+            $("#heart-flow").animate({
+                bottom: "-100%"
+            }, 800);
+            $("#heart-flow").animate({
+                bottom: "40%",
+                height: "300px"
+            }, 500);
+            $("#heart-flow").animate({
+                bottom: "100%",
+                height: "150px"
+            }, 800);
+            $("#heart-flow").animate({
+                bottom: "-100%",
+                height: "150px"
+            }, 0);
+        }
 
         let getLikes = document.getElementById("getLikes");
         getLikes.classList.add("active-btn");
@@ -549,14 +749,10 @@ display: none;
         let likeCommentContainer = document.getElementById("like-comment-container");
 
 
-
-
-        // Function to fetch comments for the corresponding post
         function fetchComments() {
-            let postId = <?php echo $postId; ?>; // Get the post ID
-            let commentsContainer = document.getElementById("like-comment-container"); // Container to display comments
+            let postId = <?php echo $postId; ?>; 
+            let commentsContainer = document.getElementById("like-comment-container"); 
 
-            // Make an AJAX request to fetch comments
             $(document).ready(() => {
                 $.ajax({
                     url: "./server/api/getComments.php",
@@ -565,7 +761,6 @@ display: none;
                         postId: postId
                     },
                     success: function(response) {
-                        // Update the comments container with the fetched comments
                         const responseObj = JSON.parse(response);
                         let commentBody = "";
                         responseObj.forEach((item) => {
@@ -591,56 +786,61 @@ display: none;
                         <button class="softRed controlBtn replyComment" data-id="${item.comment_id}" id="replyComment-${item.comment_id}">Reply Commment</button>
                     </div>`;
                         });
-                        commentsContainer.innerHTML = commentBody;
-
-                        // Add click event listener to editComment buttons
+                        
+                            if(commentBody.length == 0)
+                            {
+                                commentsContainer.innerHTML = "<p>No comments</p>";
+                            }else{
+                                commentsContainer.innerHTML = commentBody;
+                            }
+                
                         $(".editComment").click(function(event) {
-                            // Access the data-id attribute of the clicked button
                             const commentId = $(this).data("id");
-                            if(this.innerText != "Save")
-                            {
+                            if (this.innerText != "Save") {
                                 this.innerText = "Save";
-                            $("#content-<?php echo $uid; ?>").append("<input type='text' id='updateText'/>");
+                                $("#content-<?php echo $uid; ?>").append("<input type='text' id='updateText'/>");
 
-                            }else if(this.innerText == "Save")
-                            {
+                            } else if (this.innerText == "Save") {
                                 $.ajax({
                                     url: "./server/api/comments/updateComment.php",
                                     type: 'POST',
-                                    data: {commentId: commentId, newComment: document.getElementById("updateText").value},
-                                    success:function(data)
-                                    {
+                                    data: {
+                                        commentId: commentId,
+                                        newComment: document.getElementById("updateText").value
+                                    },
+                                    success: function(data) {
                                         fetchComments();
                                     }
                                 });
                             }
-                            // fetchComments();
                         });
 
                         $(".deleteComment").click(function(event) {
-                            // Access the data-id attribute of the clicked button
                             const commentId = $(this).data("id");
                             console.log(commentId);
 
-                            if(this.innerText != "Confirm Delete")
-                            {
+                            if (this.innerText != "Confirm Delete") {
                                 this.innerText = "Confirm Delete";
-                            }else{
+                            } else {
                                 $.ajax({
                                     url: "./server/api/comments/deleteComment.php",
                                     type: 'POST',
-                                    data: {commentId: commentId},
-                                    success:function(data)
-                                    {
+                                    data: {
+                                        commentId: commentId
+                                    },
+                                    success: function(data) {
                                         fetchComments();
                                     }
                                 })
-
                             }
-
-                            // fetchComments();
-
                         });
+
+                        $(".replyComment").click(function(){
+                            const commentId = $(this).data("id");
+                            $(".replyComment-modal").slideDown();
+                            $("#parentCommentIdHolder").val(commentId);
+                        });
+
                     },
                     error: function(error) {
                         console.log("Error fetching comments:", error);
@@ -649,15 +849,10 @@ display: none;
             });
         }
 
-
         getComments.addEventListener("click", () => {
             let getLikes = document.getElementById("getLikes");
-            console.log("clicked");
             getLikes.classList.remove("active-btn");
             getComments.classList.add("active-btn");
-            console.log(getLikes.classList);
-            console.log(getComments.classList);
-            console.log("clicked");
             fetchComments();
         })
 
@@ -666,6 +861,7 @@ display: none;
             getComments.classList.remove("active-btn");
             getPostsLikes();
         })
+
         $.ajax({
             url: "./server/api/getLikes.php",
             type: "POST",
@@ -694,7 +890,13 @@ display: none;
 
                 })
 
-                likeCommentContainer = likesHtml;
+                if(likesHtml.length == 0)
+                {
+                    likeCommentContainer.innerHTML = "<p>No likes</p>";
+                }else{
+                    likeCommentContainer = likesHtml;
+
+                }
 
             },
             error: function(data) {

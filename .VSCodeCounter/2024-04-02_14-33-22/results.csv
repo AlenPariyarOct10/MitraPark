@@ -1,0 +1,10 @@
+"filename", "language", "PHP", "HTML", "comment", "blank", "total"
+"/opt/lampp/htdocs/MitraPark/parts/entryCheck.php", "PHP", 13, 0, 0, 1, 14
+"/opt/lampp/htdocs/MitraPark/parts/feed-midbody.php", "PHP", 49, 0, 0, 4, 53
+"/opt/lampp/htdocs/MitraPark/parts/js-script-files/js-script.php", "PHP", 82, 0, 3, 21, 106
+"/opt/lampp/htdocs/MitraPark/parts/kurakani/leftNavPart.php", "PHP", 16, 0, 0, 2, 18
+"/opt/lampp/htdocs/MitraPark/parts/leftSidebar.php", "PHP", 48, 0, 0, 9, 57
+"/opt/lampp/htdocs/MitraPark/parts/navbar-template.html", "HTML", 0, 112, 4, 16, 132
+"/opt/lampp/htdocs/MitraPark/parts/navbar.php", "PHP", 52, 0, 0, 3, 55
+"/opt/lampp/htdocs/MitraPark/parts/rightSidebar.php", "PHP", 26, 0, 0, 1, 27
+"Total", "-", 286, 112, 7, 57, 462

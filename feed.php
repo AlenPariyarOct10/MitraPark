@@ -181,7 +181,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         let modalWrapper = document.getElementById("modal-wrapper");
         let closeModal = document.getElementById("closeModal");
         closeModal.addEventListener("click", () => {
-            // modalWrapper.style.display = "none";
             $("#modal-wrapper").slideUp();
         });
 

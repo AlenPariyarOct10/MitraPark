@@ -14,7 +14,6 @@
     </div>
     <div id="modal-wrapper">
         <div id="popup-upload-post">
-
             <img class="modal-popup-head" height="80px" src="./assets/images/post.png" alt="" srcset="">
             <div class="post-uploader">
                 <div id="closeModal">

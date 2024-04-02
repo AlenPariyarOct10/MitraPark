@@ -67,27 +67,22 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     if (isset($_GET['postId'])) {
         $postId = htmlspecialchars($_GET['postId']);
 
-        // getCommetns of given post_id
         $getCommentsQuery = "SELECT comments.*, users.uid, users.profile_picture, CONCAT(users.fname, ' ', users.lname) AS uname 
         FROM `comments` 
         INNER JOIN `users` ON comments.comment_by = users.uid
         WHERE `post_id` = ?";
 
-        // Prepare and execute the statement
         $stmt = $connection->prepare($getCommentsQuery);
-        $stmt->bind_param("i", $postId); // Assuming $postId is an integer
+        $stmt->bind_param("i", $postId);
         $stmt->execute();
 
-        // Get the result
         $result = $stmt->get_result();
 
-        // Fetch data
         $comments = [];
         while ($row = $result->fetch_assoc()) {
             $comments[] = $row;
         }
 
-        // Free the result and close the statement
         $stmt->close();
     ?>
         <div class="mid-body">
@@ -126,7 +121,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </a></div>';
     }
 
-    // Now $comments contains all comments along with the user information for the specified post
     include_once("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>

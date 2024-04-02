@@ -127,7 +127,10 @@ $result = mysqli_fetch_assoc($result);
             <div>
                 <label for="getEndDate">Set max access hours :</label>
                 <select name="setMaxHours" id="setMaxHours"></select>
+                <select name="setMaxMinutes" id="setMaxMinutes"></select>
+                <select name="setMaxSeconds" id="setMaxSeconds"></select>
             </div>
+            
             <p id="getBaki"></p>
             <br>
             <div class="warningWrapper">
@@ -166,15 +169,25 @@ $result = mysqli_fetch_assoc($result);
 <script src='./assets/scripts/jquery.js'></script>
     <script>
         let dateObj = new Date();
-        let currentTime = dateObj.toLocaleDateString();
-        let setMaxHours =document.getElementById("setMaxHours");
-        let timeCount = 0;
+
+        // Populating hours
+        let setMaxHours = document.getElementById("setMaxHours");
         for (let currentHour = dateObj.getHours(); currentHour <= 23; currentHour++) {
-            timeCount += 1;
-            setMaxHours.innerHTML += `
-                <option class="time-item" value="${timeCount*60*60}">${timeCount} Hours</option>
-            `
+            setMaxHours.innerHTML += `<option value="${currentHour}">${currentHour} Hours</option>`;
         }
+
+        // Populating minutes
+        let setMaxMinutes = document.getElementById("setMaxMinutes");
+        for (let currentMinute = 0; currentMinute <= 59; currentMinute++) {
+            setMaxMinutes.innerHTML += `<option value="${currentMinute}">${currentMinute} Minutes</option>`;
+        }
+
+        // Populating seconds
+        let setMaxSeconds = document.getElementById("setMaxSeconds");
+        for (let currentSecond = 0; currentSecond <= 59; currentSecond++) {
+            setMaxSeconds.innerHTML += `<option value="${currentSecond}">${currentSecond} Seconds</option>`;
+        }
+
 
 
 

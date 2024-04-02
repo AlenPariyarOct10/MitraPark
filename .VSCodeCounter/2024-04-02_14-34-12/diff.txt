@@ -1,0 +1,82 @@
+Date : 2024-04-02 14:34:12
+Directory : /opt/lampp/htdocs/MitraPark/server
+Total : 43 files,  592 codes, 68 comments, 258 blanks, all 918 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| PHP      |         42 |        704 |         72 |        274 |      1,050 |
+| HTML     |          1 |       -112 |         -4 |        -16 |       -132 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                            | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                               |         43 |        592 |         68 |        258 |        918 |
+| . (Files)                                                                       |          5 |        245 |         18 |         59 |        322 |
+| ..                                                                              |          8 |       -398 |         -7 |        -57 |       -462 |
+| ../parts                                                                        |          8 |       -398 |         -7 |        -57 |       -462 |
+| ../parts (Files)                                                                |          6 |       -300 |         -4 |        -34 |       -338 |
+| ../parts/js-script-files                                                        |          1 |        -82 |         -3 |        -21 |       -106 |
+| ../parts/kurakani                                                               |          1 |        -16 |          0 |         -2 |        -18 |
+| api                                                                             |         30 |        745 |         57 |        256 |      1,058 |
+| api (Files)                                                                     |         11 |        310 |         45 |         94 |        449 |
+| api/comments                                                                    |          6 |        166 |          0 |         59 |        225 |
+| api/kurakani                                                                    |          4 |         79 |          2 |         41 |        122 |
+| api/notification                                                                |          1 |         12 |          0 |          0 |         12 |
+| api/notifications                                                               |          1 |          2 |          0 |          3 |          5 |
+| api/posts                                                                       |          3 |         98 |         10 |         23 |        131 |
+| api/strict-mode                                                                 |          4 |         78 |          0 |         36 |        114 |
++---------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                        | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /opt/lampp/htdocs/MitraPark/parts/entryCheck.php                                | PHP      |        -13 |          0 |         -1 |        -14 |
+| /opt/lampp/htdocs/MitraPark/parts/feed-midbody.php                              | PHP      |        -49 |          0 |         -4 |        -53 |
+| /opt/lampp/htdocs/MitraPark/parts/js-script-files/js-script.php                 | PHP      |        -82 |         -3 |        -21 |       -106 |
+| /opt/lampp/htdocs/MitraPark/parts/kurakani/leftNavPart.php                      | PHP      |        -16 |          0 |         -2 |        -18 |
+| /opt/lampp/htdocs/MitraPark/parts/leftSidebar.php                               | PHP      |        -48 |          0 |         -9 |        -57 |
+| /opt/lampp/htdocs/MitraPark/parts/navbar-template.html                          | HTML     |       -112 |         -4 |        -16 |       -132 |
+| /opt/lampp/htdocs/MitraPark/parts/navbar.php                                    | PHP      |        -52 |          0 |         -3 |        -55 |
+| /opt/lampp/htdocs/MitraPark/parts/rightSidebar.php                              | PHP      |        -26 |          0 |         -1 |        -27 |
+| /opt/lampp/htdocs/MitraPark/server/api/addLike.php                              | PHP      |         24 |          0 |          4 |         28 |
+| /opt/lampp/htdocs/MitraPark/server/api/comments/deleteComment.php               | PHP      |         24 |          0 |         12 |         36 |
+| /opt/lampp/htdocs/MitraPark/server/api/comments/deleteReplyComment.php          | PHP      |         33 |          0 |          8 |         41 |
+| /opt/lampp/htdocs/MitraPark/server/api/comments/getReplyComments.php            | PHP      |         17 |          0 |          6 |         23 |
+| /opt/lampp/htdocs/MitraPark/server/api/comments/insertReplyComment.php          | PHP      |         32 |          0 |         10 |         42 |
+| /opt/lampp/htdocs/MitraPark/server/api/comments/updateComment.php               | PHP      |         25 |          0 |         12 |         37 |
+| /opt/lampp/htdocs/MitraPark/server/api/comments/updateReplyComment.php          | PHP      |         35 |          0 |         11 |         46 |
+| /opt/lampp/htdocs/MitraPark/server/api/getComments.php                          | PHP      |         17 |          0 |          6 |         23 |
+| /opt/lampp/htdocs/MitraPark/server/api/getFriendRequests.php                    | PHP      |         30 |          2 |         11 |         43 |
+| /opt/lampp/htdocs/MitraPark/server/api/getLikes.php                             | PHP      |         17 |          0 |          6 |         23 |
+| /opt/lampp/htdocs/MitraPark/server/api/getUsers.php                             | PHP      |         14 |          5 |          5 |         24 |
+| /opt/lampp/htdocs/MitraPark/server/api/handleRequest.php                        | PHP      |         59 |         38 |         17 |        114 |
+| /opt/lampp/htdocs/MitraPark/server/api/insertComment.php                        | PHP      |         20 |          0 |          6 |         26 |
+| /opt/lampp/htdocs/MitraPark/server/api/kurakani/deleteKurakani.php              | PHP      |         17 |          2 |          6 |         25 |
+| /opt/lampp/htdocs/MitraPark/server/api/kurakani/getKurakaniUsers.php            | PHP      |         29 |          0 |         10 |         39 |
+| /opt/lampp/htdocs/MitraPark/server/api/kurakani/getMessage.php                  | PHP      |         13 |          0 |         13 |         26 |
+| /opt/lampp/htdocs/MitraPark/server/api/kurakani/sendMessage.php                 | PHP      |         20 |          0 |         12 |         32 |
+| /opt/lampp/htdocs/MitraPark/server/api/notification/getNewNotificationCount.php | PHP      |         12 |          0 |          0 |         12 |
+| /opt/lampp/htdocs/MitraPark/server/api/notifications/getNotifications.php       | PHP      |          2 |          0 |          3 |          5 |
+| /opt/lampp/htdocs/MitraPark/server/api/posts/get-my-posts.php                   | PHP      |         36 |          5 |         10 |         51 |
+| /opt/lampp/htdocs/MitraPark/server/api/posts/get-posts.php                      | PHP      |         39 |          5 |          8 |         52 |
+| /opt/lampp/htdocs/MitraPark/server/api/posts/report-post.php                    | PHP      |         23 |          0 |          5 |         28 |
+| /opt/lampp/htdocs/MitraPark/server/api/strict-mode/check_strict_mode.php        | PHP      |         21 |          0 |         10 |         31 |
+| /opt/lampp/htdocs/MitraPark/server/api/strict-mode/redirect_strict_mode.php     | PHP      |         14 |          0 |          6 |         20 |
+| /opt/lampp/htdocs/MitraPark/server/api/strict-mode/update_strictMode.php        | PHP      |         27 |          0 |         11 |         38 |
+| /opt/lampp/htdocs/MitraPark/server/api/strict-mode/update_warning.php           | PHP      |         16 |          0 |          9 |         25 |
+| /opt/lampp/htdocs/MitraPark/server/api/updatePost.php                           | PHP      |         51 |          0 |         15 |         66 |
+| /opt/lampp/htdocs/MitraPark/server/api/updateProfile.php                        | PHP      |         25 |          0 |          6 |         31 |
+| /opt/lampp/htdocs/MitraPark/server/api/update_activity_dateTime.php             | PHP      |         10 |          0 |          4 |         14 |
+| /opt/lampp/htdocs/MitraPark/server/api/uploadPost.php                           | PHP      |         43 |          0 |         14 |         57 |
+| /opt/lampp/htdocs/MitraPark/server/db_connection.php                            | PHP      |          6 |          2 |          4 |         12 |
+| /opt/lampp/htdocs/MitraPark/server/deletePost.php                               | PHP      |         25 |          0 |          5 |         30 |
+| /opt/lampp/htdocs/MitraPark/server/functions.php                                | PHP      |        113 |         16 |         32 |        161 |
+| /opt/lampp/htdocs/MitraPark/server/getAllMitras.php                             | PHP      |          2 |          0 |          3 |          5 |
+| /opt/lampp/htdocs/MitraPark/server/validation.php                               | PHP      |         99 |          0 |         15 |        114 |
+| Total                                                                           |          |        592 |         68 |        258 |        918 |
++---------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
