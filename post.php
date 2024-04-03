@@ -150,7 +150,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             height: 90vh;
         }
 
-        #popup-comment{
+        #popup-comment {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -179,7 +179,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             display: none;
         }
 
-        .modal-position{
+        .modal-position {
             display: none;
             position: absolute;
             top: 50%;
@@ -207,7 +207,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             display: none;
         }
 
-        .modal-wrapper{
+        .modal-wrapper {
             background: rgba(0, 0, 0, 0.7);
             width: 100%;
             height: 100%;
@@ -284,8 +284,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     <div id="mid-body" class="mid-body">
 
-<?php ?>
-<!-- ALEN Report post modal -->
+        <?php ?>
+        <!-- ALEN Report post modal -->
         <div id="modal-wrapper">
             <div id="popup-upload-post">
                 <img class="modal-popup-head" height="80px" src="./assets/images/warning.png" alt="" srcset="">
@@ -309,9 +309,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </div>
             </div>
         </div>
-<!-- End Report post modal -->
+        <!-- End Report post modal -->
 
-<!-- ALEN reply comment modal -->
+        <!-- ALEN reply comment modal -->
         <div class="modal-wrapper replyComment-modal">
             <div id="popup-comment">
                 <img class="modal-popup-head" height="80px" src="./assets/images/reply.png" alt="" srcset="">
@@ -335,9 +335,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </div>
             </div>
         </div>
-<!-- End comment modal -->
+        <!-- End comment modal -->
 
-      <!-- ALEN action result modal -->
+        <!-- ALEN action result modal -->
         <div id="action-result" class="modal-wrapper">
             <div class="modal-position">
                 <img class="modal-popup-head" id="resultModalImg" height="80px" src="" alt="" srcset="">
@@ -348,7 +348,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     <div class="post-uploader-head">
                         <h3 id="resultActionStatus"></h3>
                         <span id="resultActionMessage"></span>
-                    </div>    
+                    </div>
                 </div>
             </div>
         </div>
@@ -567,18 +567,17 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     <script src='./assets/scripts/jquery.js'></script>
     <script>
-
         // $("#reply-comment-btn").click(()=>{
         //    const replyIn = $("#parentCommentIdHolder").val();
         //    const commentContent = $("#reply-comment-content").val();
 
         //    console.table(replyIn, commentContent);
 
-           
+
         // })
 
 
-        $(".closeModal").click(()=>{
+        $(".closeModal").click(() => {
             $(".modal-wrapper").slideUp();
             $(".modal-position").slideUp();
         })
@@ -605,8 +604,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     $("#resultActionStatus").text("Success");
                     $("#resultActionMessage").text("Post reported succesfully.");
                 },
-                error:function()
-                {
+                error: function() {
                     $("#popup-upload-post").hide();
                     $("#reportPostForm")[0].reset();
                     $("#modal-wrapper").slideUp();
@@ -640,9 +638,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     $("#resultModalImg").attr("src", "./assets/images/accept-request.png");
                     $("#resultActionStatus").text("Success");
                     $("#resultActionMessage").text("Comment sent.");
+                    fetchComments();
                 },
-                error:function(error)
-                {
+                error: function(error) {
                     console.log(error);
                     $("#replyCommentForm").hide();
                     $("#replyCommentForm")[0].reset();
@@ -750,10 +748,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 
         function fetchComments() {
-            let postId = <?php echo $postId; ?>; 
-            let commentsContainer = document.getElementById("like-comment-container"); 
+            let postId = <?php echo $postId; ?>;
+            let commentsContainer = document.getElementById("like-comment-container");
 
             $(document).ready(() => {
+                let commentBody = "";
                 $.ajax({
                     url: "./server/api/getComments.php",
                     type: "POST",
@@ -762,7 +761,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     },
                     success: function(response) {
                         const responseObj = JSON.parse(response);
-                        let commentBody = "";
+
                         responseObj.forEach((item) => {
                             commentBody += `
                     <div class="post-item">
@@ -784,16 +783,108 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         </div>
                         ${(item.comment_by == <?php echo $uid; ?>) ? `<div class="controlBtns" style="margin:5px;"><button class="softGreen controlBtn editComment" data-id="${item.comment_id}" id="editComment-${item.comment_id}">Edit Comment</button><button class="softRed controlBtn deleteComment" data-id="${item.comment_id}" id="deleteComment-${item.comment_id}">Delete Commment</button></div>` : ""}
                         <button class="softRed controlBtn replyComment" data-id="${item.comment_id}" id="replyComment-${item.comment_id}">Reply Commment</button>
+                        <div id="rcomment-${item.comment_id}">
+                        </div>
                     </div>`;
+
+
+
+                            $.ajax({
+                                url: "./server/api/comments/getReplyComments.php",
+                                type: "POST",
+                                data: {
+                                    parentCommentId: item.comment_id
+                                },
+                                success: (response) => {
+                                    let resObj = JSON.parse(response);
+                                    console.log(resObj);
+                                    let div = document.getElementById("rcomment-" + item.comment_id);
+
+                                    resObj.forEach((rcomment) => {
+                                        console.log(rcomment);
+                                        div.innerHTML += `<div style="border-left: 1px solid black; margin: 10px;">
+                        <div class="post-item-head">
+                            <div style="margin:10px;" class="post-item-head-left">
+                                <img class="profile-picture-holder" src="./${rcomment.profile_picture}" alt="" srcset="">
+                            </div>
+                            <div class="post-item-head-right">
+                                <div class="post-user">
+                                    <span>${rcomment.fname} ${rcomment.lname}</span>
+                                </div>
+                                <div class="post-details">
+                                    <span>${rcomment.created_timestamp}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-item-body">
+                            <span id="reply-content-<?php echo $uid; ?>" style="margin:5px;">${rcomment.comment_content}</span> 
+                        </div>
+                        ${(rcomment.comment_author == <?php echo $uid; ?>) ? `<div class="controlBtns" style="margin:5px;"><button class="softGreen controlBtn editRComment" data-id="${rcomment.reply_comment_id}" id="editRComment-${rcomment.reply_comment_id}">Edit Comment</button><button class="softRed controlBtn deleteRComment" data-id="${rcomment.reply_comment_id}" id="deleteRComment-${rcomment.reply_comment_id}">Delete Commment</button></div>` : ""}                        
+                    </div>`;
+
+                                        // ALEN : Delete Reply Comment API
+                                        $(".deleteRComment").click(function(event) {
+                                            console.log("delete reply");
+                                            const commentId = $(this).data("id");
+
+                                            if (this.innerText != "Confirm Delete") {
+                                                this.innerText = "Confirm Delete";
+                                            } else {
+                                                $.ajax({
+                                                    url: "./server/api/comments/deleteReplyComment.php",
+                                                    type: 'POST',
+                                                    data: {
+                                                        reply_comment_id: commentId
+                                                    },
+                                                    success: function(data) {
+                                                        $("#action-result").slideDown();
+                                                        $("#resultModalImg").attr("src", "./assets/images/accept-request.png");
+                                                        $("#resultActionStatus").text("Success");
+                                                        $("#resultActionMessage").text("Comment deleted.");
+                                                        fetchComments();
+                                                    }
+                                                })
+                                            }
+                                        });
+                                        // ALEN : Edit Reply Comment API
+                                        $(".editRComment").click(function(event) {
+                                            const commentId = $(this).data("id");
+                                            if (this.innerText != "Save") {
+                                                this.innerText = "Save";
+                                                $("#reply-content-<?php echo $uid; ?>").append("<input type='text' id='updateText'/>");
+
+                                            } else if (this.innerText == "Save") {
+                                                $.ajax({
+                                                    url: "./server/api/comments/updateReplyComment.php",
+                                                    type: 'POST',
+                                                    data: {
+                                                        reply_comment_id: commentId,
+                                                        updated_comment_content: document.getElementById("updateText").value
+                                                    },
+                                                    success: function(data) {
+                                                        fetchComments();
+                                                    }
+                                                });
+                                            }
+                                        });
+
+
+
+                                    })
+
+                                }
+
+                            })
                         });
-                        
-                            if(commentBody.length == 0)
-                            {
-                                commentsContainer.innerHTML = "<p>No comments</p>";
-                            }else{
-                                commentsContainer.innerHTML = commentBody;
-                            }
-                
+
+                        if (commentBody.length == 0) {
+                            commentsContainer.innerHTML = "<p>No comments</p>";
+                        } else {
+
+                            commentsContainer.innerHTML = commentBody;
+                        }
+
+                        // ALEN : Edit Comment API
                         $(".editComment").click(function(event) {
                             const commentId = $(this).data("id");
                             if (this.innerText != "Save") {
@@ -815,6 +906,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             }
                         });
 
+                        // ALEN : Delete Comment API
                         $(".deleteComment").click(function(event) {
                             const commentId = $(this).data("id");
                             console.log(commentId);
@@ -835,7 +927,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             }
                         });
 
-                        $(".replyComment").click(function(){
+
+
+
+
+                        $(".replyComment").click(function() {
                             const commentId = $(this).data("id");
                             $(".replyComment-modal").slideDown();
                             $("#parentCommentIdHolder").val(commentId);
@@ -890,10 +986,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                 })
 
-                if(likesHtml.length == 0)
-                {
+                if (likesHtml.length == 0) {
                     likeCommentContainer.innerHTML = "<p>No likes</p>";
-                }else{
+                } else {
                     likeCommentContainer = likesHtml;
 
                 }

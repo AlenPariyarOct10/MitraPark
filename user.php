@@ -1,9 +1,9 @@
 <?php
-include_once ('./parts/entryCheck.php');
-include_once ('./server/db_connection.php');
-include_once ('./server/validation.php');
-include_once ('./server/functions.php');
-include_once ('./server/db_connection.php');
+include_once('./parts/entryCheck.php');
+include_once('./server/db_connection.php');
+include_once('./server/validation.php');
+include_once('./server/functions.php');
+include_once('./server/db_connection.php');
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 
@@ -36,8 +36,8 @@ function noUser($aboutSite)
 
     <body>';
 
-    include_once ("./parts/navbar.php");
-    include_once ("./parts/leftSidebar.php");
+    include_once("./parts/navbar.php");
+    include_once("./parts/leftSidebar.php");
     echo '
         <div class="mid-body">
             <div class="left-inner-body inner-mid-body">
@@ -65,7 +65,7 @@ function noUser($aboutSite)
 
             </div>
         </div>';
-    include_once ("./parts/rightSidebar.php");
+    include_once("./parts/rightSidebar.php");
     echo '
     </body>
     <script src="./assets/scripts/jquery.js"></script>
@@ -76,20 +76,18 @@ function noUser($aboutSite)
 ?>
 
 <?php
-if (isset ($_GET['id'])) {
+if (isset($_GET['id'])) {
 
-    //prevent from XSS [convert script tags to special chars]
     $profileUid = htmlspecialchars($_GET['id']);
     if (session_status() != PHP_SESSION_ACTIVE) {
         session_start();
-    }
-    ;
-    if (isset ($_SESSION['user']['uid'])) {
+    };
+    if (isset($_SESSION['user']['uid'])) {
         if ($_SESSION['user']['uid'] == $profileUid) {
             header("Location: profile.php");
         }
     }
-   
+
 
 
     $result = mysqli_query($connection, "SELECT * FROM users WHERE uid='$profileUid'");
@@ -108,7 +106,7 @@ if (isset ($_GET['id'])) {
         if ($profile_pic == null) {
             $profile_pic = "/assets/images/user.png";
         }
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="en">
 
@@ -121,30 +119,143 @@ if (isset ($_GET['id'])) {
             <link rel="stylesheet" href="./assets/css/fontawesome.css" />
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-            <link
-                href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-                rel="stylesheet" />
-                <link rel="stylesheet" href="./assets/css/profile.css" />
-  <link rel="stylesheet" href="./assets/css/navbar.css">
-    <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+            <link rel="stylesheet" href="./assets/css/profile.css" />
+            <link rel="stylesheet" href="./assets/css/navbar.css">
+            <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
             <title>Profile - MitraPark</title>
+            <style>
+                #reportUser {
+                    margin: 5px;
+                    border: none;
+                    padding: 5px 15px 5px 15px;
+                    cursor: pointer;
+                    font-size: medium;
+                    border-radius: 20px;
+                }
+
+                .modal-wrapper {
+                    background: rgba(0, 0, 0, 0.7);
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    z-index: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                }
+
+                .modal-body {
+                    display: flex;
+                    flex-direction: row;
+                    width: 50%;
+                    height: 25%;
+                    background-color: #bcbcbcf6;
+                    border-radius: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                }
+
+                .reportUserForm {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .row-caption-container {
+                    width: 100%;
+                }
+
+                .text-area {
+                    width: 80%;
+                }
+
+                .closeModal {
+                    position: relative;
+                    top: -40%;
+                    left: 97%;
+                    background-color: rgb(255, 0, 25);
+                    width: 20px;
+                    text-align: center;
+                    border-radius: 50%;
+                    cursor: pointer;
+
+                }
+
+                .text-area {
+                    border: none;
+                    resize: none;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 5px;
+                    border-radius: 10px;
+                }
+
+                .pop-up-notification{
+                    
+                    position: absolute;
+                    bottom: 2%;
+                    z-index: 1;
+                    width: 70%;
+                    box-shadow: 0.5px 0.5px 5px 0.5px #6d6d6d;
+                    border-radius: 2px;
+                    display: flex;
+                }
+
+            </style>
         </head>
 
         <body>
-
             <?php
-            include_once ("./parts/navbar.php");
-            include_once ("./parts/leftSidebar.php");
+            include_once("./parts/navbar.php");
+            include_once("./parts/leftSidebar.php");
             ?>
 
 
             <div class="mid-body">
                 <div class="left-inner-body inner-mid-body">
+
+                    <!-- ALEN Report user modal -->
+                    <div class="modal-wrapper reportUserModal">
+                        <div id="popup-report-user" class="modal-body">
+                            <img class="modal-popup-head" height="80px" src="./assets/images/warning.png" alt="" srcset="">
+                            <div class="post-uploader">
+                                <div class="closeModal">
+                                    <p>x</p>
+                                </div>
+                                <div class="post-uploader-head">
+                                    <h3>Report user</h3>
+                                </div>
+                                <hr class="section-break-hr">
+                                <form id="reportUserForm" method="POST" enctype="multipart/form-data">
+                                    <div class="row-caption-container">
+                                        <input type="hidden" name="postId" value="<?php echo $profileUid; ?>">
+                                        <textarea class="text-area" name="reportContent" style="color: #222831;" placeholder="Specify about the problem." required></textarea>
+                                    </div>
+                                    <div class="row-upload-controls post-upload-control">
+                                        <input class="submitBtn" type="submit" value="Submit">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Report user modal -->
+                    
+                    <!-- ALEN Report user modal -->
+                    
+                  
+
                     <label for="profileUpload">
                         <div id="profile-img-holder" class="image-holder">
                             <img src=".<?php echo "./MitraPark/" . $profile_pic; ?>" id="profile-img" class="profile-img" />
                         </div>
-
                     </label>
 
                     <span class="name-placeholder">
@@ -154,6 +265,8 @@ if (isset ($_GET['id'])) {
                         <?php echo $bio; ?>
                     </span>
                     <hr class="label-underline" />
+
+
                     <div style="
               display: flex;
               height: 40px;
@@ -184,7 +297,7 @@ if (isset ($_GET['id'])) {
                         $IsFrientResult = mysqli_query($connection, $query);
                         $IsFrientResult = mysqli_fetch_array($IsFrientResult, MYSQLI_ASSOC);
 
-                        
+
 
 
                         if ($IsFrientResult !== null) {
@@ -195,7 +308,7 @@ if (isset ($_GET['id'])) {
                                 </div>
                                 </div>
 
-                                <a href="chat.php?uid='.$profileUid.'" class="mitra-request-control-btn">
+                                <a href="chat.php?uid=' . $profileUid . '" class="mitra-request-control-btn">
                                 <img src="./assets/images/message-solid.svg" height="30px" alt="" />
                                 </a>
 
@@ -227,6 +340,9 @@ if (isset ($_GET['id'])) {
                         }
                         ?>
                     </div>
+
+                    <hr class="label-underline" />
+                    <button id="reportUser">Report User</button>
                     <hr class="label-underline" />
 
                     <div style="display:flex; flex-direction:column;">
@@ -245,18 +361,100 @@ if (isset ($_GET['id'])) {
                     </div>
                 </div>
             </div>
-            <?php include_once ("./parts/rightSidebar.php") ?>
+            <?php include_once("./parts/rightSidebar.php") ?>
 
 
-            <?php 
+            <?php
 
-                        echo "Sender : ".$profileUid;
-                        echo "Receiver : ".$senderId;
-?>
+            echo "Sender : " . $profileUid;
+            echo "Receiver : " . $senderId;
+            ?>
         </body>
         <script src="./assets/scripts/jquery.js"></script>
         <script>
+
+            //  ALEN Report user modal 
+            function showSuccessNotification()
+            {
+                let div =document.createElement("div");
+                div.innerHTML = `<div style="background-color: #D8EEBE; padding:10px; border-left:10px solid #75964A; display:flex;justify-content:space-between;" class="pop-up-notification">
+                        <div class="label">
+                            <p id="notification-text">Report sent <b>Successfully </b>✅</p>
+                        </div>
+                    </div>`;
+                    div.style.width = "100%";
+                document.getElementsByClassName("mid-body")[0].appendChild(div);
+                div.setAttribute("class","popup-notification");
+
+                setTimeout(()=>{
+                    div.remove();
+                },5000);
+            }
+            function showFailedNotification()
+            {
+                let div =document.createElement("div");
+                div.innerHTML = `<div style="background-color: #F2CECE; padding:10px; border-left:10px solid #C94744; class="pop-up-notification">
+                        <div class="label">
+                            <p id="notification-text">Report sent succesfully.</p>
+                        </div>
+                    </div>`;
+                    div.style.width = "100%";
+
+                document.getElementsByClassName("inner-mid-body")[0].appendChild(div);
+
+                setTimeout(()=>{
+                    div.remove();
+                },5000);
+            }
+
+            $(".reportUserModal").css({
+                "display": "none"
+            });
+
+            $("#reportUserForm").submit((form) => {
+                form.preventDefault();
+                let formData = $(form.target).serializeArray();
+                const userId = formData[0].value;
+                const reportContent = formData[1].value;
+                $.ajax({
+                    url: "./server/api/other/report-user.php",
+                    type: "POST",
+                    data: {
+                        userId: userId,
+                        content: reportContent,
+                    },
+                    success: function(success) {
+                        showSuccessNotification("Report submitted.");
+                        $(".reportUserModal").css({
+                "display": "none"
+            });
+
+                    },
+                    error: function(fail) {
+                        showFailedNotification("Unable to submit report.");
+                        $(".reportUserModal").css({
+                "display": "none"
+            });
+
+                    }
+                })
+            })
+
+            $(".closeModal").click(() => {
+                $("#reportUserForm")[0].reset();
+
+                $(".reportUserModal").css({
+                    "display": "none"
+                });
+            })
+            $("#reportUser").click(() => {
+                $(".modal-body").slideDown();
+
+                $(".reportUserModal").show();
+
+            })
             console.log(document.getElementById("mitraRequestHandleBtn").childNodes[1].dataset.mode);
+
             function updateMitraBtn() {
                 $.ajax({
                     url: "./server/api/handleRequest.php",
@@ -265,11 +463,11 @@ if (isset ($_GET['id'])) {
                         messageTo: <?php echo $profileUid; ?>,
                         mode: requestHandleBtn.childNodes[1].dataset.mode
                     },
-                    success: function (success) {
+                    success: function(success) {
                         let mitraRequestHandleBtn = document.getElementById("mitraRequestHandleBtn");
                         mitraRequestHandleBtn.innerHTML = success;
                     },
-                    error: function (fail) {
+                    error: function(fail) {
                         console.log("failed", fail);
                     }
                 })
@@ -278,13 +476,11 @@ if (isset ($_GET['id'])) {
             requestHandleBtn.addEventListener("click", () => {
                 updateMitraBtn();
             })
-
-
         </script>
 
         </html>
 
-        <?php
+<?php
 
     } else {
         noUser($aboutSite);

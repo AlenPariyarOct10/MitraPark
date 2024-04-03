@@ -138,9 +138,6 @@ function likeHandeler() {
 function generatePostHTML(postItem, likedState) {
   const postHTML = `
             <div class="post-item">
-              <div style="display:flex; justify-content:end;">
-                <button style="border-radius:50%; border:none; padding:5px; background-color:white; cursor:pointer;">...</button>
-              </div>
               <div class="post-item-head">
                 <div class="post-item-head-left">
                   <img class="profile-picture-holder" src="${postItem.profile_picture}" alt="" srcset="">
@@ -152,7 +149,7 @@ function generatePostHTML(postItem, likedState) {
                   <div class="post-details">
                     <span>${postItem.visibility}</span>
                     <span>|</span>
-                    <span> </span>
+                    <span>${timeAgo(postItem.created_date_time)}</span>
                   </div>
                 </div>
               </div>

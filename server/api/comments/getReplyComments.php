@@ -2,7 +2,8 @@
 
 if(session_status()!=PHP_SESSION_ACTIVE){session_start();};
 
-include_once("../db_connection.php");
+include_once("../../db_connection.php");
+
 $rawData = file_get_contents("php://input");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
