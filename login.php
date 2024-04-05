@@ -20,9 +20,8 @@ if(isset($_POST['email']) && isset($_POST['password']))
     $email = htmlspecialchars($_POST['email']);
     $psw = htmlspecialchars($_POST['password']);
     loginUser($email, $psw);
-
-
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,7 +76,6 @@ if(isset($_POST['email']) && isset($_POST['password']))
             <input placeholder="Password" class="inp-fields" type="password" name="password" id="password">
             <button type="submit" id="submit" class="btn login-btn">Login</button>
         </form>
-        
         
         <div id="underline"></div>
         <a class="btn" href="signup.php">Create a account</a>

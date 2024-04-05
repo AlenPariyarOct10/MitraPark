@@ -51,16 +51,13 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
         include_once("./parts/navbar.php");
         include_once("./parts/leftSidebar.php");
         function timeAgo($postedTime) {
-            // Get current timestamp
+            
             $currentTime = time();
-            
-            // Convert posted time to timestamp
             $postedTimestamp = strtotime($postedTime);
-            
-            // Calculate time difference in seconds
+
             $timeDifference = $currentTime - $postedTimestamp;
             
-            // Convert time difference to minutes, hours, days, months, or years
+            $seconds = floor($timeDifference);
             $minutes = floor($timeDifference / 60);
             $hours = floor($timeDifference / (60 * 60));
             $days = floor($timeDifference / (60 * 60 * 24));
@@ -79,7 +76,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
             } elseif ($minutes > 0) {
                 return $minutes . ($minutes > 1 ? ' minutes' : ' minute') . ' ago';
             } else {
-                return 'just now';
+                return $seconds. " ago";
             }
         }
     ?>
@@ -115,7 +112,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                             <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
                             <div style="display:flex; flex-direction:column;">
                                 <span><b>'.$row['uname'].'</b> liked your post.</span>
-                                <span style="font-size: small; color: #373737;">'.timeAgo($row['created_date_time']).' ago</span>
+                                <span style="font-size: small; color: #373737;">'.timeAgo($row['created_date_time']).' </span>
                             </div>
                         </a>
                         ';
@@ -126,7 +123,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                             <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">
                             <div style="display:flex; flex-direction:column;">
                                 <span><b>'.$row['uname'].'</b> commented in your post.</span>
-                                <span style="font-size: small; color: #373737;">'.timeAgo($row['created_date_time']).' ago</span>
+                                <span style="font-size: small; color: #373737;">'.timeAgo($row['created_date_time']).' </span>
                             </div>
                         </a>
                         ';

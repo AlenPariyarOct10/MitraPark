@@ -6,6 +6,8 @@
     if(mysqli_connect_errno()) {
         die("Unable to connect to database: " . mysqli_connect_error());
     }
+    date_default_timezone_set('Asia/Kathmandu');
+
 
 
 ?>

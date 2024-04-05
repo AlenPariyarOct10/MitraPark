@@ -1,9 +1,9 @@
 <?php
-include_once ('./parts/entryCheck.php');
-include_once ('./server/db_connection.php');
-include_once ('./server/validation.php');
-include_once ('./server/functions.php');
-include_once ('./server/db_connection.php');
+include_once('./parts/entryCheck.php');
+include_once('./server/db_connection.php');
+include_once('./server/validation.php');
+include_once('./server/functions.php');
+include_once('./server/db_connection.php');
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 
@@ -17,9 +17,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/kurakani-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="assets/css/mitras-style.css">
     <link rel="stylesheet" href="./assets/css/all.min.css">
@@ -52,26 +50,24 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             justify-content: flex-start;
         }
 
-        .deleteMsg{
+        .deleteMsg {
             color: #949494;
             cursor: pointer;
         }
 
-        .deleteMsg:hover{
+        .deleteMsg:hover {
             color: #d9534f;
 
         }
     </style>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Kurakani Station</title>
 </head>
 
 <body>
-    <?php include_once ("./parts/navbar.php"); ?>
+    <?php include_once("./parts/navbar.php"); ?>
     <div class="body">
-        <?php include_once ("./parts/kurakani/leftNavPart.php") ?>
+        <?php include_once("./parts/kurakani/leftNavPart.php") ?>
         <?php
         $chatUserId = htmlspecialchars($_GET['uid']);
         $getUserQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, uid FROM `users` WHERE `uid`='$chatUserId'";
@@ -84,8 +80,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     <div class="message-head">
                         <div class="mitra-request-list-item" id="chat-user-<?php echo $chatUserId; ?>">
                             <a class="redirect-to-profile" href="user.php?id=<?php echo $chatUserId ?>">
-                                <img class="mitra-request-profile-list"
-                                    src="<?php echo $getChatUserData['profile_picture']; ?>">
+                                <img class="mitra-request-profile-list" src="<?php echo $getChatUserData['profile_picture']; ?>">
                                 <span id="chat-profile-uname" class="uname">
                                     <?php echo $getChatUserData['uname']; ?>
                                 </span>
@@ -100,36 +95,40 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i>
                     </div>
         </div>
-        <?php include_once ("./parts/rightSidebar.php") ?>
+        <?php include_once("./parts/rightSidebar.php") ?>
     </div>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
 <script>
     function scrollToBottom() {
-    mainChatContainer.scrollTop = mainChatContainer.scrollHeight;
-}
-    function deleteMsg(id)
-    {
-        let clickedBtn = document.getElementById("chat-"+id);
+        mainChatContainer.scrollTop = mainChatContainer.scrollHeight;
+    }
+
+    // ALEN : Delete message
+    function deleteMsg(id) {
+        let clickedBtn = document.getElementById("chat-" + id);
         $.ajax({
             url: "./server/api/kurakani/deleteKurakani.php",
-            data: {message_id: id},
+            data: {
+                message_id: id
+            },
             type: "POST",
-            success: function (response)
-            {
+            success: function(response) {
                 console.log(response);
             }
         })
         clickedBtn.remove();
     }
-    
+
     let receipientUserId = '<?php echo $chatUserId; ?>';
     let chatUsersContainer = document.getElementById("chatUsersContainer");
     $.ajax({
         url: "./server/api/kurakani/getKurakaniUsers.php",
-        success: function (response) {
+        success: function(response) {
             console.log(response);
             let responseObj = JSON.parse(response);
+            responseObj =responseObj.filter(item => item.uid != <?php echo $_SESSION['user']['uid']; ?>);
+            console.log(responseObj);
             responseObj.forEach((item) => {
                 console.log("name", item.uname);
                 chatUsersContainer.innerHTML += `<div class="mitra-request-list-item" id="kurakani-${item.uid}">
@@ -151,19 +150,23 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     let messageBox = document.getElementById("message-text");
     let sendBtn = document.getElementById("sendBtn");
 
+
+    // ALEN : Refresh chat 
     function refreshMessages() {
         $.ajax({
             url: "./server/api/kurakani/getMessage.php",
             type: "POST",
-            data: { receipientId: receipientUserId },
-            success: function (response) {
+            data: {
+                receipientId: receipientUserId
+            },
+            success: function(response) {
                 let chatData = JSON.parse(response);
-                mainChatContainer.innerHTML = ""; // Clear previous messages
+                mainChatContainer.innerHTML = ""; 
                 chatData.forEach((chat) => {
                     let newChat = "";
                     if (receipientUserId == chat.sender_id && localStorage.getItem("mp-uid") == chat.receiver_id) {
-                       
-                                newChat = `
+
+                        newChat = `
                                 <div class="message-container m-out">
                                     <div id="${chat.message_id}" class="message-out">
                                         <span>${chat.message_text}</span>
@@ -183,15 +186,18 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             }
         });
         scrollToBottom();
+        seenMessage();
     }
 
-
+// ALEN : get messages
     function getMessages() {
         $.ajax({
             url: "./server/api/kurakani/getMessage.php",
             type: "POST",
-            data: { receipientId: receipientUserId },
-            success: function (response) {
+            data: {
+                receipientId: receipientUserId
+            },
+            success: function(response) {
                 let chatData = JSON.parse(response);
                 let newChat = "";
                 chatData.forEach((chat) => {
@@ -213,15 +219,33 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             `;
                     }
                     mainChatContainer.innerHTML += newChat;
-                  
+
                 })
             }
         })
         scrollToBottom();
-       
+
     }
 
-    // Function to send message
+    // ALEN : Update seen status of message
+    function seenMessage()
+    {
+        $.ajax({
+            url: "./server/api/kurakani/updateSeenStatus.php",
+            type: "POST",
+            data: {
+                senderId: receipientUserId
+            },
+            success: (success)=>{
+                console.log(success);
+            },
+            error: (error)=>{
+                console.log(error);
+            }
+        })
+    }
+
+    // ALEN : Send Message 
     function sendMessage() {
         let message = messageBox.value.trim();
         if (message !== "") {
@@ -235,24 +259,43 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             mainChatContainer.innerHTML += newChat;
             messageBox.value = ""; // Clear message box
 
-           
+
             $.ajax({
                 url: "./server/api/kurakani/sendMessage.php",
                 type: "POST",
-                data: { receipientId: receipientUserId, msg: message },
-                success: function (status) {
+                data: {
+                    receipientId: receipientUserId,
+                    msg: message
+                },
+                success: function(status) {
                     console.log(status);
                     // Refresh messages after sending
                     refreshMessages();
                 }
             });
+
+            // ALEN : Update chat history after sending msg
+            $.ajax({
+                url: "./server/api/kurakani/updateChatHistory.php",
+                type: "POST",
+                data: {
+                    receipientId: receipientUserId,
+                    msg: message
+                },
+                success: function(status) {
+                    console.log(status);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         }
     }
-
 
     $(document).ready(() => {
         refreshMessages();
         scrollToBottom();
+        seenMessage();
     })
 
     // Set interval to refresh messages every 5 seconds (adjust as needed)
@@ -260,17 +303,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     // Attach event listener to send button
     sendBtn.addEventListener("click", sendMessage);
-
-
-   
-
-
-
-   
-
-
-
-
 </script>
 
 </html>
