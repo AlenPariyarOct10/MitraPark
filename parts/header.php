@@ -1,6 +1,21 @@
+<?php
+    include_once("../server/db_connection.php");
+
+    $getSystemColor = "SELECT * FROM `system_data` WHERE 1";
+    $result = mysqli_query($connection, $getSystemColor);
+
+    $result = mysqli_fetch_assoc($result);
+    $data = json_decode($result['themeSpecification'], true);
+
+    // ALEN : primaryColor, secondaryColor, ThemeBgColor
+
+?>
+
+<style>
 :root{
-    --mp-color-1 : #222831;
-    --mp-theme-bg : #FEFBF6;
+    --mp-primary : <?php echo $data['primaryColor']; ?>;
+    --mp-secondary : <?php echo $data['secondaryColor']; ?>;
+    --mp-theme-bg : <?php echo $data['ThemeBgColor']; ?>;
 }
 
 * {
@@ -30,7 +45,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--mp-color-1);
+    background-color: var(--mp-primary);
     position: relative;
     box-shadow: 0.1px 0.1px 1px 0.2px white;
 }
@@ -58,27 +73,27 @@ body{
     height: 100%;
     width: 100%;
     text-align: center;
-    color: #EEEEEE;
-    border-top: 5px solid var(--mp-color-1);
-    border-bottom: 5px solid var(--mp-color-1);
+    color: var(--mp-secondary);
+    border-top: 5px solid var(--mp-primary);
+    border-bottom: 5px solid var(--mp-primary);
 }
 
 #user-nav .center-part a i{
     
-    color: #EEEEEE;
+    color: var(--mp-secondary);
 }
 
 #user-nav .center-part a:hover {
     background-color: rgba(115, 115, 115, 0.215);
-    color:#EEEEEE;
+    color: var(--mp-secondary);
   
 
 }
 
 #user-nav .center-part .active{
-    color: #EEEEEE;
-    border-bottom: 5px solid #EEEEEE;
-    border-top: 5px solid #EEEEEE;
+    color: var(--mp-secondary);
+    border-bottom: 5px solid var(--mp-secondary);
+    border-top: 5px solid var(--mp-secondary);
 
     background-color: #49494947;
 
@@ -371,3 +386,5 @@ body{
         width: 80%;
     }
 }
+
+</style>

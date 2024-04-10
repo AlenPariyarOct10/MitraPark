@@ -96,17 +96,16 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                                 triggered_by  
                          FROM notifications n 
                          INNER JOIN users u ON triggered_by = u.uid 
-                         WHERE n.type='like' 
-                               AND u.uid<>'$uid' 
-                               AND component_id IN (SELECT post_id FROM posts WHERE author_id='$uid') 
-                         ORDER BY created_date_time ASC";
+                         WHERE triggered_by<>'$uid' AND component_id IN (SELECT post_id FROM posts WHERE author_id='$uid') 
+                         ORDER BY created_date_time DESC";
 
                 $result = mysqli_query($connection, $getNotificationQuery);
                 while($row = mysqli_fetch_assoc($result))
                 {
-                
+
                     if($row['type']=='like')
                     {
+
                         echo '
                         <a class="right-nav-item" id="my-profile" href="./user.php?id='.$row['triggered_by'].'">
                             <img class="right-nav-item-img" src="./'.$row['profile_picture'].'">

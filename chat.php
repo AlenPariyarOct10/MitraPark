@@ -50,15 +50,21 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             justify-content: flex-start;
         }
 
-        .deleteMsg {
-            color: #949494;
+        .deleteMsg > i{
             cursor: pointer;
+            color: rgb(104, 104, 104);
         }
 
-        .deleteMsg:hover {
-            color: #d9534f;
+        .deleteMsg > i:hover{
+            color: rgb(255, 87, 87);
 
         }
+
+        .message-out > span, .message-in > span{
+            padding: 8px;
+        }
+
+        
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Kurakani Station</title>
@@ -100,6 +106,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 </body>
 <script src="./assets/scripts/jquery.js"></script>
 <script>
+    $(".message-container").hover(()=>{
+        console.log("hello");
+    })
+
+
     function scrollToBottom() {
         mainChatContainer.scrollTop = mainChatContainer.scrollHeight;
     }
@@ -168,18 +179,22 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                         newChat = `
                                 <div class="message-container m-out">
-                                    <div id="${chat.message_id}" class="message-out">
+                                    <div id="${chat.message_id}" class="message-in">
                                         <span>${chat.message_text}</span>
                                     </div>
-                                </div>`;
+                                </div>
+                                
+                                `;
                     } else if (receipientUserId == chat.receiver_id && localStorage.getItem("mp-uid") == chat.sender_id) {
                         newChat = `
                                 <div class="message-container m-in" id="chat-${chat.message_id}">
                                 <div class="deleteMsg" onclick="deleteMsg(${chat.message_id})" ><i class="fa-solid fa-trash-can"></i></div>
-                                    <div class="message-in">
+                                    <div class="message-out">
                                         <span>${chat.message_text}</span>
                                     </div>
-                                </div>`;
+                                </div>
+                                
+                                `;
                     }
                     mainChatContainer.innerHTML += newChat;
                 });
@@ -219,12 +234,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             `;
                     }
                     mainChatContainer.innerHTML += newChat;
-
                 })
             }
         })
         scrollToBottom();
-
     }
 
     // ALEN : Update seen status of message
@@ -296,6 +309,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         refreshMessages();
         scrollToBottom();
         seenMessage();
+    console.log("----------- ",$(".message-out"));
+
     })
 
     // Set interval to refresh messages every 5 seconds (adjust as needed)

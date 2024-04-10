@@ -23,6 +23,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
   <link rel="stylesheet" href="./assets/css/profile.css" />
   <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+    <style>
+      #post-container{
+        width: 60%;
+      }
+    </style>
     
   <title>Profile - MitraPark</title>
 </head>

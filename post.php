@@ -276,15 +276,31 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     $getAuthor = mysqli_query($connection, $getAuthor);
     $getAuthor = mysqli_fetch_assoc($getAuthor);
 
-    // $getPost = "SELECT uid, profile_picture, concat(fname,' ', lname) as uname, profile_picture FROM `users` WHERE `uid` IN ( SELECT `liked_by` FROM `likes` WHERE `post_id`='$postId')";
+    $authorId = $getAuthor['author_id'];
+
     $getPost = mysqli_query($connection, $getPost);
     $getPost = mysqli_fetch_assoc($getPost);
+
+    $authorMitras = "SELECT * FROM `friends` WHERE (`sender_id`='$uid' AND `acceptor_id`='$authorId') OR (`sender_id`='$authorId' AND `acceptor_id`='$uid')";
+    $authorMitras = mysqli_query($connection, $authorMitras);
+    $authorMitras = mysqli_fetch_assoc($authorMitras);
+    $isMitra = false;
+    if($authorMitras)
+    {
+        $isMitra = true;
+    }
+
+
+   
 
     ?>
 
     <div id="mid-body" class="mid-body">
 
-        <?php ?>
+        <?php
+            if($getPost && ($getPost['visibility']=="private" && $getAuthor['author_id']==$uid) || ($getPost['visibility']=="public") || ($getPost['visibility']=="mitras" && ($isMitra ||$getAuthor['author_id']==$uid)))
+            {
+        ?>
         <!-- ALEN Report post modal -->
         <div id="modal-wrapper">
             <div id="popup-upload-post">
@@ -561,21 +577,25 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     </div>
     <?php
+            }else{
+                ?>
+                <div id="mid-body" class="mid-body">
+
+       
+        <div class="post-item">
+            Post not found
+        </div>
+                </div>
+    </div>
+
+                    <?php
+            }
     include_once("./parts/rightSidebar.php");
     ?>
 
 
     <script src='./assets/scripts/jquery.js'></script>
     <script>
-        // $("#reply-comment-btn").click(()=>{
-        //    const replyIn = $("#parentCommentIdHolder").val();
-        //    const commentContent = $("#reply-comment-content").val();
-
-        //    console.table(replyIn, commentContent);
-
-
-        // })
-
 
         $(".closeModal").click(() => {
             $(".modal-wrapper").slideUp();
@@ -683,6 +703,12 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     commentAuthor: localStorage.getItem("mp-uid"),
                     commentContent: commentText.value
                 },
+                success: (response)=>{
+                    console.log("success", response);
+                },
+                error: (response)=>{
+                    console.log("failed",response);
+                }
             })
             commentText.value = null;
         }
