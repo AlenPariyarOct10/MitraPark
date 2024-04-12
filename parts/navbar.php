@@ -1,10 +1,5 @@
 <?php include_once ("./server/api/strict-mode/redirect_strict_mode.php"); ?>
-<script>
-    let npi =document.getElementById("nav-profile-img");
-npi.addEventListener("click",()=>{
-    console.log("clicked");
-})
-</script>
+
 <div id="user-nav">
     <div class="left-part">
         <p class="navbar-title">MitraPark</p>
@@ -39,10 +34,11 @@ npi.addEventListener("click",()=>{
     <!-- Profile Menu Start -->
     <div id="profile-menu" class="profile-menu">
         <div class="image-holder">
-            <img height="70px" style="border-radius: 50%;" class="profile-img" src="alen-profile.jpg" alt="">
+            <img style="border-radius: 50%; height:80px;" class="profile-img" src="<?php echo "./" . $_SESSION['user']['profile_picture']; ?>" alt="">
         </div>
         <div class="profile-info">
-            <p id="profile-info-uname">Alen Pariyar</p>
+            <p id="profile-info-uname"><?php echo $_SESSION['user']['fname']." ".$_SESSION['user']['lname']; ?></p>
+            
             <a class="profile-menu-item" href="">
                 My profile
             </a>
@@ -51,4 +47,6 @@ npi.addEventListener("click",()=>{
             </a>
         </div>
     </div>
+
+
    

@@ -275,8 +275,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     $getAuthor = mysqli_query($connection, $getAuthor);
     $getAuthor = mysqli_fetch_assoc($getAuthor);
-
-    $authorId = $getAuthor['author_id'];
+    if($getAuthor)
+    {
+        $authorId = $getAuthor['author_id'];
 
     $getPost = mysqli_query($connection, $getPost);
     $getPost = mysqli_fetch_assoc($getPost);
@@ -289,6 +290,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     {
         $isMitra = true;
     }
+    
+
+    
 
 
    
@@ -414,7 +418,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     <span id="like-count" class="like-count">0</span>
                 </div>
                 <div class="comment-container">
-                    <img height="30px" src="./assets/images/comment-outline.svg">
+                    <img height="30px" src="./assets/images/comment-outline.png">
                 </div>
 
             </div>
@@ -590,6 +594,19 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                     <?php
             }
+        }else{
+            ?>
+            <div id="mid-body" class="mid-body">
+
+   
+    <div class="post-item">
+        Post not found
+    </div>
+            </div>
+
+
+                <?php
+        }
     include_once("./parts/rightSidebar.php");
     ?>
 

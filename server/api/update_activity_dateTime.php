@@ -6,7 +6,10 @@
     }
 
     $uid = $_SESSION['user']['uid'];
-    $updateQuery = "UPDATE `users` SET `last_active_date_time`=now() WHERE `uid`='$uid'";
+
+    $dateTime = Date("Y-m-d H-i-s");
+
+    $updateQuery = "UPDATE `users` SET `last_active_date_time`='$dateTime' WHERE `uid`='$uid'";
     mysqli_query($connection, $updateQuery);
 
     

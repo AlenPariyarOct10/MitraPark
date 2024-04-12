@@ -45,7 +45,7 @@ body{
 
 .message-in span
 {
-    background-color: black;
+    background-color:  	#218aff;
     color: white;
 
     border-radius: 50px 50px 50px 0px;
@@ -95,13 +95,27 @@ body{
 .message-head{
     width: 100%;
     display: flex;
-    border-bottom: 1px solid black;
-    border-radius: 20px;
-    background-color: rgb(230, 230, 230);
+    box-shadow: 0.5px 0.5px 5px 0.5px rgb(194, 194, 194);
+    border-radius: 8px;
+    background-color: rgb(252, 252, 252);
+    margin-bottom: 4px;
+    padding: 1px;
+    margin: 5px;
 }
 .redirect-to-profile{
     display: flex;
 }
 
+.chat-user-profile{
+    padding: 5px;
+}
+
+.online-status{
+    font-size: small;
+}
+
+#chat-profile-uname{
+    font-weight: bold;
+}
 
 

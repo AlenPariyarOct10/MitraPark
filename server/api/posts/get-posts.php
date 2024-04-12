@@ -22,7 +22,9 @@
             SELECT acceptor_id FROM friends WHERE sender_id = '$uid'
             UNION
             SELECT sender_id FROM friends WHERE acceptor_id = '$uid'
-        ))
+        )
+        OR posts.author_id = '$uid'
+        )
     GROUP BY
         posts.post_id
     ORDER BY 

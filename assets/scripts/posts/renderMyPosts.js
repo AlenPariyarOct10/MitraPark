@@ -161,7 +161,7 @@ function timeAgo(postedTime) {
                   </div>
                   <div class="comment-container">
                     <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
-                    <img height="30px" src="./assets/images/comment-outline.svg"></a>
+                    <img height="30px" src="./assets/images/comment-outline.png"></a>
                   </div>
                 </div>
               </div>

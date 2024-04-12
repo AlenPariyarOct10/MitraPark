@@ -18,8 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $parentCommentId = mysqli_real_escape_string($connection, $parentCommentId);
             $commentAuthor = mysqli_real_escape_string($connection, $commentAuthor);
             $commentContent = mysqli_real_escape_string($connection, $commentContent);
+            $dateTime = Date("Y-m-d H-i-s");
+
   
-            $insertReplyCommentQuery = "INSERT INTO reply_comments (parent_comment_id, comment_author, created_timestamp, comment_content) VALUES ('$parentCommentId', '$commentAuthor', NOW(), '$commentContent')";
+            $insertReplyCommentQuery = "INSERT INTO reply_comments (parent_comment_id, comment_author, created_timestamp, comment_content) VALUES ('$parentCommentId', '$commentAuthor', '$dateTime, '$commentContent')";
             $insertReplyCommentResult = mysqli_query($connection, $insertReplyCommentQuery);
 
             if ($insertReplyCommentResult) {

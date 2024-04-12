@@ -102,7 +102,6 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
                 $result = mysqli_query($connection, $getNotificationQuery);
                 while($row = mysqli_fetch_assoc($result))
                 {
-
                     if($row['type']=='like')
                     {
 
@@ -142,6 +141,6 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
     ?>
     
     <script src='./assets/scripts/jquery.js'></script>
-    <script src='posts.js'></script>
+
 </body>
 </html>

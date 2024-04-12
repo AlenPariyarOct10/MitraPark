@@ -11,8 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $commentText = htmlspecialchars($_POST['commentContent']);
         if($commentText!="")
         {
+        $dateTime = Date("Y-m-d H-i-s");
             
-            $insertComment = "INSERT INTO `comments`(`comment_by`, `content`, `created_date_time`, `post_id`) VALUES ('$commentAuthor','$commentText',NOW(),'$postId')";
+            $insertComment = "INSERT INTO `comments`(`comment_by`, `content`, `created_date_time`, `post_id`) VALUES ('$commentAuthor','$commentText','$dateTime','$postId')";
             $insertCommentStatus = mysqli_query($connection, $insertComment);
             addNotification("comment",$postId,$uid);
              

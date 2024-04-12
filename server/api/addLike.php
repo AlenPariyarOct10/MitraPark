@@ -9,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $selectAll = "SELECT * FROM likes WHERE post_id = '$postId' AND liked_by = '$uid'";
         $result = mysqli_query($connection, $selectAll);
+        $dateTime = Date("Y-m-d H-i-s");
         
 
         if (mysqli_num_rows($result) == 0) {

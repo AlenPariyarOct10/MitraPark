@@ -35,10 +35,86 @@ if(isset($_POST['email']) && isset($_POST['password']))
         rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
+    <style>
+          /* ALEN : Content Space -----------------------*/
+          .body{
+            height: 80vh;
+            position: relative;
+        }
+
+        .wrapper{
+            position: absolute;
+            background-color: #295fff5e;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+
+        .modal{
+            background-color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            width: 50%;
+            position: relative;
+
+        }
+
+        .modal-close{
+            height: 30px;
+            width: 30px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #FF204E;
+            
+            cursor: pointer;
+        }
+
+        .modal-close:hover{
+            background-color: red;
+        }
+
+        .btn{
+            border: none;
+        }
+
+        .btn-green{
+            background-color: cadetblue;
+        }
+
+        .btn-red{
+            background-color: #FF204E;
+        }
+
+    </style>
 
 </head>
 
 <body>
+         <!-- Modal Wrapper -->
+        <div class="wrapper">
+        <div class="modal">
+            <span class="modal-close">x</span>
+            <form action="close-strict-mode.php" method="POST" enctype="multipart/form-data">
+            <div class="modal-head">
+                <p class="modal-title">Are you sure you want to exit Strict mode?</p>
+            </div>
+            <hr>
+            <div>
+                <input class="btn btn-green" type="submit" value="Yes">
+                <button class="btn btn-red closeModal" type="button">No</button>
+            </div>
+            
+            </form>
+        </div>
+    </div>
     <div class="left">
         <img id="logo" src="<?php echo $mainLogo; ?>" alt="mitrapark-logo">
         <h1>
@@ -68,10 +144,23 @@ if(isset($_POST['email']) && isset($_POST['password']))
         <div class="signup-error">Strict Mode is Active till the end of <?php echo date("M d, Y"); ?>.</div>
         <a href="feed.php">Reload</a>
         <a style="padding: 20px; margin:20px;background-color:lightgreen;" href="logout.php">Logout</a>
+        <button id="exitStrictMode" style="border:none;padding: 5px; margin:20px;background-color: rgba(255, 0, 0, 0.45); border-radius:20px;cursor:pointer;">Exit Strict mode</button>
     </div>
 </body>
+<script src="./assets/scripts/jquery.js"></script>
 <script>
-    
+      // ALEN : Update Modal Button -> Show Modal
+      $("#exitStrictMode").click(()=>{
+        $(".wrapper").css({"display":"flex"});
+    })
+
+    // ALEN : Hide Modal
+    $(".modal-close").click(()=>{
+        $(".wrapper").css({"display":"none"});
+    })
+    $(".closeModal").click(()=>{
+        $(".wrapper").css({"display":"none"});
+    })
 </script>
 
 </html>

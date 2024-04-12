@@ -55,6 +55,47 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 visibility: visible;
             }
         }
+
+        /* ALEN : Kurakani-Style */
+        .recent-message{
+            font-size: small;
+            padding-left: 5px;
+        }
+
+        .chat-item-container{
+            color: rgb(62, 62, 62);
+            display: flex;
+            padding-left: 5px;
+            flex-direction: column;
+        }
+
+        .new-msg-dot {
+            height: 12px;
+            width: 12px;
+            background-color: #3da5ff;
+            border-radius: 50%;
+            display: inline-block;
+            }
+        .active-user-dot {
+            height: 15px;
+            width: 15px;
+            background-color: #2bff19;
+            border-radius: 50%;
+            display: inline-block;
+            position: absolute;
+            bottom: 5px;
+            right: 1px;
+            box-shadow: 0.5px 0.5px 2px 0.5px #78787892;
+            }
+
+        .text-time-label{
+            padding-left: 5px;
+            font-size: x-small;
+        }
+
+        .profile-holder{
+            position: relative;
+        }
     </style>
 </head>
 
@@ -79,5 +120,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 // ALEN : JS scripts to get chat history and suggested users
 ?>
 <?php include_once("./parts/kurakani/kurakani-scripts.php"); ?>
+<?php
+        include_once("./parts/js-script-files/js-script.php");
+    ?>
 
 </html>

@@ -12,8 +12,10 @@
     $uid = $_SESSION['user']['uid'];
     $receiverId = $_POST['receipientId'];
     $message = $_POST['msg'];
+    $dateTime = Date("Y-m-d H-i-s");
 
-    $insertMessageQuery = "INSERT INTO `messages`(`sender_id`, `receiver_id`, `message_text`, `sent_datetime`) VALUES ('$uid','$receiverId','$message',now())"; 
+
+    $insertMessageQuery = "INSERT INTO `messages`(`sender_id`, `receiver_id`, `message_text`, `sent_datetime`) VALUES ('$uid','$receiverId','$message','$dateTime')"; 
     $result = mysqli_query($connection, $insertMessageQuery);
 
     if($result)

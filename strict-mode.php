@@ -22,20 +22,29 @@ $result = mysqli_fetch_assoc($result);
 
     if($result==null)
     {
-        if(isset($_POST['setMaxHours']))
-        {
-            
-            $maxSeconds = $_POST['setMaxHours'];
-            $getNotifications = 0;
-    
-            if(isset($_POST['exceedTimeWarning']))
+            if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
             {
-                $getNotifications = 1;
-            }
+
+                if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
+                {
+                    $totalMax = ((int)$_POST['setMaxHours']*60*60)+((int)$_POST['setMaxMinutes']*60)+((int)$_POST['setMaxSeconds']);
+                    if($totalMax > 0)
+                    {
+                        $getNotifications = 0;
+            
+                        if(isset($_POST['exceedTimeWarning']))
+                        {
+                            $getNotifications = 1;
+                        }
     
-            $strictMode = 1;
-            $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`) VALUES ('$uid','$getNotifications',CURDATE(),'$maxSeconds','$strictMode','$maxSeconds')";
-            $result = mysqli_query($connection, $insertStrictMode);
+                        $strictMode = 1;
+                        $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`) VALUES ('$uid','$getNotifications',CURDATE(),'$totalMax','$strictMode','$maxSeconds')";
+                        $result = mysqli_query($connection, $insertStrictMode);
+                    }else{
+
+                    }
+
+                }
         }
     }
     
@@ -91,7 +100,7 @@ $result = mysqli_fetch_assoc($result);
         {
             background-color: rebeccapurple;
         }
-        #setMaxHours{
+        .timeSelector{
             padding: 8px;
             border: none;
         }
@@ -133,13 +142,17 @@ $result = mysqli_fetch_assoc($result);
             <br>
             <div>
                 <label for="getEndDate">Set max access hours :</label>
-                <select name="setMaxHours" id="setMaxHours"></select>
-                <select name="setMaxMinutes" id="setMaxMinutes"></select>
-                <select name="setMaxSeconds" id="setMaxSeconds"></select>
+                <select name="setMaxHours" class="timeSelector" id="setMaxHours"></select>
+                <select name="setMaxMinutes" class="timeSelector" id="setMaxMinutes"></select>
+                <select name="setMaxSeconds" class="timeSelector" id="setMaxSeconds"></select>
             </div>
             
             <p id="getBaki"></p>
             <br>
+            <div class="warningWrapper">
+                <label for="auto-renew">Automatically activate Strict Mode everyday :</label>
+                <input type="checkbox" name="auto-renew" id="auto-renew">
+            </div>
             <div class="warningWrapper">
                 <label for="exceedTimeWarning">Get notified before 15 minutes of access limit time :</label>
                 <input type="checkbox" name="exceedTimeWarning" id="exceedTimeWarning">
@@ -179,37 +192,37 @@ $result = mysqli_fetch_assoc($result);
 
         // Populating hours
         let setMaxHours = document.getElementById("setMaxHours");
-        for (let currentHour = dateObj.getHours(); currentHour < 23; currentHour++) {
+        for (let currentHour = 0; currentHour <= 24; currentHour++) {
             setMaxHours.innerHTML += `<option value="${currentHour}">${currentHour} Hours</option>`;
         }
 
         // Populating minutes
         let setMaxMinutes = document.getElementById("setMaxMinutes");
-        for (let currentMinute = 0; currentMinute <= 59; currentMinute++) {
+        for (let currentMinute = 0; currentMinute <= 60; currentMinute++) {
             setMaxMinutes.innerHTML += `<option value="${currentMinute}">${currentMinute} Minutes</option>`;
         }
 
         // Populating seconds
         let setMaxSeconds = document.getElementById("setMaxSeconds");
-        for (let currentSecond = 0; currentSecond <= 59; currentSecond++) {
+        for (let currentSecond = 0; currentSecond <= 60; currentSecond++) {
             setMaxSeconds.innerHTML += `<option value="${currentSecond}">${currentSecond} Seconds</option>`;
         }
 
 
 
 
-        $.ajax({
-            url: "./server/api/strict-mode/check_strict_mode.php",
-            type: "POST",
-            success:function (getStatus)
-            {
-                console.log(getStatus);
-            },
-            error:function()
-            {
-                console.log("failed");
-            }
-        })
+        // $.ajax({
+        //     url: "./server/api/strict-mode/check_strict_mode.php",
+        //     type: "POST",
+        //     success:function (getStatus)
+        //     {
+        //         console.log(getStatus);
+        //     },
+        //     error:function()
+        //     {
+        //         console.log("failed");
+        //     }
+        // })
     </script>
 
 </html>

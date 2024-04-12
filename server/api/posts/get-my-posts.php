@@ -7,13 +7,15 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 }
 
 $uid = $_SESSION['user']['uid'];
+$dateTime = Date("Y-m-d H-i-s");
+
 
 $query = "
     SELECT 
         posts.post_id, posts.author_id, posts.content, posts.visibility, posts.created_date_time, posts.media, 
         users.uid, users.fname, users.lname, users.profile_picture, 
         COUNT(likes.like_id) AS like_count,
-        CONCAT(TIMESTAMPDIFF(SECOND, posts.created_date_time, NOW()), ' seconds ago') AS time_ago
+        CONCAT(TIMESTAMPDIFF(SECOND, posts.created_date_time, '$dateTime'), ' seconds ago') AS time_ago
     FROM 
         posts
     INNER JOIN 

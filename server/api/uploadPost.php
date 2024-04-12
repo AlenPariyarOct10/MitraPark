@@ -43,10 +43,11 @@ if (isset($_POST)) {
             session_start();
         }
 
+        $dateTime = Date("Y-m-d H-i-s");
 
         $uid = $_SESSION['user']['uid'];
         $filePath = $_GLOBALS['fileName'];
-        $insertPostQuery = "INSERT INTO `posts`(`content`, `author_id`, `created_date_time`, `media`, `visibility`) VALUES ('$text','$uid',now(),'$filePath','$visibility')";
+        $insertPostQuery = "INSERT INTO `posts`(`content`, `author_id`, `created_date_time`, `media`, `visibility`) VALUES ('$text','$uid','$dateTime','$filePath','$visibility')";
         $connection->query($insertPostQuery);
         header("Location: ../../feed.php");
         

@@ -152,7 +152,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             const file = event.target.files[0];
             if (file) {
                 const imgUrl = URL.createObjectURL(file);
-                console.log(imgUrl);
+        
                 $("#selected-post-img").attr("src", imgUrl);
                 $(".post-image-holder")[0].style.display = "block";
                 
@@ -201,6 +201,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         }, 5000);
     </script>
     <script src='posts.js'></script>
+    <?php
+        include_once("./parts/js-script-files/js-script.php");
+    ?>
 </body>
 
 </html>

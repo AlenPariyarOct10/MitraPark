@@ -8,7 +8,7 @@
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         echo "called";
         
-        $currentDateTime = date("Y-m-d h:i:s");
+        $currentDateTime = date("Y-m-d H-i-s");
         $insertQuery = "INSERT INTO `users`(`fname`, `lname`, `phone`, `email`, `password`, `createdDateTime`) VALUES 
         ('$fname','$lname','$phone','$email','$hashedPassword','$currentDateTime')";
         
@@ -139,10 +139,17 @@
         {
             session_start();
         }
+        $dateTime = Date("Y-m-d H-i-s");
+
+        global $connection;
+
+        $authorId = mysqli_query($connection, "SELECT `author_id` FROM `posts` WHERE `post_id`='$component_id'");
+        $authorId = mysqli_fetch_assoc($authorId);
+
+        $authorId = $authorId['author_id'];
 
         $uid = $_SESSION['user']['uid'];
-
-        $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', NOW(), '{$component_id}' , '{$triggered_by}',{$uid})";
+        $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', '$dateTime', '{$component_id}' , '{$triggered_by}',{$authorId})";
         $GLOBALS['connection']->query($insertQuery);
 
     }

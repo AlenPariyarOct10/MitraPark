@@ -64,6 +64,35 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             padding: 8px;
         }
 
+        .online-status-icon{
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .isactive{
+            background-color: rgb(59, 255, 82);
+        }
+        .inactive{
+            background-color: rgb(255, 59, 59);
+        }
+
+        .online-status{
+            background-color: rgb(236, 236, 236);
+            padding: 0.5px 10px;
+            border-radius: 10px;
+            width: fit-content
+        }
+
+        .message-out{
+            position: relative;
+        }
+
+        .bx-check-double{
+            position: absolute;
+            bottom: 0;
+        }
         
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -75,21 +104,47 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <div class="body">
         <?php include_once("./parts/kurakani/leftNavPart.php") ?>
         <?php
-        $chatUserId = htmlspecialchars($_GET['uid']);
-        $getUserQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, uid FROM `users` WHERE `uid`='$chatUserId'";
-        $getUserQuery = mysqli_query($connection, $getUserQuery);
-        $getChatUserData = mysqli_fetch_array($getUserQuery, MYSQLI_ASSOC);
+            $chatUserId = htmlspecialchars($_GET['uid']);
+            $getUserQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, uid FROM `users` WHERE `uid`='$chatUserId'";
+            $getUserQuery = mysqli_query($connection, $getUserQuery);
+            $getChatUserData = mysqli_fetch_array($getUserQuery, MYSQLI_ASSOC);
         ?>
         <div class="mid-body">
             <a href="kurakani.php" class="back">
                 < Go Back </a>
+                <?php
+                    // ALEN : User Validation
+                    $uid = $_SESSION['user']['uid'];
+                    $checkMitra = "SELECT * FROM `friends` WHERE (`sender_id`='$chatUserId' AND `acceptor_id`='$uid') OR (`sender_id`='$uid' AND `acceptor_id`='$chatUserId')";
+                    $checkMitra = mysqli_query($connection, $checkMitra);
+                    $checkMitra = mysqli_fetch_all($checkMitra);
+                    if($checkMitra){
+
+                            $getHistory = "SELECT * FROM `chat_history` WHERE `user_1`='$uid' AND `user_2`='$chatUserId' OR `user_1`='$chatUserId' AND `user_2`='$uid'";
+                            $getHistory = mysqli_query($connection, $getHistory);
+                            $getHistory = mysqli_fetch_assoc($getHistory);
+                            if($getHistory['sender_id']!=$uid)
+                            {
+                                $history = "UPDATE `chat_history` SET `seen_status`=1 WHERE `user_1`='$uid' AND `user_2`='$chatUserId' OR `user_1`='$chatUserId' AND `user_2`='$uid'";
+                                mysqli_query($connection, $history);
+                            }
+
+                            
+                        
+                       
+
+                ?>
                     <div class="message-head">
-                        <div class="mitra-request-list-item" id="chat-user-<?php echo $chatUserId; ?>">
+                        <div class="chat-user-profile" id="chat-user-<?php echo $chatUserId; ?>">
                             <a class="redirect-to-profile" href="user.php?id=<?php echo $chatUserId ?>">
                                 <img class="mitra-request-profile-list" src="<?php echo $getChatUserData['profile_picture']; ?>">
-                                <span id="chat-profile-uname" class="uname">
-                                    <?php echo $getChatUserData['uname']; ?>
-                                </span>
+                                <div style="display:flex;flex-direction:column; margin-left:6px; justify-content:flex-start;">
+                                    <span id="chat-profile-uname" class="uname">
+                                        <?php echo $getChatUserData['uname']; ?>
+                                    </span>
+                                    <span id="online-status" class="online-status"> 
+                                </div>
+                                
                             </a>
                         </div>
                     </div>
@@ -100,15 +155,51 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <textarea name="" id="message-text"></textarea>
                         <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i>
                     </div>
+                    <?php
+                    }else{
+                        ?>
+                         <div class="post-item">
+                            User not found
+                         </div>
+                        <?php
+                    }
+                    ?>
         </div>
         <?php include_once("./parts/rightSidebar.php") ?>
     </div>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
 <script>
-    $(".message-container").hover(()=>{
-        console.log("hello");
+    
+    // ALEN : Check online status
+
+    $.ajax({
+        url: "./server/api/other/checkUserOnlineStatus.php",
+        type: "POST",
+        data: {
+            userId: <?php echo $chatUserId; ?>
+        },
+        success: (status)=>{
+            const onlineStatus = JSON.parse(status);
+            if(onlineStatus.isActive)
+            {
+                $("#online-status")[0].innerHTML = `
+                <span class="online-status-icon isactive" > </span>
+                                        Active
+                                    </span>
+                `;
+
+            }else{
+                $("#online-status")[0].innerHTML = `
+                <span class="online-status-icon inactive" > </span>
+                                        Inactive
+                                    </span>
+                `;
+            }
+        }
     })
+
+ 
 
 
     function scrollToBottom() {
@@ -182,6 +273,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                                     <div id="${chat.message_id}" class="message-in">
                                         <span>${chat.message_text}</span>
                                     </div>
+                                    
                                 </div>
                                 
                                 `;
@@ -191,7 +283,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                                 <div class="deleteMsg" onclick="deleteMsg(${chat.message_id})" ><i class="fa-solid fa-trash-can"></i></div>
                                     <div class="message-out">
                                         <span>${chat.message_text}</span>
+                                        ${(chat.seen_status==1)?'<i class="bx bx-check-double"></i>':''}
+                                        
+
                                     </div>
+                                   
                                 </div>
                                 
                                 `;
@@ -318,6 +414,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     // Attach event listener to send button
     sendBtn.addEventListener("click", sendMessage);
+    
 </script>
+<?php
+        include_once("./parts/js-script-files/js-script.php");
+    ?>
 
 </html>

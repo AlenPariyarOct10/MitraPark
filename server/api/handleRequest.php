@@ -17,9 +17,10 @@ $selectFriendRequest = "SELECT * FROM `friend_requests` WHERE sender_id='$uid' A
 $requestList = mysqli_query($connection, $selectFriendRequest);
 $requestList = mysqli_fetch_array($requestList, MYSQLI_ASSOC);
 if ($requestMode === "sendRequest") {
+    $dateTime = Date("Y-m-d H-i-s");
 
     if ($requestList === null) {
-        $insertRequest = "INSERT INTO `friend_requests`(`sender_id`, `receiver_id`, `status`, `created_date_time`) VALUES ('$uid','$receiverId','pending',now())";
+        $insertRequest = "INSERT INTO `friend_requests`(`sender_id`, `receiver_id`, `status`, `created_date_time`) VALUES ('$uid','$receiverId','pending','$dateTime')";
         $insertRequestStatus = mysqli_query($connection, $insertRequest);
         echo '
         <div id="mitraRequestHandleBtn" data-mode="cancelRequest" data-uid="' . $receiverId . '" class="mitra-request-control-btn">
@@ -41,9 +42,10 @@ if ($requestMode === "sendRequest") {
     $deleteRequest = "DELETE FROM `friend_requests` WHERE `sender_id`='$uid' AND `receiver_id`='$receiverId' OR `sender_id`='$receiverId' AND `receiver_id`='$uid'";
     $deleteRequestStatus = mysqli_query($connection, $deleteRequest);
 
+    $dateTime = Date("Y-m-d H-i-s");
 
     // Insert into Friends
-    $insertFriend = "INSERT INTO `friends`(`sender_id`, `acceptor_id`, `since_date_time`) VALUES ('$uid','$receiverId',now())";
+    $insertFriend = "INSERT INTO `friends`(`sender_id`, `acceptor_id`, `since_date_time`) VALUES ('$uid','$receiverId','$dateTime')";
     $insertFriendStatus = mysqli_query($connection, $insertFriend);
 
     echo '

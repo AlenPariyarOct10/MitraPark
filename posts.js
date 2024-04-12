@@ -105,18 +105,15 @@ function likeHandeler() {
             success: function(data)
             {
               let likesObj = JSON.parse(data);
-              console.log("likes",likesObj);
+      
               let liked_byObj= likesObj.map((item)=>item.liked_by);
-              console.log(liked_byObj);
+          
 
               let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart.png":"./assets/images/heart-outline.png";
               console.log("index",likedState);
               generatePostHTML(postItem, likedState);
             },
-            error: function(data)
-            {
-              console.log("failed");
-            }
+            
           })
            
         });
@@ -130,9 +127,6 @@ function likeHandeler() {
       console.error("Error fetching or rendering posts:", error);
     }
   }
-
- 
-
 
 // Each Post Card parameters(postId, likedState)
 function generatePostHTML(postItem, likedState) {
@@ -164,7 +158,7 @@ function generatePostHTML(postItem, likedState) {
                 </div>
                 <div class="comment-container">
                   <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
-                  <img height="30px" src="./assets/images/comment-outline.svg"></a>
+                  <img height="30px" src="./assets/images/comment-outline.png"></a>
                 </div>
               </div>
             </div>
