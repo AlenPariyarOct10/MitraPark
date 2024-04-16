@@ -42,6 +42,8 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
             background-color: rgba(0, 0, 0, 0.2);
         }
     </style>
+        <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+
     <?php echo "<script>localStorage.setItem('mp-uid','".$_SESSION['user']['uid']."')</script>";?>
 
 </head>

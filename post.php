@@ -254,6 +254,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         }
     </style>
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
+    <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+   
 
 </head>
 

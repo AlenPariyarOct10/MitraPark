@@ -24,7 +24,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
-
     <style>
         .mid-body {
             height: 90vh;
@@ -95,6 +94,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         }
         
     </style>
+    <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Kurakani Station</title>
 </head>
@@ -244,6 +245,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             });
         }
     })
+   
 
     let userChatList = document.getElementById("mitra-request-list-item");
 
@@ -408,6 +410,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     console.log("----------- ",$(".message-out"));
 
     })
+    
+        scrollToBottom();
+
+  
 
     // Set interval to refresh messages every 5 seconds (adjust as needed)
     setInterval(refreshMessages, 5000);

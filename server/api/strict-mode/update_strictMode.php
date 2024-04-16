@@ -1,4 +1,6 @@
 <?php
+    // ALEN : Update remaining access time in each call
+
     include_once "../../db_connection.php";
     if(session_status()!=PHP_SESSION_ACTIVE)
     {
@@ -6,13 +8,10 @@
     }
 
     $uid = $_SESSION['user']['uid'];
-    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `endStrictDate`=CURDATE() AND `uid`='$uid'";
+    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `strictMode`=0 AND `endStrictDate`=CURDATE() AND `uid`='$uid'";
 
     $result = mysqli_query($connection, $checkStrictMode);
     $result = mysqli_fetch_assoc($result);
-
-
-
 
     if($result != null)
     {
@@ -24,8 +23,16 @@
             $result = array("strict-mode"=>true, "strict-lock"=>false);
             echo json_encode($result);
         }else{
-            $result = array("strict-mode"=>true, "strict-lock"=>true);
-            echo json_encode($result);
+            if($result['strictMode']==1)
+            {
+                $result = array("strict-mode"=>true, "strict-lock"=>true);
+                echo json_encode($result);
+            }else{
+                $result = array("strict-mode"=>false, "strict-lock"=>false);
+                echo json_encode($result);
+
+            }
+           
         }
     }else{
         $result = array("strict-mode"=>false, "strict-lock"=>false);

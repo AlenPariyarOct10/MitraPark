@@ -205,8 +205,8 @@
             height: 75vh;
             overflow: scroll;
         }
-        
-        .operation-btn{
+
+        .operation-btn {
             cursor: pointer;
         }
 
@@ -222,22 +222,52 @@
         .active-page {
             background-color: #295fff;
         }
+
+        /* -----------------------------------------Modal---------------------------------------------- */
+        #modal-wrapper {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: #001f8494;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal{
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .btn{
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-green{
+            background-color: cadetblue;
+        }
+
+        .btn-red{
+            background-color: #FF204E;
+        }
+
+
+
+
     </style>
 </head>
 
 <body>
 
     <div class="body">
-        <div class="sidebar sidebar-desktop">
-            <span><a href="">MitraPark</a></span>
-            <ul>
-                <li class="active-tab"><i class="bx bxs-dashboard"></i><a class="sidebar-links" href="">Dashboard</a>
-                </li>
-                <li><i class="bx bxs-user"></i><a class="sidebar-links" href="">Reported Users</a></li>
-                <li><i class="bx bx-card"></i><a class="sidebar-links" href="">Reported Posts</a></li>
-                <li><i class="bx bx-info-square"></i><a class="sidebar-links" href="">System</a></li>
-            </ul>
-        </div>
+        
+    <?php include_once("./parts/sidebar.php") ?>
+
         <div class="content">
             <div class="inner-header">
                 <p>Dashboard ~ MitraPark </p>
@@ -252,15 +282,11 @@
                                 <p class="lite-dim">+0.00%</p>
                             </div>
                             <div class="card-row">
-                                <p>5K</p>
+                                <p id="reported_users">Loading...</p>
                             </div>
                             <div class="card-row">
-                                <span style="cursor:pointer;" class="lite-dim underline showReportedUsers" data-num="1">View records</span>
-                                <span class="icon-cover bg-red">
-                                    <i><i class="bx bxs-user">
-                                            <div></div>
-                                        </i></i>
-                                </span>
+                                <span style="cursor:pointer;" onclick="getReportedUsers(1);" class="lite-dim underline" data-num="1">View records</span>
+                              
                             </div>
                         </div>
                         <div class="card">
@@ -269,15 +295,10 @@
                                 <p class="lite-dim">+0.00%</p>
                             </div>
                             <div class="card-row">
-                                <p>5K</p>
+                                <p id="restricted_users">Loading...</p>
                             </div>
                             <div class="card-row">
-                                <span style="cursor:pointer;" class="lite-dim underline showRestrictedUsers" data-num="1">View records</span>
-                                <span class="icon-cover bg-yellow">
-                                    <i><i class="bx bxs-user">
-                                            <div></div>
-                                        </i></i>
-                                </span>
+                                <span style="cursor:pointer;" onclick="getRestrictedUsers(1)" class="lite-dim underline" data-num="1">View records</span>
                             </div>
                         </div>
                     </div>
@@ -308,6 +329,23 @@
 </body>
 <script src="../assets/scripts/jquery.js"></script>
 <script>
+
+    getRestrictedInfo();
+
+    function getRestrictedInfo()
+    {
+        // ALEN : Get restricted and reported data
+        $.ajax({
+                url: "./api/userInfo.php",
+                type: "POST",
+                success:  async (response)=>{
+                    const responseObj = await JSON.parse(response);
+                    $("#restricted_users")[0].innerText =responseObj.restricted_users;
+                    $("#reported_users")[0].innerText =responseObj.reported_users;
+                }
+            })
+    }
+    
     $('body').css({
         'height': $(this).height()
     });
@@ -373,8 +411,8 @@
         }
     })
 
-    function getRestrictedUsers(id)
-    {
+    function getRestrictedUsers(id) {
+        console.log("clicked");
         $("#users-data")[0].innerHTML = "";
         $("#record-table").css({
             'display': ''
@@ -408,9 +446,8 @@
                                 <td>${row.fname} ${row.lname}</td>
                                 <td>${row.report_content}</td>
                                 <td>
-                                    <button class="operation-btn">Delete</button>
-                                    <button class="operation-btn">Restrict</button>
-                                    <button class="operation-btn">View</button>
+                                    <button onclick="unstrictUser(${row.report_id})" class="operation-btn">Unrestrict</button>
+                                    <button onclick="viewUser(${row.uid})" class="operation-btn">View</button>
                                 </td>
                             </tr>
                         `;
@@ -435,6 +472,7 @@
                 }
             }
         })
+        getRestrictedInfo();
     }
 
     function getReportedUsers(id) {
@@ -453,9 +491,10 @@
                 reportType: "user",
                 page: id,
             },
-            success: (result) => {
+            success: async (result) => {
                 $("#table-mode")[0].innerText = "Reported Users";
-                let resultObj = JSON.parse(result);
+                console.log(result);
+                let resultObj = await JSON.parse(result);
                 let totalRow = null;
 
                 if (resultObj.length > 0) {
@@ -473,9 +512,9 @@
                                 <td>${row.fname} ${row.lname}</td>
                                 <td>${row.report_content}</td>
                                 <td>
-                                    <button class="operation-btn">Delete</button>
-                                    <button class="operation-btn">Restrict</button>
-                                    <button class="operation-btn">View</button>
+                                    <button onclick="deleteReport(${row.report_id})" class="operation-btn">Delete</button>
+                                    <button onclick="generateRestrictUserModal(${row.report_id})" class="operation-btn">Restrict</button>
+                                    <button onclick="showUser(${row.uid})" class="operation-btn">View</button>
                                 </td>
                             </tr>
                     `;
@@ -500,16 +539,202 @@
 
             }
         })
+        getRestrictedInfo();
     }
-
-
 
     $(".showReportedUsers").click(() => {
         getReportedUsers(1);
     })
-    $(".showRestrictedUsers").click(() => {
-        getRestrictedUsers(1);
-    })
+
+    function deleteReport(reportId)
+    {
+        console.log(reportId);
+        generateDeleteUserModal(reportId);
+        getRestrictedInfo();
+    }
+
+    function showUser(uid){
+        
+    }
+
+    function BtndeleteReport(reportId)
+    {
+        $.ajax({
+            url: "./api/deleteReport.php",
+            type: "GET",
+            data: {
+                reportId : reportId
+            },
+            success: (response)=>{
+                getReportedUsers(1);
+                removeModal();
+                getRestrictedInfo();
+            },
+            error: (response)=>{
+                console.log(response);
+            }
+        })
+    }
+
+    function restrictUser(reportId)
+    {
+        $.ajax({
+            url: "./api/restrictUser.php",
+            type: "GET",
+            data: {
+                reportId : reportId
+            },
+            success: (response)=>{
+                getReportedUsers(1);
+                removeModal();
+                getRestrictedInfo();
+            },
+            error: (response)=>{
+                console.log(response);
+            }
+        })
+    }
+
+    function generateUnrestrictUserModal(reportId)
+    {
+        if ($("#modal-wrapper")[0] === undefined) {
+            $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
+            $("#modal-wrapper")[0].innerHTML = `
+            
+          
+            <div class="modal">
+                <img class="modal-popup-head" height="80px" src="../assets/images/restriction.png" alt="" srcset="">
+                <div class="post-uploader">
+                    <div class="post-uploader-head">
+                        <h3>Are you sure you want to unrestrict this user?</h3>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-red close-modal">No</button>
+                        <button onclick="restrictUser(${reportId})" class="btn btn-green">Yes</button>
+                    </div>
+                </div>
+            </div>
+       
+            `;
+            $(".close-modal").click(removeModal);
+            getRestrictedInfo();
+        }
+    }
+
+    function unstrictUser(reportId)
+    {
+        $.ajax({
+            url: "./api/unrestrictUser.php",
+            type: "GET",
+            data: {
+                reportId : reportId
+            },
+            success: (response)=>{
+                getRestrictedUsers(1);
+                removeModal();
+                getRestrictedInfo();
+            },
+            error: (response)=>{
+                console.log(response);
+            }
+        })
+    }
+
+    function generateDeleteUserModal(reportId)
+    {
+        if ($("#modal-wrapper")[0] === undefined) {
+            $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
+            $("#modal-wrapper")[0].innerHTML = `
+            
+            <!-- ALEN Report delete modal -->
+            <div class="modal">
+                <img class="modal-popup-head" height="80px" src="../assets/images/trash.png" alt="" srcset="">
+                <div class="post-uploader">
+                    <div class="post-uploader-head">
+                        <h3>Are you sure you want to delete this report?</h3>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-red close-modal">No</button>
+                        <button onclick="BtndeleteReport(${reportId})" class="btn btn-green">Yes</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End delete modal -->
+            `;
+    $(".close-modal").click(removeModal);
+    getRestrictedInfo();
+    return;
+        }
+    }
+
+    function generateRestrictUserModal(reportId)
+    {
+        if ($("#modal-wrapper")[0] === undefined) {
+            $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
+            $("#modal-wrapper")[0].innerHTML = `
+            
+            <!-- ALEN Report delete modal -->
+            <div class="modal">
+                <img class="modal-popup-head" height="80px" src="../assets/images/restriction.png" alt="" srcset="">
+                <div class="post-uploader">
+                    <div class="post-uploader-head">
+                        <h3>Are you sure you want to restrict this user?</h3>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-red close-modal">No</button>
+                        <button onclick="restrictUser(${reportId})" class="btn btn-green">Yes</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End delete modal -->
+            `;
+            $(".close-modal").click(removeModal);
+            getRestrictedInfo();
+        }
+    }
+
+    function generateModal() {
+        if ($("#modal-wrapper")[0] === undefined) {
+            $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
+            $("#modal-wrapper")[0].innerHTML = `
+            
+            <!-- ALEN Report post modal -->
+
+            <div class="modal">
+                <img class="modal-popup-head" height="80px" src="" alt="" srcset="">
+                <div class="post-uploader">
+                    <div class="post-uploader-head">
+                        <h3></h3>
+                    </div>
+                    <hr class="section-break-hr">
+                    <div class="modal-body">
+                        model body
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-red close-modal">Close</button>
+                        <button class="btn btn-green">Hello</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Report post modal -->
+     
+            `;
+            $(".close-modal").click(removeModal);
+        }
+    }
+
+    function removeModal() {
+        try {
+            $("#modal-wrapper")[0].remove();
+        } catch (error) {
+
+        }
+    }
+
+  
 </script>
 
 </html>

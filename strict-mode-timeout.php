@@ -4,6 +4,8 @@ include_once("./server/db_connection.php");
 include_once("./server/validation.php");
 include_once("./server/functions.php");
 
+session_start();
+
 $aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
@@ -16,6 +18,22 @@ if(isset($_POST['email']) && isset($_POST['password']))
     $psw = htmlspecialchars($_POST['password']);
     loginUser($email, $psw);
 }
+
+    $uid = $_SESSION['user']['uid'];
+    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `uid`='$uid'";
+
+    $result = mysqli_query($connection, $checkStrictMode);
+    $result = mysqli_fetch_assoc($result);
+
+    if($result['strictMode']==1 && $result['autoRenew']==1)
+    {
+        $today = date("Y-m-d");
+        if($result['today_date']!=$today)
+        {
+            $renewStrictMode = "UPDATE `strict_mode` SET `today_date`='$today',`endStrictDate`='$today', `availableAccessSeconds`=`maxAccessSeconds` WHERE `uid`='$uid'";
+            mysqli_query($connection, $renewStrictMode);
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +120,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
         <div class="wrapper">
         <div class="modal">
             <span class="modal-close">x</span>
-            <form action="close-strict-mode.php" method="POST" enctype="multipart/form-data">
+            <form action="./server/api/strict-mode/removeStrictMode.php" method="POST">
             <div class="modal-head">
                 <p class="modal-title">Are you sure you want to exit Strict mode?</p>
             </div>

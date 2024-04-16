@@ -9,6 +9,8 @@ $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
 
+
+
 <?php 
 $uid = $_SESSION['user']['uid'];
 $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE()";
@@ -25,26 +27,51 @@ $result = mysqli_fetch_assoc($result);
             if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
             {
 
-                if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
-                {
                     $totalMax = ((int)$_POST['setMaxHours']*60*60)+((int)$_POST['setMaxMinutes']*60)+((int)$_POST['setMaxSeconds']);
                     if($totalMax > 0)
                     {
                         $getNotifications = 0;
+                        $autoRenew = 0;
             
                         if(isset($_POST['exceedTimeWarning']))
                         {
                             $getNotifications = 1;
                         }
+                        if(isset($_POST['auto-renew']))
+                        {
+                            $autoRenew = 1;
+                        }
     
                         $strictMode = 1;
-                        $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`) VALUES ('$uid','$getNotifications',CURDATE(),'$totalMax','$strictMode','$maxSeconds')";
+                        $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`, `autoRenew`) VALUES ('$uid','$getNotifications',CURDATE(),'$totalMax','$strictMode','$totalMax', '$autoRenew')";
                         $result = mysqli_query($connection, $insertStrictMode);
-                    }else{
-
                     }
 
-                }
+        }
+    }else{
+        if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
+            {
+
+                    $totalMax = ((int)$_POST['setMaxHours']*60*60)+((int)$_POST['setMaxMinutes']*60)+((int)$_POST['setMaxSeconds']);
+                    if($totalMax > 0)
+                    {
+                        $getNotifications = 0;
+                        $autoRenew = 0;
+            
+                        if(isset($_POST['exceedTimeWarning']))
+                        {
+                            $getNotifications = 1;
+                        }
+                        if(isset($_POST['auto-renew']))
+                        {
+                            $autoRenew = 1;
+                        }
+    
+                        $strictMode = 1;
+                        $updateStrictMode = "UPDATE `strict_mode` SET `getWarning`='$getNotifications', `endStrictDate`=CURDATE(), `maxAccessSeconds`='$totalMax', `strictMode`='$strictMode', `availableAccessSeconds`='$totalMax', `autoRenew`='$autoRenew' WHERE `uid`='$uid'";
+                        $result = mysqli_query($connection, $updateStrictMode);
+                    }
+
         }
     }
     
@@ -106,6 +133,8 @@ $result = mysqli_fetch_assoc($result);
         }
 
     </style>
+    <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
 
 </head>
@@ -117,7 +146,7 @@ $result = mysqli_fetch_assoc($result);
     ?>
 
     <?php
-        $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE()";
+        $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE() AND `strictMode`=1";
         $result = mysqli_query($connection, $getStrictModeInfo);
         $result = mysqli_fetch_assoc($result);
 
@@ -159,7 +188,7 @@ $result = mysqli_fetch_assoc($result);
             </div>
             <br>
             <div>
-                <button id="" style="width:100%;padding:5px;" type="submit">Enter Strict Mode</button>
+                <input style="width:100%;padding:5px;" type="submit" name="send" value="Enter Strict Mode">
             </div>
         </form>
         <?php
@@ -177,6 +206,7 @@ $result = mysqli_fetch_assoc($result);
             </div>
                     Strict Mode is Running
                     <?php echo number_format((float)($result['availableAccessSeconds']/60),2). " minutes left till end of ".$result['endStrictDate']; ?>
+                    <a style="background-color: crimson; color: white; padding:6px; border-radius: 20px;margin-top:10px;" href="./server/api/strict-mode/removeStrictMode.php">Exit Strict Mode</a>
                 <?php
             }
             ?>
@@ -211,18 +241,7 @@ $result = mysqli_fetch_assoc($result);
 
 
 
-        // $.ajax({
-        //     url: "./server/api/strict-mode/check_strict_mode.php",
-        //     type: "POST",
-        //     success:function (getStatus)
-        //     {
-        //         console.log(getStatus);
-        //     },
-        //     error:function()
-        //     {
-        //         console.log("failed");
-        //     }
-        // })
+       
     </script>
 
 </html>

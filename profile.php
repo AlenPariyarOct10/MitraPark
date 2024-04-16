@@ -28,6 +28,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         width: 60%;
       }
     </style>
+        <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+   
+
     
   <title>Profile - MitraPark</title>
 </head>

@@ -16,23 +16,28 @@ if(session_status()!=PHP_SESSION_ACTIVE)
     
     if($reportType=='post')
     {
-        $getAllReported = "SELECT DISTINCT *,  (SELECT COUNT(DISTINCT report_id) 
+        $getAllReported = "SELECT DISTINCT *,  (SELECT COUNT(DISTINCT report_id) as total_count
         FROM `reports` 
         INNER JOIN users u ON component_id = u.uid 
-        WHERE `type`='$reportType') AS total_count FROM `reports` INNER JOIN posts p  ON  p.author_id=component_id INNER JOIN users u ON p.author_id = u.uid WHERE `type`='$reportType' AND `report_response`=NULL LIMIT $offset, 20";
+        WHERE `type`='$reportType') FROM `reports` INNER JOIN posts p  ON  p.author_id=component_id INNER JOIN users u ON p.author_id = u.uid WHERE `type`='$reportType' AND `report_response`=NULL LIMIT $offset, 20";
     }else if($reportType=='user')
     {
-        $getAllReported = "SELECT DISTINCT *, (SELECT COUNT(DISTINCT report_id) 
-        FROM `reports` 
-        INNER JOIN users u ON component_id = u.uid 
-        WHERE `type`='$reportType' AND `report_response` IS NULL) AS total_count FROM `reports` INNER JOIN users u ON component_id = u.uid WHERE `type`='$reportType'  AND `report_response` IS NULL LIMIT $offset, 20";
+        $getAllReported = "SELECT DISTINCT *,
+        (SELECT COUNT(DISTINCT report_id)
+        FROM `reports`
+        INNER JOIN users u ON component_id = u.uid
+        WHERE `type`='$reportType' AND `report_response` IS NULL) AS total_count
+        FROM `reports`
+        INNER JOIN users u ON component_id = u.uid
+        WHERE `type`='$reportType' AND u.status = 'active' AND `report_response` IS NULL
+        LIMIT $offset, 20";
 
     }else if($reportType=='restrictedUser')
     {
         $getAllReported = "SELECT DISTINCT *,  (SELECT COUNT(DISTINCT report_id) 
         FROM `reports` 
         INNER JOIN users u ON component_id = u.uid 
-        WHERE `type`='user' AND `report_response` IS NOT NULL) AS total_count FROM `reports` LEFT JOIN users u ON component_id = u.uid WHERE `type`='user' AND `report_response` IS NOT NULL LIMIT $offset, 20";
+        WHERE `type`='user' AND `report_response` IS NOT NULL) AS total_count FROM `reports` LEFT JOIN users u ON component_id = u.uid WHERE `type`='user' AND u.status = 'restricted' LIMIT $offset, 20";
 
     }
     $result = mysqli_query($connection, $getAllReported);

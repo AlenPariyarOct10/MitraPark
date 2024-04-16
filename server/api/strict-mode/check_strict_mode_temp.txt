@@ -8,22 +8,12 @@
     }
 
     $uid = $_SESSION['user']['uid'];
-    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `uid`='$uid'";
+    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `endStrictDate`=CURDATE() AND `uid`='$uid'";
 
     $result = mysqli_query($connection, $checkStrictMode);
     $result = mysqli_fetch_assoc($result);
 
-    if($result['strictMode']==1 && $result['autoRenew']==1)
-    {
-        $today = date("Y-m-d");
-        if($result['today_date']!=$today)
-        {
-            $renewStrictMode = "UPDATE `strict_mode` SET `today_date`='$today',`endStrictDate`='$today', `availableAccessSeconds`=`maxAccessSeconds` WHERE `uid`='$uid'";
-            mysqli_query($connection, $renewStrictMode);
-        }
-    }
-
-
+    
     
     if($result == null)
     {

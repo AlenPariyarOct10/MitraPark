@@ -11,7 +11,7 @@
         $uid = $_SESSION['user']['uid'];
         $userId = $_POST['userId'];
         $content = $_POST['content'];
-        $insertReport = "INSERT INTO `reports`(`type`, `component_id`, `report_content`) VALUES ('user','$userId','$content')";
+        $insertReport = "INSERT INTO `reports`(`type`, `component_id`, `report_content`,`reported_by`) VALUES ('user','$userId','$content','$uid')";
         $result = mysqli_query($connection, $insertReport);
 
         if($result)

@@ -97,6 +97,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             position: relative;
         }
     </style>
+        <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+  
 </head>
 
 <body>

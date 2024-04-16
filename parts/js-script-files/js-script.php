@@ -71,15 +71,15 @@
         $.ajax({
             url: "./server/api/strict-mode/update_strictMode.php",
             success: function (msg) {
+                console.log(msg);
                 const strictModeStatus = JSON.parse(msg);
-               
+               console.log(strictModeStatus);
 
-                if (strictModeStatus['strict-mode'] == true && strictModeStatus['strict-lock'] == true) {
+                // if (strictModeStatus['strict-mode'] == true && strictModeStatus['strict-lock'] == true) {
                
-                    window.location.href = "feed.php";
+                //     window.location.href = "feed.php";
                    
-
-                }
+                // }
             }
         })
     }
@@ -89,12 +89,10 @@
         update_activity_datetime();
         update_strict_mode_timeout();
         updateNewNotificationStatus();
-        console.log("trigger");
+        $.ajax({
+            url: "./server/api/strict-mode/check_strict_mode.php",
+            type: "POST",
+        })
     }, 5000);
-
-    
-
-
-    
 
 </script>

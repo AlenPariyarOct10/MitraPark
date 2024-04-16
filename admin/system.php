@@ -336,6 +336,25 @@
             align-items: center;
             justify-content: space-between;
         }
+
+        .label-success{
+            font-size: medium;
+            background-color: #5fffbf;
+            padding: 10px;
+            border-left: 4px solid #00b96f;
+        }
+        .label-success{
+            font-size: medium;
+            background-color: #5fffbf;
+            padding: 10px;
+            border-left: 4px solid #00b96f;
+        }
+        .label-fail{
+            font-size: medium;
+            background-color: #ff9999;
+            padding: 10px;
+            border-left: 4px solid #b90000;
+        }
     </style>
 </head>
 
@@ -354,20 +373,23 @@
             <div class="modal-body">
                 <div class="form-item">
                     <label for="system_name">Name :</label>
-                    <input type="text" name="system_name" id="system_name" required>
+                    <input type="text" name="system_name" id="form-system_name" required>
                 </div>
                 <div class="form-item">
                     <label for="system_name">Description :</label>
-                    <input type="text" name="system_description" id="system_description" required>
+                    <input type="text" name="system_description" id="form-system_description" required>
                 </div>
                 <div class="form-item">
                     <label for="system_name">Maintenance Mode :</label>
-                    
-                    <button type="button" id="maintenance_mode">Turn On</button>
+                    <label for="maintenance_on">Turn On</label>
+                    <input type="radio" name="maintainance_mode" value=1 id="maintenance_on">
+                    <label for="maintenance_off">Turn Off</label>
+                    <input type="radio" name="maintainance_mode" value=0 id="maintenance_off">
+                    <!-- <input name="maintenance_mode" value=0 type="button" id="maintenance_mode">Turn On</input> -->
                 </div>
                 <div class="form-item">
                     <label>System Logo :</label>
-                    <input style="display: none;" type="file" name="logo_img" id="logo_img">
+                    <input style="display: none;" type="file" name="logo_img" id="form_logo_img">
                     <label id="changeLogoLabel" for="logo_img">
                         Change Logo
                     </label>
@@ -383,13 +405,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="color" class="colorSelector" name="primaryColor" id="primaryColor">
+                                <input type="color" class="colorSelector" name="primaryColor" id="form_primaryColor">
                             </td>
                             <td>
-                                <input type="color" class="colorSelector" name="secondaryColor" id="secondaryColor">
+                                <input type="color" class="colorSelector" name="secondaryColor" id="form_secondaryColor">
                             </td>
                             <td>
-                                <input type="color" class="colorSelector" name="bgColor" id="bgColor">
+                                <input type="color" class="colorSelector" name="bgColor" id="form_bgColor">
                             </td>
                         </tr>
                     </table>
@@ -402,22 +424,34 @@
             </form>
         </div>
     </div>
-        <div class="sidebar sidebar-desktop">
-            <span><a href="">MitraPark</a></span>
-            <ul>
-                <li class="active-tab"><i class="bx bxs-dashboard"></i><a class="sidebar-links" href="">Dashboard</a>
-                </li>
-                <li><i class="bx bxs-user"></i><a class="sidebar-links" href="">Reported Users</a></li>
-                <li><i class="bx bx-card"></i><a class="sidebar-links" href="">Reported Posts</a></li>
-                <li><i class="bx bx-info-square"></i><a class="sidebar-links" href="">System</a></li>
-            </ul>
-        </div>
+    <?php include_once("./parts/sidebar.php") ?>
+
         <div class="content">
             <div class="inner-header">
                 <p>System ~ MitraPark </p>
                 <div><button id="updateSystemBtn">Update System Info</button></div>
             </div>
             <div class="inner-body">
+            <?php 
+                if(isset($_GET['updateSuccess']))
+                {
+                    echo '
+                    <div class="label-success">
+                    System info updated succesfully
+                </div>
+                    ';
+                }
+                if(isset($_GET['updateFailed']))
+                {
+                    echo '
+                    <div class="label-fail">
+                    Unable to update system into
+                </div>
+                    ';
+                }
+
+            ?>
+                
                 <div class="inner-body-section">
                     <!-- ALEN : CARD -->
                     <div class="card-grid">
@@ -467,7 +501,12 @@
                                 <p class="lite-dim">System Color </p>
                             </div>
                             <div class="card-row">
-                                <p>MitraPark</p>
+                                <div style="display: flex;">
+                                    <div style="height: 30px;width: 30px; background-color: red;margin:2px;" id="showPrimaryColor" class="color-box"></div>
+                                    <div style="height: 30px;width: 30px; background-color: red;margin:2px;" id="showSecondaryColor" class="color-box"></div>
+                                    <div style="height: 30px;width: 30px; background-color: red;margin:2px;" id="showBgColor" class="color-box"></div>
+                                </div>
+
                             </div>
                             <div class="card-row">
                                 <span style="cursor:pointer;" class="lite-dim underline showReportedUsers" data-num="1">View records</span>
@@ -521,24 +560,28 @@
             console.log(response);
             let responseObj = JSON.parse(response);
             console.log(responseObj);
-            $("#system_name")[0].value =responseObj.system_name;
-            $("#system_description")[0].value =responseObj.system_description;
-            console.log(responseObj.system_description);
-            $("#system_description")[0].innerText = "ALen";
+        
+            $("#form-system_name")[0].value =responseObj.system_name;
+            $("#form-system_description")[0].value =responseObj.system_description;
+          
             if(responseObj.maintenance_mode==0)
             {
-                $("#maintenance_mode")[0].innerText = "Turn On";
-                $("#maintenance_mode")[0].style.backgroundColor = "#FA7070";
-            }else{
-                $("#maintenance_mode")[0].innerText = "Turn Off";
-                $("#maintenance_mode")[0].style.backgroundColor = "#90D26D";
-            }
+                $("#maintenance_on")[0].checked = true;
+                $("#maintenance_off")[0].checked = false;
 
+            }else{
+                $("#maintenance_off")[0].checked = true;
+                $("#maintenance_on")[0].checked = false;
+
+
+            }
+ 
             let responseColorObj =JSON.parse(responseObj.themeSpecification);
-            $("#primaryColor").val(responseColorObj.primaryColor);
-            $("#secondaryColor").val(responseColorObj.secondaryColor);
-            $("#bgColor").val(responseColorObj.ThemeBgColor);
-            $("#logo_img")[0].val(responseObj.system_logo);
+    
+            $("#form_primaryColor").val(responseColorObj.primaryColor);
+            $("#form_secondaryColor").val(responseColorObj.secondaryColor);
+            $("#form_bgColor").val(responseColorObj.ThemeBgColor);
+            $("#form_logo_img")[0].val(responseObj.system_logo);
         }
     }
     
@@ -578,12 +621,18 @@
             console.log(response);
             let responseObj = JSON.parse(response);
             console.log(responseObj);
-            console.log($("#systemName")[0].innerHTML);
+            console.log($("#systemName").innerHTML);
             $("#systemName")[0].innerHTML = responseObj.system_name;
             $("#maintenanceMode")[0].innerHTML = (responseObj.maintenance_mode==1)?"On":"Off";
             $("#system_description")[0].innerHTML = responseObj.system_description;
             $("#system_logo")[0].src = responseObj.system_logo;
             $("#system_logo")[0].style.height = "60px";
+            const colorTheme = JSON.parse(responseObj.themeSpecification);
+            console.log(colorTheme);
+
+            $("#showPrimaryColor")[0].style.backgroundColor =colorTheme.primaryColor;
+            $("#showSecondaryColor")[0].style.backgroundColor =colorTheme.secondaryColor;
+            $("#showBgColor")[0].style.backgroundColor =colorTheme.ThemeBgColor;
         }
     })
     

@@ -210,6 +210,9 @@ if (isset($_GET['id'])) {
                 }
 
             </style>
+                <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+  
+
         </head>
 
         <body>

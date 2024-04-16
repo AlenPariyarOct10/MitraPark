@@ -109,13 +109,13 @@ if (isset($_POST['submit'])) {
     let phoneField = document.getElementById("phone");
     let confirmPasswordField =document.getElementById("cpassword");
 
-    let nameRule = /^[a-zA-Z]{3,10}$/;
+    let nameRule = /^[a-zA-Z]{2,10}$/;
     let emailRule = /^[a-z0-9._-]+@[a-z0-9]+\.[a-z0-9]{2,4}$/;
     let errorText = document.querySelectorAll('.errorText');
     let phoneRule = /[0-9]\d{9}/;
 
      // Rule for Email Field
-     let allowEmail = false;
+    let allowEmail = false;
     let allowPassword = false;
     let allowName = false;
     let allowPhone = false;
@@ -198,15 +198,20 @@ if (isset($_POST['submit'])) {
             document.getElementById("checkLength").classList.add("fa-circle-xmark");
             
         }
+
         let specialCharRule = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
         if(specialCharRule.test(passwordField.value))
         {
             
             document.getElementById("checkSpecialChar").classList.remove("fa-circle-xmark");
             document.getElementById("checkSpecialChar").classList.add("fa-circle-check");
+            allowPassword = true;
+
         }else{
             document.getElementById("checkSpecialChar").classList.add("fa-circle-xmark");
             document.getElementById("checkSpecialChar").classList.remove("fa-circle-check");
+            allowPassword = false;
+
         }
 
         let checkNumberRule = /[0-9]/;
@@ -214,9 +219,13 @@ if (isset($_POST['submit'])) {
         {
             document.getElementById("checkNumber").classList.remove("fa-circle-xmark");
             document.getElementById("checkNumber").classList.add("fa-circle-check");
+            allowPassword = true;
+
         }else{
             document.getElementById("checkNumber").classList.add("fa-circle-xmark");
             document.getElementById("checkNumber").classList.remove("fa-circle-check");
+            allowPassword = false;
+
         }
 
         let checkUpperCase = /[A-Z]/;
@@ -224,9 +233,11 @@ if (isset($_POST['submit'])) {
         {
             document.getElementById("checkUpperCase").classList.remove("fa-circle-xmark");
             document.getElementById("checkUpperCase").classList.add("fa-circle-check");
+            allowPassword = true;
         }else{
             document.getElementById("checkUpperCase").classList.add("fa-circle-xmark");
             document.getElementById("checkUpperCase").classList.remove("fa-circle-check");
+            allowPassword = false;
         }
 
         let checkLowerCase = /[a-z]/;
@@ -234,9 +245,12 @@ if (isset($_POST['submit'])) {
         {
             document.getElementById("checkLowerCase").classList.remove("fa-circle-xmark");
             document.getElementById("checkLowerCase").classList.add("fa-circle-check");
+            allowPassword = true;
+            
         }else{
             document.getElementById("checkLowerCase").classList.add("fa-circle-xmark");
             document.getElementById("checkLowerCase").classList.remove("fa-circle-check");
+            allowCpassword = false;
         }
         controlSubmit();
     });
