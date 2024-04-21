@@ -4,16 +4,16 @@
     
     if(isset($_GET['reportId'])) {
     
-        $reportId = htmlspecialchars($_GET['reportId']);
+        $reportId = $_GET['reportId'];
     
-        $getUser = "SELECT `type`, `component_id` FROM `reports` WHERE `report_id`='$reportId'";
-        $getUser = mysqli_query($connection, $getUser);
-        $getUser = mysqli_fetch_assoc($getUser);
-        $getUserId = $getUser['component_id'];
-        $setRestricted = "UPDATE `users` SET `status`='restricted' WHERE `uid`='$getUserId'";
+        $getPost = "SELECT `type`, `component_id` FROM `reports` WHERE `report_id`='$reportId'";
+        $getPost = mysqli_query($connection, $getPost);
+        $getPost = mysqli_fetch_assoc($getPost);
+        $getPostId = $getPost['component_id'];
+        $setRestricted = "UPDATE `posts` SET `status`='active' WHERE `post_id`='$getPostId'";
         $result1 = mysqli_query($connection, $setRestricted);
 
-        $updateStatus = "UPDATE `reports` SET `report_response`='restricted' WHERE `report_id`='$reportId'"; 
+        $updateStatus = "UPDATE `reports` SET `report_response`=NULL WHERE `report_id`='$reportId'"; 
         $result2 = mysqli_query($connection, $updateStatus);
 
     

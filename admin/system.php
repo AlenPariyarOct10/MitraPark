@@ -564,14 +564,14 @@
             $("#form-system_name")[0].value =responseObj.system_name;
             $("#form-system_description")[0].value =responseObj.system_description;
           
-            if(responseObj.maintenance_mode==0)
+            if(responseObj.maintenance_mode==1)
             {
                 $("#maintenance_on")[0].checked = true;
                 $("#maintenance_off")[0].checked = false;
 
             }else{
-                $("#maintenance_off")[0].checked = true;
                 $("#maintenance_on")[0].checked = false;
+                $("#maintenance_off")[0].checked = true;
 
 
             }

@@ -1,11 +1,7 @@
 <?php 
 
-    var_dump($_POST);
-    var_dump($_FILES);
 
     // array(6) { ["system_name"]=> string(9) "MitraPark" ["system_description"]=> string(28) "Connecting Mitras all around" ["maintainance_mode"]=> string(1) "1" ["primaryColor"]=> string(7) "#fefbf6" ["secondaryColor"]=> string(7) "#fefbf6" ["bgColor"]=> string(7) "#000000" } array(1) { ["logo_img"]=> array(6) { ["name"]=> string(0) "" ["full_path"]=> string(0) "" ["type"]=> string(0) "" ["tmp_name"]=> string(0) "" ["error"]=> int(4) ["size"]=> int(0) } } 
-
-// /MitraPark/assets/images/mitrapark.png
 if (isset($_POST)) {
 
     include_once("../server/db_connection.php");

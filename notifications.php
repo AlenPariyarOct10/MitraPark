@@ -8,6 +8,8 @@ include_once('./server/functions.php');
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
+include_once("./server/auto-routes.php");
+
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +31,7 @@ $aboutSite= $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
     <title>Feed -
         <?php echo $aboutSite['system_name']; ?>
+
     </title>
     <style>
         

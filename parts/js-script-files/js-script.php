@@ -1,3 +1,4 @@
+
 <script>
     // ----------------------------------------------------------------------//
     //  Toggle profile menu
@@ -84,11 +85,27 @@
         })
     }
 
+    function check_maintenance_mode()
+    {
+        $.ajax({
+            url: "./server/api/check-maintenance-mode.php",
+            success:function(status)
+            {
+                const maintenanceStatus = JSON.parse(status);
+                if(maintenanceStatus['maintenance-mode']==true)
+                {
+                    window.location.href = "maintenance-mode.php";
+                }
+            }
+        })
+    }
+
     setInterval(() => {
      
         update_activity_datetime();
         update_strict_mode_timeout();
         updateNewNotificationStatus();
+        // check_maintenance_mode();
         $.ajax({
             url: "./server/api/strict-mode/check_strict_mode.php",
             type: "POST",

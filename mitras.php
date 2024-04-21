@@ -4,6 +4,8 @@ include_once('./parts/entryCheck.php');
 include_once('./server/db_connection.php');
 include_once('./server/validation.php');
 include_once('./server/functions.php');
+include_once("./server/auto-routes.php");
+
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);

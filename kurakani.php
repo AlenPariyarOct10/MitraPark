@@ -6,6 +6,8 @@ include_once ('./server/functions.php');
 include_once ('./server/db_connection.php');
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
+include_once("./server/auto-routes.php");
+
 ?>
 
 

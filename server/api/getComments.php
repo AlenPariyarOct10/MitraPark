@@ -6,8 +6,7 @@ include_once("../db_connection.php");
 $rawData = file_get_contents("php://input");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_SESSION['user']['uid'])) {
-        $uid = $_SESSION['user']['uid'];
+    if (isset($_SESSION['user']['uid']) || isset($_SESSION['loggedInAdmin'])) {
         $postId = $_POST['postId'];
 
         $selectAll = "SELECT fname, lname, created_date_time, profile_picture, content, created_date_time, uid, comment_by, comment_id FROM comments c INNER JOIN users u on u.uid=c.comment_by WHERE post_id = '$postId'";

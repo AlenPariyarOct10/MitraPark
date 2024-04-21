@@ -1,9 +1,48 @@
+<?php
+  $adminMenu = [
+    [
+      "title"=>"Dashboard",
+      "href"=>"index.php",
+      "class" => "bx bxs-dashboard",
+    ],
+    [
+      "title"=>"Reported Users",
+      "href"=>"reported-users.php",
+      "class" => "bx bxs-user",
+    ],
+    [
+      "title"=>"Reported Posts",
+      "href"=>"reported-posts.php",
+      "class" => "bx bxs-card",
+    ],
+    [
+      "title"=>"System",
+      "href"=>"system.php",
+      "class" => "bx bxs-info-square",
+    ],
+    [
+      "title"=>"Logout",
+      "href"=>"logout.php",
+      "class" => "bx bx-log-in-circle",
+    ],
+    
+  ]
+  
+
+?>
 <div class="sidebar sidebar-desktop">
       <span><a href="">MitraPark</a></span>
       <ul>
-        <li class="active-tab"><i class="bx bxs-dashboard"></i><a class="sidebar-links" href="./index.php">Dashboard</a></li>
-        <li><i class="bx bxs-user"></i><a class="sidebar-links" href="./getReports.php">Reported Users</a></li>
-        <li><i class="bx bx-card"></i><a class="sidebar-links" href="">Reported Posts</a></li>
-        <li><i class="bx bx-info-square"></i><a class="sidebar-links" href="./system.php">System</a></li>
+       
+          <?php
+            foreach ($adminMenu as $item) {
+                echo '<li ';
+                if (str_contains($_SERVER['REQUEST_URI'], $item['href'])) {
+                    echo 'class="active-tab"';
+                }
+                echo '><i class="' . $item["class"] . '"></i><a class="sidebar-links" href="./' . $item['href'] . '">' . $item['title'] . '</a></li>';
+            }
+          ?>
+
       </ul>
     </div>

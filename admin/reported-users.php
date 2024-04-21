@@ -4,273 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Reported Users ~ MitraPark</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Khand:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/boxicons/css/boxicons.css">
-    <style>
-        body {
-            margin: 0px;
-            padding: 0px;
-            background-color: #F3F3F9;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Hanken Grotesk';
-            font-size: 28px;
-            font-weight: normal;
-        }
-
-        .body {
-            display: flex;
-            background-color: #f2f2f2;
-            height: 100%;
-
-        }
-
-
-        /* ALEN: SIDEBAR */
-        .sidebar {
-            background-color: #3d4d82;
-            ;
-            transition: width 0.9s ease;
-            color: rgb(243, 243, 243);
-            font-size: medium;
-            line-height: 30px;
-
-        }
-
-        .sidebar-mobile {
-            width: 60px;
-        }
-
-        .sidebar-desktop {
-            width: 180px;
-
-        }
-
-        .sidebar ul>*:hover {
-            background-color: #535C91;
-        }
-
-
-
-
-
-        .sidebar ul>li {
-
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .active-tab {
-            background-color: #FF204E;
-            font-weight: bold;
-        }
-
-        .sidebar ul {
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-
-        a {
-            width: 100%;
-            color: whitesmoke;
-            text-decoration: none;
-        }
-
-        .sidebar ul>li {
-            padding-left: 20px;
-            /* background-color: red; */
-        }
-
-        .inner-body {
-            height: 100%;
-        }
-
-
-        /* ---------------------------------------- */
-        .content {
-            padding: 30px;
-            width: 100%;
-        }
-
-        p {
-            margin: 0;
-            padding: 0;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
-        }
-
-
-
-        /* Card Style */
-        .card {
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 0px 0px 20px 1px #9f9f9f66;
-            width: 20%;
-            height: 100px;
-
-        }
-
-        .card:hover {
-
-            box-shadow: 0px 0px 20px 1px #9f9f9fad;
-
-        }
-
-        .card-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .lite-dim {
-            font-weight: 500;
-            font-size: small;
-            color: #535C91;
-        }
-
-        .underline {
-            text-decoration: underline;
-        }
-
-        .bg-green {
-            background-color: #6effc5;
-            color: #00b96f;
-        }
-
-        .bg-red {
-            background-color: #ff6e6e;
-            color: #b90000;
-        }
-
-        .bg-yellow {
-            background-color: #ffee6e;
-            color: #b9b300;
-        }
-
-        .bg-blue {
-            background-color: #6e8bff;
-            color: #002eb9;
-        }
-
-        .icon-cover {
-            padding: 5px 8px 5px 8px;
-            border-radius: 10px;
-        }
-
-        .card-grid {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* ----------------TABLE--------------------------- */
-        table {
-            font-size: large;
-            width: 100%;
-        }
-
-        tr:nth-child(even) {
-            background-color: #d4d4d4;
-
-        }
-
-        th {
-            font-size: large;
-            text-align: center;
-            font-weight: bold;
-            color: white;
-            background-color: #295fff;
-            padding: 10px;
-
-        }
-
-        td {
-            text-align: center;
-        }
-
-        .table-wrapper {
-            margin-top: 10px;
-            height: 75vh;
-            overflow: scroll;
-        }
-
-        .operation-btn {
-            cursor: pointer;
-        }
-
-        /* Pagination */
-        .pagination-btn {
-            border: none;
-            background-color: darkgray;
-            padding: 5px;
-            color: white;
-            cursor: pointer;
-        }
-
-        .active-page {
-            background-color: #295fff;
-        }
-
-        /* -----------------------------------------Modal---------------------------------------------- */
-        #modal-wrapper {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            background-color: #001f8494;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal{
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .btn{
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-        }
-
-        .btn-green{
-            background-color: cadetblue;
-        }
-
-        .btn-red{
-            background-color: #FF204E;
-        }
-
-
-
-
-    </style>
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <body>
-
     <div class="body">
-        
     <?php include_once("./parts/sidebar.php") ?>
-
         <div class="content">
             <div class="inner-header">
-                <p>Dashboard ~ MitraPark </p>
+                <p>Reported Users ~ MitraPark</p>
             </div>
             <div class="inner-body">
                 <div class="inner-body-section">
@@ -339,6 +86,7 @@
                 url: "./api/userInfo.php",
                 type: "POST",
                 success:  async (response)=>{
+                    console.log(response);
                     const responseObj = await JSON.parse(response);
                     $("#restricted_users")[0].innerText =responseObj.restricted_users;
                     $("#reported_users")[0].innerText =responseObj.reported_users;
@@ -430,12 +178,12 @@
 
                 $("#table-mode")[0].innerText = "Restricted Users";
                 let resultObj = JSON.parse(result);
+                console.log(resultObj);
                 let totalRow = null;
                 if (resultObj.length > 0) {
                     resultObj.forEach((row) => {
                         if (totalRow == null) {
                             totalRow = row.total_count;
-
                         }
 
                         $("#users-data")[0].innerHTML +=
@@ -446,8 +194,9 @@
                                 <td>${row.fname} ${row.lname}</td>
                                 <td>${row.report_content}</td>
                                 <td>
-                                    <button onclick="unstrictUser(${row.report_id})" class="operation-btn">Unrestrict</button>
-                                    <button onclick="viewUser(${row.uid})" class="operation-btn">View</button>
+                                    <button class="table-option" onclick="unstrictUser(${row.report_id})" class="operation-btn">Unrestrict</button>
+                                    <button class="table-option" onclick="viewUser(${row.uid})" class="operation-btn">View</button>
+                                    <a class="table-option" href="viewUser.php?uid=${row.uid}" class="operation-btn">View</a>
                                 </td>
                             </tr>
                         `;
@@ -466,7 +215,7 @@
                     $("#users-data")[0].innerHTML +=
                         `
                             <tr>
-                                <td style="background-color: #5aaa" colspan="4">No records found</td>
+                                <td style="background-color: #5aaa" colspan="5">No records found</td>
                             </tr>
                     `;
                 }
@@ -501,7 +250,6 @@
                     resultObj.forEach((row) => {
                         if (totalRow == null) {
                             totalRow = row.total_count;
-
                         }
 
                         $("#users-data")[0].innerHTML +=
@@ -512,9 +260,9 @@
                                 <td>${row.fname} ${row.lname}</td>
                                 <td>${row.report_content}</td>
                                 <td>
-                                    <button onclick="deleteReport(${row.report_id})" class="operation-btn">Delete</button>
-                                    <button onclick="generateRestrictUserModal(${row.report_id})" class="operation-btn">Restrict</button>
-                                    <button onclick="showUser(${row.uid})" class="operation-btn">View</button>
+                                    <button class="table-option" onclick="deleteReport(${row.report_id})" class="operation-btn">Delete</button>
+                                    <button class="table-option" onclick="generateRestrictUserModal(${row.report_id})" class="operation-btn">Restrict</button>
+                                    <a class="table-option" href="viewUser.php?uid=${row.uid}" class="operation-btn">View</a>
                                 </td>
                             </tr>
                     `;
@@ -532,7 +280,7 @@
                     $("#users-data")[0].innerHTML +=
                         `
                             <tr>
-                                <td style="background-color: #5aaa" colspan="4">No records found</td>
+                                <td style="background-color: #5aaa" colspan="5">No records found</td>
                             </tr>
                     `;
                 }
@@ -551,10 +299,6 @@
         console.log(reportId);
         generateDeleteUserModal(reportId);
         getRestrictedInfo();
-    }
-
-    function showUser(uid){
-        
     }
 
     function BtndeleteReport(reportId)
@@ -620,6 +364,11 @@
             $(".close-modal").click(removeModal);
             getRestrictedInfo();
         }
+    }
+
+    function viewUser(uid)
+    {
+        console.log(uid);
     }
 
     function unstrictUser(reportId)

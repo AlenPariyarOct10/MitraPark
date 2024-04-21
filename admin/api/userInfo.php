@@ -22,6 +22,18 @@
         $postsCount = mysqli_fetch_assoc($postsCount);
         $result['total_posts'] = $postsCount['total_posts'];
 
+        // total reported posts
+        $postsCount = "SELECT COUNT(`report_id`) as `total_reported_posts` FROM `reports` WHERE `report_response` IS NULL AND `type`='post' AND `component_id` IN (SELECT `post_id` FROM `posts` WHERE `status` = 'active') ";
+        $postsCount = mysqli_query($connection, $postsCount);
+        $postsCount = mysqli_fetch_assoc($postsCount);
+        $result['total_reported_posts'] = $postsCount['total_reported_posts'];
+        
+        // total restricted posts
+        $postsCount = "SELECT COUNT(`post_id`) as `total_restricted_posts` FROM `posts` WHERE `status`='restricted'";
+        $postsCount = mysqli_query($connection, $postsCount);
+        $postsCount = mysqli_fetch_assoc($postsCount);
+        $result['total_restricted_posts'] = $postsCount['total_restricted_posts'];
+
         // Get new posts
         $newPostsCount = "SELECT COUNT(post_id) as new_posts FROM `posts` WHERE created_date_time=NOW()";
         $newPostsCount = mysqli_query($connection, $newPostsCount);

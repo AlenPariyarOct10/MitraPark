@@ -2,12 +2,30 @@
 if(session_status()!=PHP_SESSION_ACTIVE)
 {
     session_start();
+
+    
 }
 
 
 include_once("./server/db_connection.php");
 include_once("./server/validation.php");
 include_once("./server/functions.php");
+
+if(isset($_SESSION['loggedInAdmin']))
+{
+  if($_SESSION['loggedInAdmin']==true)
+  {
+    header("Location: ./admin/");
+  }
+}
+
+if(isset($_SESSION['loggedIn']))
+{
+    if($_SESSION['loggedIn']==true)
+    {
+        header("Location: feed.php");
+    }
+}
 
 $aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);

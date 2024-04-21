@@ -34,20 +34,10 @@
     $result = mysqli_query($connection, $query);
 
     if ($result) {
-        // Fetching all rows as associative array
-        $allPosts = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        
-        // Free result set
-        mysqli_free_result($result);
-        
-        
-        // Output as JSON
-        echo json_encode($allPosts);
-    } else {
-        // Handle query execution error
-        echo "Error: " . mysqli_error($connection);
-    }
 
-    // Close database connection
+        $allPosts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        mysqli_free_result($result);
+        echo json_encode($allPosts);
+    }
     mysqli_close($connection);
 ?>

@@ -8,7 +8,9 @@ include_once('./server/functions.php');
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
+include_once("./server/auto-routes.php");
 ?>
+
 
 <!DOCTYPE html>
 <html lang='en'>
