@@ -17,11 +17,16 @@ $selectFriendRequest = "SELECT * FROM `friend_requests` WHERE sender_id='$uid' A
 $requestList = mysqli_query($connection, $selectFriendRequest);
 $requestList = mysqli_fetch_array($requestList, MYSQLI_ASSOC);
 if ($requestMode === "sendRequest") {
+
     $dateTime = Date("Y-m-d H-i-s");
 
     if ($requestList === null) {
         $insertRequest = "INSERT INTO `friend_requests`(`sender_id`, `receiver_id`, `status`, `created_date_time`) VALUES ('$uid','$receiverId','pending','$dateTime')";
         $insertRequestStatus = mysqli_query($connection, $insertRequest);
+
+        addNotification("request_received", $receiverId, $uid);
+
+
         echo '
         <div id="mitraRequestHandleBtn" data-mode="cancelRequest" data-uid="' . $receiverId . '" class="mitra-request-control-btn">
             <img src="./assets/images/remove.png" height="30px" alt="" />
@@ -36,6 +41,8 @@ if ($requestMode === "sendRequest") {
                         <img src="./assets/images/add-mitra.png" height="30px" alt="" />
                         <span>Add Mitra</span>
                      </div>';
+        removeNotification("request_received",$receiverId, $uid);
+        
     }
 } else if ($requestMode === "acceptRequest") {
     // Delete from Friend Requests
@@ -45,7 +52,7 @@ if ($requestMode === "sendRequest") {
     $dateTime = Date("Y-m-d H-i-s");
 
     // Insert into Friends
-    $insertFriend = "INSERT INTO `friends`(`sender_id`, `acceptor_id`, `since_date_time`) VALUES ('$uid','$receiverId','$dateTime')";
+    $insertFriend = "INSERT INTO `friends`(`sender_id`, `acceptor_id`, `since_date_time`) VALUES ('$receiverId','$uid','$dateTime')";
     $insertFriendStatus = mysqli_query($connection, $insertFriend);
 
     echo '
@@ -55,6 +62,8 @@ if ($requestMode === "sendRequest") {
                                 </div>
                                
                                 ';
+    addNotification("request_accepted", $receiverId, $uid);
+                                
 
 }else if($requestMode === "rejectRequest")
 {
@@ -74,6 +83,8 @@ if ($requestMode === "sendRequest") {
                         <img src="./assets/images/add-mitra.png" height="30px" alt="" />
                         <span>Add Mitra</span>
                      </div>';
+    removeNotification("request_accepted", $receiverId, $uid);
+
 }
 
 

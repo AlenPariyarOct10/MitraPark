@@ -23,7 +23,13 @@ if(isset($_POST['email']) && isset($_POST['password']))
     $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `uid`='$uid'";
 
     $result = mysqli_query($connection, $checkStrictMode);
+    if(!$result){
+        header("Location: feed.php");
+        exit();
+    }
     $result = mysqli_fetch_assoc($result);
+
+   
 
     if($result['strictMode']==1 && $result['autoRenew']==1)
     {
@@ -32,8 +38,22 @@ if(isset($_POST['email']) && isset($_POST['password']))
         {
             $renewStrictMode = "UPDATE `strict_mode` SET `today_date`='$today',`endStrictDate`='$today', `availableAccessSeconds`=`maxAccessSeconds` WHERE `uid`='$uid'";
             mysqli_query($connection, $renewStrictMode);
+            header("Location: feed.php");
+
+        }
+    }else if($result['strictMode']==1 && $result['autoRenew']==0)
+    {
+        $today = date("Y-m-d");
+        if($result['today_date']!=$today)
+        {
+            $delete = "DELETE FROM `strict_mode` WHERE `uid`='$uid'";
+            mysqli_query($connection, $delete);
+            header("Location: feed.php");
         }
     }
+
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,7 +154,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
         </div>
     </div>
     <div class="left">
-        <img id="logo" src="<?php echo $mainLogo; ?>" alt="mitrapark-logo">
+        <img id="logo" src="<?php echo $aboutSite['system_logo']; ?>" alt="logo">
         <h1>
             <?php echo $aboutSite['system_name']; ?>
         </h1>
@@ -143,21 +163,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
         </span>
     </div>
     <div class="right">
-    <?php    
-    if(isset($_GET['1'])){echo '
-    <div class="signup-success">Account created Successfully. Please Login to continue.</div>
-        ';}
-    if(isset($_GET['loginFirst'])){
-        echo '<div class="signup-success">Please Login to continue.</div>';
-    }
-    if(isset($_SESSION['userNotFound'])){
-        if($_SESSION['userNotFound']==true)
-        {
-            echo '<div class="signup-error">Couldn"t find user.</div>';
-        }
-    }
-
-    ?>
+    
         <span class="page-title">Strict Mode - Timeout</span>
         <div class="signup-error">Strict Mode is Active till the end of <?php echo date("M d, Y"); ?>.</div>
         <a href="feed.php">Reload</a>

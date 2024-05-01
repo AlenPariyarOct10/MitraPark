@@ -4,6 +4,10 @@
             <div class="search-field">
                 <input placeholder="Search" type="text" id="search-field-inp">
                 <i class="fas fa-search"></i>
+                
+            </div>
+            <div class="left-inner-body" id="filter-search-result">
+
             </div>
             <span class="dim-label">
                 Kurakani Station
@@ -17,6 +21,7 @@
             <span class="dim-label">
                 All Mitras
             </span>
+            
             <hr class="label-underline">
         </div>
         <div id="allUsers" class="left-inner-body">

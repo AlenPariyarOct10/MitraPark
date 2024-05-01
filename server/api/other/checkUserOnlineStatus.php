@@ -1,7 +1,6 @@
 <?php
   include_once("../../../server/db_connection.php");
 
-  // 1. Sanitize user input to prevent SQL injection
   $userId = mysqli_real_escape_string($connection, $_POST['userId']);
 
   $getStatusQuery = "SELECT `last_active_date_time` FROM `users` WHERE `uid`='$userId'";

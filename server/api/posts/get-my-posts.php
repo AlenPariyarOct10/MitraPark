@@ -24,6 +24,8 @@ $query = "
         likes ON posts.post_id = likes.post_id
     WHERE 
         posts.author_id = '$uid'
+        AND
+        posts.status = 'active'
     GROUP BY
         posts.post_id
     ORDER BY 

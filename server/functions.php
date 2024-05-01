@@ -143,14 +143,25 @@
 
         global $connection;
 
+
+        $uid = $_SESSION['user']['uid'];
+        if($type == "request_received" || $type == "request_accepted")
+        {
+            $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', '$dateTime', '{$component_id}' , '{$triggered_by}',{$component_id})";
+            $GLOBALS['connection']->query($insertQuery);
+        }else{
+            
         $authorId = mysqli_query($connection, "SELECT `author_id` FROM `posts` WHERE `post_id`='$component_id'");
         $authorId = mysqli_fetch_assoc($authorId);
 
         $authorId = $authorId['author_id'];
-
-        $uid = $_SESSION['user']['uid'];
-        $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', '$dateTime', '{$component_id}' , '{$triggered_by}',{$authorId})";
-        $GLOBALS['connection']->query($insertQuery);
+            if($authorId != $uid)
+            {
+                $insertQuery = "INSERT INTO `notifications`(`type`, `created_date_time`, `component_id`, `triggered_by`,`author_id`) VALUES ('{$type}', '$dateTime', '{$component_id}' , '{$triggered_by}',{$authorId})";
+                $GLOBALS['connection']->query($insertQuery);
+            }
+        }
+        
 
     }
 
@@ -165,4 +176,36 @@
         $GLOBALS['connection']->query($deleteQuery);
 
     }
+
+    function timeAgo($postedTime)
+    {
+
+        $currentTime = time();
+        $postedTimestamp = strtotime($postedTime);
+
+        $timeDifference = $currentTime - $postedTimestamp;
+
+        $seconds = floor($timeDifference);
+        $minutes = floor($timeDifference / 60);
+        $hours = floor($timeDifference / (60 * 60));
+        $days = floor($timeDifference / (60 * 60 * 24));
+        $months = floor($timeDifference / (60 * 60 * 24 * 30));
+        $years = floor($timeDifference / (60 * 60 * 24 * 365));
+
+        // Return time ago string
+        if ($years > 0) {
+            return $years . ($years > 1 ? ' years' : ' year') . ' ago';
+        } elseif ($months > 0) {
+            return $months . ($months > 1 ? ' months' : ' month') . ' ago';
+        } elseif ($days > 0) {
+            return $days . ($days > 1 ? ' days' : ' day') . ' ago';
+        } elseif ($hours > 0) {
+            return $hours . ($hours > 1 ? ' hours' : ' hour') . ' ago';
+        } elseif ($minutes > 0) {
+            return $minutes . ($minutes > 1 ? ' minutes' : ' minute') . ' ago';
+        } else {
+            return $seconds . "sec ago";
+        }
+    }
 ?>
+

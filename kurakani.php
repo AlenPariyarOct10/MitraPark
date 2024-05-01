@@ -7,9 +7,7 @@ include_once ('./server/db_connection.php');
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 include_once("./server/auto-routes.php");
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +15,6 @@ include_once("./server/auto-routes.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/kurakani-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
@@ -31,6 +28,8 @@ include_once("./server/auto-routes.php");
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
 
     <title>Kurakani Station</title>
     <style>
@@ -106,14 +105,16 @@ include_once("./server/auto-routes.php");
 <body>
     <?php include_once ("./parts/navbar.php"); ?>
     <div class="body">
-        <?php include_once ("./parts/kurakani/leftNavPart.php") ?>
+        <?php include_once ("./parts/kurakani/leftNavPart.php"); ?>
         <div class="mid-body hide-mobile">
-            <img src="assets/images/community-img.svg" alt="" srcset="">
+            <img width="75%" src="assets/images/community-img.png" alt="" srcset="">
             <span>
                 Let's have Kurakani with mitras
             </span>
         </div>
+       
         <div id="chatUsersContainerMobile" class="mid-body for-mobile">
+            
         </div>
 
         <?php include_once ("./parts/rightSidebar.php") ?>
@@ -127,5 +128,9 @@ include_once("./server/auto-routes.php");
 <?php
         include_once("./parts/js-script-files/js-script.php");
     ?>
+    <script>
+        getKurakaniUsers();
+        setInterval(getKurakaniUsers,5000);
+    </script>
 
 </html>

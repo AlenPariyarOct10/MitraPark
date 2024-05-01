@@ -8,4 +8,13 @@
      {
          header("Location: maintenance-mode.php");
      }
+
+     $uid = $_SESSION['user']['uid'];
+     $checkRestricted = "SELECT `status` FROM `users` WHERE `uid`='$uid'";
+     $checkRestricted = mysqli_query($connection, $checkRestricted);
+     $checkRestricted = mysqli_fetch_assoc($checkRestricted);
+     if($checkRestricted['status']==='restricted')
+     {
+         header("Location: user-restricted.php");
+     }
 ?>

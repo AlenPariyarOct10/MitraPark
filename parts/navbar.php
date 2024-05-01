@@ -2,7 +2,7 @@
 
 <div id="user-nav">
     <div class="left-part">
-        <p class="navbar-title">MitraPark</p>
+        <p class="navbar-title"><?php echo $aboutSite['system_name']; ?></p>
     </div>
     <div class="center-part">
         <a href="feed.php" class="<?php if (strpos($_SERVER['PHP_SELF'], "feed.php") != false) {
@@ -39,10 +39,10 @@
         <div class="profile-info">
             <p id="profile-info-uname"><?php echo $_SESSION['user']['fname']." ".$_SESSION['user']['lname']; ?></p>
             
-            <a class="profile-menu-item" href="">
+            <a class="profile-menu-item" href="profile.php">
                 My profile
             </a>
-            <a class="profile-menu-item" href="">
+            <a class="profile-menu-item" href="setting.php">
                 Setting
             </a>
         </div>

@@ -31,7 +31,7 @@
 
 ?>
 <div class="sidebar sidebar-desktop">
-      <span><a href="">MitraPark</a></span>
+      <span><a href=""><?php echo $aboutSite['system_name']; ?></a></span>
       <ul>
        
           <?php

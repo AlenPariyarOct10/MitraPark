@@ -134,8 +134,26 @@ $result = mysqli_fetch_assoc($result);
             border: none;
         }
 
+        .mid-body{
+            justify-content: flex-start;
+        }
+
+        .btn{
+            border: none;
+            padding: 10px;
+            width: 100%;
+            background-color: var(--mp-color-1);
+            border-radius: 10px;
+            cursor: pointer;
+
+        }
+
+        .btn:hover{
+            box-shadow: 0.9px 0.9px 0.9px 0.5px rgb(118, 118, 118);
+        }
     </style>
     <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
+   
 
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
 
@@ -146,6 +164,7 @@ $result = mysqli_fetch_assoc($result);
     include_once("./parts/navbar.php");
     include_once("./parts/leftSidebar.php");
     ?>
+ 
 
     <?php
         $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE() AND `strictMode`=1";
@@ -186,11 +205,11 @@ $result = mysqli_fetch_assoc($result);
             </div>
             <div class="warningWrapper">
                 <label for="exceedTimeWarning">Get notified before 15 minutes of access limit time :</label>
-                <input type="checkbox" name="exceedTimeWarning" id="exceedTimeWarning">
+                <input type="checkbox" name="exceedTimeWarning" id="exceedTimeWarning" disabled>
             </div>
             <br>
             <div>
-                <input style="width:100%;padding:5px;" type="submit" name="send" value="Enter Strict Mode">
+                <input class="btn" id="submitBtn" type="submit" name="send" value="Enter Strict Mode" disabled>
             </div>
         </form>
         <?php
@@ -207,7 +226,7 @@ $result = mysqli_fetch_assoc($result);
                 </span>
             </div>
                     Strict Mode is Running
-                    <?php echo number_format((float)($result['availableAccessSeconds']/60),2). " minutes left till end of ".$result['endStrictDate']; ?>
+                    <span id="showRemaining"></span> remaining for today.
                     <a style="background-color: crimson; color: white; padding:6px; border-radius: 20px;margin-top:10px;" href="./server/api/strict-mode/removeStrictMode.php">Exit Strict Mode</a>
                 <?php
             }
@@ -219,7 +238,50 @@ $result = mysqli_fetch_assoc($result);
 
 </body>
 <script src='./assets/scripts/jquery.js'></script>
+<?php include_once("./parts/js-script-files/strict-and-activity-update.php"); ?>
     <script>
+        function getRemainingTime()
+        {
+            $.ajax({
+            url: "./server/api/strict-mode/check_strict_mode.php",
+            type: "POST",
+            success: (result)=>{
+                let resultObj =JSON.parse(result);
+                if(resultObj['strict-mode']==true && resultObj['getWarning']=="1" && resultObj['availableAccessSeconds']<=900)
+                {
+                    window.location.href = "timeOutWarn.php";
+                }
+                let hours = parseInt(Math.floor(resultObj['availableAccessSeconds']/(60*60)));
+                let minutes = Math.floor(resultObj['availableAccessSeconds']/(60) - (hours*60));
+                let seconds = resultObj['availableAccessSeconds'] - minutes*60 - hours*60*60;
+                $("#showRemaining")[0].innerHTML = "";
+                if(hours>0)
+                {
+                    $("#showRemaining")[0].innerHTML += hours+" Hours ";
+                }
+                if(minutes>0)
+                {
+                    $("#showRemaining")[0].innerHTML +=  minutes+" Minutes ";
+                }
+                if(seconds >0)
+                {
+                    $("#showRemaining")[0].innerHTML +=  seconds+" Seconds ";
+                }
+
+                
+            }
+        })
+        }
+        getRemainingTime();
+        setInterval(()=>{
+            getRemainingTime();
+        }, 5000);
+      
+
+        let submitBtn =document.getElementById("submitBtn");
+       
+       
+
         let dateObj = new Date();
 
         // Populating hours
@@ -239,6 +301,34 @@ $result = mysqli_fetch_assoc($result);
         for (let currentSecond = 0; currentSecond <= 60; currentSecond++) {
             setMaxSeconds.innerHTML += `<option value="${currentSecond}">${currentSecond} Seconds</option>`;
         }
+
+        
+        let selectors = [setMaxHours, setMaxMinutes, setMaxSeconds];
+        selectors.forEach((selector)=>{
+        
+            selector.addEventListener("change",()=>{
+                
+                const totalMins = parseInt(document.getElementById("setMaxHours").value)*60+parseInt(document.getElementById("setMaxMinutes").value)+(parseInt(document.getElementById("setMaxSeconds").value)/60);
+                
+                console.log("total->",totalMins);
+                if(totalMins<20)
+                {
+                    document.getElementById("exceedTimeWarning").disabled = true;
+                }else{
+                    document.getElementById("exceedTimeWarning").disabled = false;
+
+                }
+
+                if(totalMins>1)
+                {
+                    submitBtn.disabled = false;
+                }else{
+                    submitBtn.disabled  =true;
+                }
+            })
+        })
+
+       
 
 
 

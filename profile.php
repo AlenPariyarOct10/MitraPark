@@ -34,7 +34,7 @@ include_once("./server/auto-routes.php");
    
 
     
-  <title>Profile - MitraPark</title>
+  <title>Profile - <?php echo $aboutSite['system_name']; ?></title>
 </head>
 
 <body>
@@ -247,20 +247,19 @@ include_once("./server/auto-routes.php");
     </div>
     
     <div id="post-container">
-    <div class="left-inner-heading">
+      <div class="left-inner-heading">
                     <span class="dim-label">
                         Your posts
                     </span>
                     <hr class="label-underline">
-                </div>
-
+      </div>
     </div>
   </div>
   <?php include_once("./parts/rightSidebar.php") ?>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
-<script src="./assets/scripts/posts/renderMyPosts.js"></script>
 <script>
+  document.addEventListener("DOMContentLoaded", function() {
   let profileImg = document.getElementById("profile-img");
   let changeBtn = document.getElementById("overlay-button");
   changeBtn.style.opacity = 0;
@@ -319,7 +318,7 @@ include_once("./server/auto-routes.php");
     e.preventDefault();
 
     let formData = new FormData(form);
-    console.log(formData);
+    console.log("form-data ", formData);
 
     const userData = {
       fname: formData.get("fname"),
@@ -389,6 +388,10 @@ include_once("./server/auto-routes.php");
       }
     })
   })
+  console.log("loaded");
+})
 </script>
+<script src="./assets/scripts/posts/renderMyPosts.js"></script>
+
 
 </html>

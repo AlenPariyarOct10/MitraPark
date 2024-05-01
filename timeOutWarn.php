@@ -4,17 +4,33 @@ include_once("./server/db_connection.php");
 include_once("./server/validation.php");
 include_once("./server/functions.php");
 
+if(session_status()!=PHP_SESSION_ACTIVE)
+{
+    session_start();
+}
+
 $aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 
-$mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['system_logo'];
+
 
 if(isset($_POST['email']) && isset($_POST['password']))
 {
     $email = htmlspecialchars($_POST['email']);
     $psw = htmlspecialchars($_POST['password']);
     loginUser($email, $psw);
+}
+
+$uid = $_SESSION['user']['uid'];
+
+$updateWarningNotified = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `strictMode`=1";
+$updateWarningNotified = mysqli_query($connection, $updateWarningNotified);
+
+if(mysqli_affected_rows($connection)>0)
+{
+    $updateWarningNotified = "UPDATE `strict_mode` SET `getWarning`=0 WHERE `uid`='$uid' AND `strictMode`=1";
+    $updateWarningNotified = mysqli_query($connection, $updateWarningNotified);
 }
 ?>
 <!DOCTYPE html>
@@ -40,7 +56,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
 
 <body>
     <div class="left">
-        <img id="logo" src="<?php echo $mainLogo; ?>" alt="mitrapark-logo">
+        <img id="logo" src="<?php echo ".".$aboutSite['system_logo']; ?>" alt="logo">
         <h1>
             <?php echo $aboutSite['system_name']; ?>
         </h1>
@@ -52,12 +68,14 @@ if(isset($_POST['email']) && isset($_POST['password']))
   
         <span class="page-title">Strict Mode - Remainder for Timeout</span>
         <div class="signup-error">15 minutes left for to start strict mode lock.</div>
-        <a href="feed.php">< Go Back</a>
+        <button id="goBack">< Go Back</button>
         <a style="padding: 20px; margin:20px;background-color:lightgreen;" href="logout.php">Logout</a>
     </div>
 </body>
 <script>
-    
+    document.getElementById("goBack").addEventListener("click",()=>{
+        window.location.href = history.back();
+    })
 </script>
 
 </html>

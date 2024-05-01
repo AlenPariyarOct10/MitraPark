@@ -77,6 +77,8 @@ include_once("./server/auto-routes.php");
     include_once("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>
+    <?php include_once("./parts/js-script-files/js-script.php");?>
+
 </body>
 
 </html>

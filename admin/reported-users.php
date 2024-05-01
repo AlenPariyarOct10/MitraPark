@@ -1,10 +1,15 @@
+<?php 
+include_once("../server/db_connection.php");
+$aboutSite = $connection->query('SELECT * FROM `system_data`');
+$aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reported Users ~ MitraPark</title>
+    <title>Reported Users ~ <?php echo $aboutSite['system_name']; ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Khand:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -17,7 +22,7 @@
     <?php include_once("./parts/sidebar.php") ?>
         <div class="content">
             <div class="inner-header">
-                <p>Reported Users ~ MitraPark</p>
+                <p>Reported Users ~ <?php echo $aboutSite['system_name']; ?></p>
             </div>
             <div class="inner-body">
                 <div class="inner-body-section">
@@ -160,11 +165,13 @@
     })
 
     function getRestrictedUsers(id) {
-        console.log("clicked");
+        $("#pagination-count")[0].innerHTML = "";
         $("#users-data")[0].innerHTML = "";
         $("#record-table").css({
             'display': ''
         });
+       
+
         // ALEN : FETCH RESTRICTED USERS
         $.ajax({
             url: "./api/report.php",
@@ -174,7 +181,9 @@
                 page: id,
             },
             success: (result) => {
-                console.log(result);
+                
+     
+
 
                 $("#table-mode")[0].innerText = "Restricted Users";
                 let resultObj = JSON.parse(result);
@@ -202,6 +211,10 @@
                         `;
                     });
 
+
+                    $("#pagination-count")[0].innerHTML = "";
+
+
                     let count = totalRow / 20;
                     console.log(count);
                     $("#pagination-count")[0].innerHTML = "";
@@ -211,6 +224,8 @@
                         <button class="pagination-btn ${ (id==c)?'active-page':''}" onclick="getRestrictedUsers(${c})"" >${c}</button>
                     `;
                     }
+
+
                 } else {
                     $("#users-data")[0].innerHTML +=
                         `
@@ -225,6 +240,7 @@
     }
 
     function getReportedUsers(id) {
+        $("#pagination-count")[0].innerHTML = "";
         $("#users-data")[0].innerHTML = "";
         console.log(id);
 

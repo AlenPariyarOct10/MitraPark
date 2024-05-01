@@ -147,10 +147,6 @@ include_once("./server/auto-routes.php");
     <script src='./assets/scripts/jquery.js'></script>
 
     <script>
-        
-    
-       
-
         $("#post-upload-file").change((event) => {
             const file = event.target.files[0];
             if (file) {
@@ -166,8 +162,6 @@ include_once("./server/auto-routes.php");
         $("#remove-post-image").click(()=>{
             $("#selected-post-img").attr("src", null);
             $(".post-image-holder")[0].style.display = "none";
-            
-            
         })
 
         $("#post-text").click(() => {
@@ -188,20 +182,7 @@ include_once("./server/auto-routes.php");
         });
 
 
-        function getFriendRequests() {
-            let mitraRequestList = document.getElementById("mitraList");
-            $.ajax({
-                url: "./server/api/getFriendRequests.php",
-                success: function(success) {
-                    mitraRequestList.innerHTML = success;
-                }
-            })
-        }
-
-        $(document).ready(getFriendRequests);
-        setInterval(() => {
-            getFriendRequests();
-        }, 5000);
+       
     </script>
     <script src='posts.js'></script>
     <?php
