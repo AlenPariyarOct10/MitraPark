@@ -1,3 +1,4 @@
+
 <script>
 function timeAgo(postedTime) {
   const postedDate = new Date(postedTime);
@@ -50,7 +51,7 @@ async function fetchPosts() {
   
       const postData = await fetchPosts();
       const postPlace = document.querySelector(".mid-body");
-      console.log(postData.length);
+      // console.log(postData.length);
       if(postData.length > 0)
       {
 
@@ -84,7 +85,7 @@ function generatePostHTML(postItem) {
                   </div>
                 </div>
               </div>
-              <a href="./post.php?postId=${postItem.post_id}" class="post-item-body">
+
                 <span style="margin:5px;">${postItem.content}</span>
                 
                 ${(postItem.media) ? '<img style="width:500px;object-fit:contain;border-radius:10px;" src="../' + postItem.media+'" alt="" srcset=""' : ''}

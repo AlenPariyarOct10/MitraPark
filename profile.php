@@ -25,6 +25,8 @@ include_once("./server/auto-routes.php");
   <link rel="stylesheet" href="./assets/css/profile.css" />
   <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+    <link rel="shortcut icon" href="./<?php echo $aboutSite['system_logo']; ?>" type="image/x-icon">
+
     <style>
       #post-container{
         width: 60%;
@@ -34,7 +36,7 @@ include_once("./server/auto-routes.php");
    
 
     
-  <title>Profile - MitraPark</title>
+  <title>Profile - <?php echo $aboutSite['system_name']; ?></title>
 </head>
 
 <body>
@@ -247,20 +249,19 @@ include_once("./server/auto-routes.php");
     </div>
     
     <div id="post-container">
-    <div class="left-inner-heading">
+      <div class="left-inner-heading">
                     <span class="dim-label">
                         Your posts
                     </span>
                     <hr class="label-underline">
-                </div>
-
+      </div>
     </div>
   </div>
   <?php include_once("./parts/rightSidebar.php") ?>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
-<script src="./assets/scripts/posts/renderMyPosts.js"></script>
 <script>
+  document.addEventListener("DOMContentLoaded", function() {
   let profileImg = document.getElementById("profile-img");
   let changeBtn = document.getElementById("overlay-button");
   changeBtn.style.opacity = 0;
@@ -303,7 +304,7 @@ include_once("./server/auto-routes.php");
   };
 
   let closeSpan = document.getElementById("closeProfilePicture");
-  console.log(closeSpan);
+  // console.log(closeSpan);
   closeSpan.onclick = function() {
     profileUploadModal.style.display = "none";
   }
@@ -319,7 +320,7 @@ include_once("./server/auto-routes.php");
     e.preventDefault();
 
     let formData = new FormData(form);
-    console.log(formData);
+    // console.log("form-data ", formData);
 
     const userData = {
       fname: formData.get("fname"),
@@ -337,10 +338,10 @@ include_once("./server/auto-routes.php");
       data: JSON.stringify(userData),
       contentType: 'application/json',
       success: (response) => {
-        console.log(response);
+        // console.log(response);
       },
       error: (failed) => {
-        console.log(failed);
+        // console.log(failed);
       }
     })
     form.reset();
@@ -382,13 +383,17 @@ include_once("./server/auto-routes.php");
       if (!nameRule.test(item[0].value)) {
         hasError = true;
         item[3].innerText = "- Invalid name";
-        console.log("hello");
+        // console.log("hello");
       } else {
         item[3].innerText = "";
         hasError = false;
       }
     })
   })
+  // console.log("loaded");
+})
 </script>
+<script src="./assets/scripts/posts/renderMyPosts.js"></script>
+
 
 </html>

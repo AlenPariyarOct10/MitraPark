@@ -30,8 +30,10 @@ include_once("./server/auto-routes.php");
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <link rel="shortcut icon" href="./<?php echo $aboutSite['system_logo']; ?>" type="image/x-icon">
+
     <link rel="stylesheet" href="./assets/css/all.min.css">
-    <title>Feed -
+    <title>Setting -
         <?php echo $aboutSite['system_name']; ?>
     </title>
     <style>
@@ -77,6 +79,10 @@ include_once("./server/auto-routes.php");
     include_once("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>
+    <?php include_once("./parts/js-script-files/js-script.php");?>
+<?php include_once("./parts/js-script-files/strict-and-activity-update.php"); ?>
+
+
 </body>
 
 </html>

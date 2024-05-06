@@ -1,6 +1,5 @@
 <?php
-// include_once('../parts/entryCheck.php');
-// include_once('../server/validation.php');
+include_once("./parts/entryCheck.php");
 include_once('../server/functions.php');
 include_once('../server/db_connection.php');
 
@@ -30,7 +29,7 @@ function noUser($aboutSite)
             href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
             rel="stylesheet" />
         <link rel="stylesheet" href="./assets/css/profile.css" />
-        <title>Profile - MitraPark</title>
+        <title>Profile - '.$aboutSite['system_name'].'</title>
     </head>
 
     <body>';
@@ -152,7 +151,7 @@ if (isset($_GET['uid'])) {
             <link rel="stylesheet" href="../assets/css/profile.css" />
             <link rel="stylesheet" href="../assets/css/navbar.css">
             <link rel="stylesheet" href="../assets/css/boxicons/css/boxicons.min.css">
-            <title>Profile - MitraPark</title>
+            <title>Profile - <?php echo $aboutSite['system_name']; ?></title>
             <style>
                 body{
                     color: black;
@@ -343,7 +342,7 @@ if (isset($_GET['uid'])) {
                 success: async(status) => {
            
                     const restrictedStatus = await JSON.parse(status);
-                    console.log(restrictedStatus);
+                    // console.log(restrictedStatus);
 
                     if(restrictedStatus.status == "active")
                     {
@@ -369,7 +368,7 @@ if (isset($_GET['uid'])) {
 
             function restrictUser(reportId)
             {
-                console.log(reportId);
+                // console.log(reportId);
                 $.ajax({
                     url: "./api/restrictUser.php",
                     type: "GET",
@@ -377,7 +376,7 @@ if (isset($_GET['uid'])) {
                         reportId : reportId
                     },
                     success: (response)=>{
-                        console.log(response);
+                        // console.log(response);
                         $("#reportUser")[0].innerHTML="Unrestrict User";  
                     }
                 })

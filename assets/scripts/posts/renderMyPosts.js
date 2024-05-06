@@ -33,8 +33,6 @@ function timeAgo(postedTime) {
             type: "POST",
             success: (data) => {
                 resolve(JSON.parse(data));
-                console.log("hh");
-                console.log(JSON.parse(data));
             },
             error: (error) => {
                 reject(error);
@@ -80,50 +78,44 @@ function timeAgo(postedTime) {
     })
   }
     
-    async function renderPosts() {
-      try {
+  async function renderPosts() {
+    try {
         const postData = await fetchPosts();
-        const postPlace = document.querySelector(".mid-body");
-        console.log(postData.length);
-        if(postData.length > 0)
-        {
-  
-          postData.forEach(postItem => {
-  
-            if(postItem.profile_picture == null)
-            {
-              postItem.profile_picture = "/MitraPark/assets/images/user.png";
-            }
-            $.ajax({
-              url: "./server/api/getLikes.php",
-              type: "POST",
-              data: {postId: postItem.post_id},
-              success: function(data)
-              {
-                let likesObj = JSON.parse(data);
-                console.log("likes",likesObj);
-                let liked_byObj= likesObj.map((item)=>item.liked_by);
-                console.log(liked_byObj);
-  
-                let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart.png":"./assets/images/heart-outline.png";
-                console.log("index",likedState);
-                generatePostHTML(postItem, likedState);
-              },
-              error: function(data)
-              {
-                console.log("failed");
-              }
-            })
-             
-          });
-        }else{
-          postPlace.innerHTML += "No Posts";
+        const postPlace = document.querySelector("#post-container");
+
+        // Clear existing posts
+        postPlace.innerHTML = "";
+
+        if (postData.length > 0) {
+            postData.forEach(postItem => {
+                // Render each post
+                if (postItem.profile_picture == null) {
+                    postItem.profile_picture = "/MitraPark/assets/images/user.png";
+                }
+                $.ajax({
+                    url: "./server/api/getLikes.php",
+                    type: "POST",
+                    data: { postId: postItem.post_id },
+                    success: function (data) {
+                        let likesObj = JSON.parse(data);
+                        let liked_byObj = likesObj.map((item) => item.liked_by);
+                        let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1) ? "./assets/images/heart.png" : "./assets/images/heart-outline.png";
+                        generatePostHTML(postItem, likedState);
+                    },
+                    error: function (error) {
+                        console.error("Error fetching likes:", error);
+                    }
+                });
+            });
+        } else {
+            // No posts to display
+            postPlace.innerHTML = "No Posts";
         }
-        
-      } catch (error) {
-        console.error("Error fetching or rendering posts:", error);
-      }
+    } catch (error) {
+        console.error("Error rendering posts:", error);
     }
+}
+
   
    
   
@@ -160,7 +152,7 @@ function timeAgo(postedTime) {
                     <span class="like-count">${postItem.like_count}</span>
                   </div>
                   <div class="comment-container">
-                    <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
+                    <a href="./post.php?postId=${postItem.post_id}">
                     <img height="30px" src="./assets/images/comment-outline.png"></a>
                   </div>
                 </div>

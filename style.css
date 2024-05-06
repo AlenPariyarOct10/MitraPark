@@ -294,6 +294,9 @@ a{
     .right-nav{
         display: none;
     }
+    .right-sidebar{
+        display: none;
+    }
     .mid-body{
         width: 100%;
     }

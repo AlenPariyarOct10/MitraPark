@@ -20,7 +20,6 @@
     $dateTime = Date("Y-m-d H-i-s");
 
 
-    // If not existint product insert into chatHistoryOf
     if($getChatRecord != null)
     {
         $history = "UPDATE `chat_history` SET `last_updated`='$dateTime', `last_message`='$message', `sender_id`='$uid', `seen_status`=0 WHERE `user_1`='$uid' AND `user_2`='$receiverId' OR  `user_1`='$receiverId' AND `user_2`='$uid'";

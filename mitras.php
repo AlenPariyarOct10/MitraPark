@@ -26,8 +26,11 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+    <link rel="shortcut icon" href="./<?php echo $aboutSite['system_logo']; ?>" type="image/x-icon">
 
-    <title>Kurakani Station</title>
+
+    <title>Mitras ~ <?php echo $aboutSite['system_name']; ?></title>
+
     <style>
         .mid-body {
             display: flex;
@@ -49,62 +52,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 <body>
     <?php include_once("./parts/navbar.php") ?>
     <div class="body">
-        <div class="left-nav">
-            <div class="left-top">
-                <div class="left-inner-heading">
-                    <span class="dim-label">
-                        Suggested Mitras
-                    </span>
-                    <hr class="label-underline">
-                </div>
-
-                <!-- -------------------------------- -->
-                <?php
-                    $getUsers = "SELECT * FROM `users` WHERE `uid` NOT IN (SELECT `sender_id` as 'uid' FROM `friends` WHERE `sender_id`='$uid' or `acceptor_id`='$uid') AND `uid` <> '$uid'";
-
-                
-                    $result = mysqli_query($connection, $getUsers);
-                    if($c=mysqli_affected_rows($connection))
-                    {
-                        
-
-                        while($row = mysqli_fetch_assoc($result))
-                        {
-                     
-
-                            ?>
-                            <div class="left-inner-body">
-                                <div class="mitra-request-list-item" id="user-<?php echo $row['uid'];?>">
-                                    <a class="redirect-to-profile" href="user.php?id=<?php echo $row['uid']; ?>">
-                                        <img class="mitra-request-profile-list" src="<?php echo "./". $row['profile_picture']; ?>">
-                                        <span class="uname">
-                                            <?php echo $row['fname']." ".$row['lname']; ?>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                <?php
-                        }
-                    }else{
-                        echo "No users found";
-                    }
-                ?>
-
-                <!-- -------------------------------- -->
-                
-            </div>
-            <div class="left-bottom">
-                <div class="left-inner-heading">
-                    <span class="dim-label">
-                        Mitra Requests
-                    </span>
-                    <hr class="label-underline">
-                </div>
-                <div id="mitraList" class="left-inner-body">
-                    No requests found
-                </div>
-            </div>
-        </div>
+    <?php include_once("./parts/leftSidebar.php");?>
         <div class="mid-body">
             <div>
                 <div class="search-field">
@@ -114,13 +62,22 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <div id="searchResult" class="left-inner-body" style="width: 100%; text-align:center;">
                 </div>
                 <hr>
-                <!-- <div class="mitra-request-list-item">
-                    <a class="redirect-to-profile" href="./user.php?">
+                <div class="mitra-request-list-item">
+                    <a class="redirect-to-profile" href="mitrarequests.php">
+                        <span class="uname">
+                           View all Mitra Requests
+                        </span>
+                    </a>
+                    
+                </div>
+                <div class="mitra-request-list-item">
+                <a class="redirect-to-profile" href="allmitra.php">
                         <span class="uname">
                            View all Mitras
                         </span>
                     </a>
-                </div> -->
+                    
+                </div>
             </div>
         </div>
         <?php
@@ -143,13 +100,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             success: function(items) {
                 let itemsArr = JSON.parse(items);
                 let searchResultShow = document.getElementById("searchResult");
-                console.log(JSON.parse(items));
+                // console.log(JSON.parse(items));
                 if (itemsArr.length == 0) {
                     searchResultShow.innerHTML = '<span style="text-align: center;" cl ass="uname">  No result found </span>';
                 } else {
                     searchResultShow.innerHTML = "";
                     itemsArr.map((profile) => (
-                        console.log(profile),
+                        // console.log(profile),
 
                         searchResultShow.innerHTML += `
                     <div class="mitra-request-list-item" id="result-${(profile.uid)}">
@@ -165,8 +122,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 }
             },
             error: function(x) {
-                console.log("fail");
-                console.log(x);
+                // console.log("fail");
+                // console.log(x);
             }
 
         })
@@ -188,5 +145,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         getFriendRequests();
     }, 5000);
 </script>
+
+    <?php include_once("./parts/js-script-files/js-script.php"); ?>
+<?php include_once("./parts/js-script-files/strict-and-activity-update.php"); ?>
+
+
 
 </html>

@@ -1,5 +1,6 @@
 <?php
 var_dump($_POST);
+
 if (isset($_POST)) {
 
     include_once("../db_connection.php");
@@ -11,10 +12,10 @@ if (isset($_POST)) {
     $validImg = false;
     $validFile = false;
     $postId = $_POST['postId'];
-    echo "--hello";
+    
     var_dump($_FILES['file']);
  
-    if (isset($_FILES['file'])) {
+    if ($_FILES['file']['size']>0) {
 
         $img = $_FILES['file'];
         $fileName = $_FILES['file']['name'];
@@ -31,6 +32,8 @@ if (isset($_POST)) {
             $_GLOBALS['fileName'] = '/user_uploads/' . $newName;
             $newFileName = '/user_uploads/' . $newName;
         }
+    }else{
+        echo "no file";
     }
 
     $allowedVisibile = array("public", "private", "mitras");
@@ -46,13 +49,21 @@ if (isset($_POST)) {
 
 
         $uid = $_SESSION['user']['uid'];
-       
-        if(isset($newFileName))
+
+        if($_POST['file-operation']=="delete")
         {
-            $updateProfileQuery = "UPDATE `posts` SET `content`='$text',`media`='$newFileName',`visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+            $updateProfileQuery = "UPDATE `posts` SET `content`='$text',`media`=null,`visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+            
         }else{
-            $updateProfileQuery = "UPDATE `posts` SET `content`='$text', `visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+            if(isset($newFileName))
+            {
+                $updateProfileQuery = "UPDATE `posts` SET `content`='$text',`media`='$newFileName',`visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+            }else{
+                $updateProfileQuery = "UPDATE `posts` SET `content`='$text', `visibility`='$visibility' WHERE `author_id`='$uid' AND `post_id`='$postId'";
+            }
         }
+       
+        
 
         mysqli_query($connection, $updateProfileQuery);
 

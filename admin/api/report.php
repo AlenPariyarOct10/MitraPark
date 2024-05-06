@@ -22,7 +22,8 @@ if(session_status()!=PHP_SESSION_ACTIVE)
         INNER JOIN posts p ON component_id = p.post_id
         WHERE `type`='$reportType' AND `report_response` IS NULL) AS total_count
         FROM `reports`
-        WHERE `type`='$reportType' AND `report_response` IS NULL
+        INNER JOIN posts p ON component_id=post_id
+        WHERE reports.type='$reportType' AND p.status = 'active' AND `report_response` IS NULL
         LIMIT $offset, 20";
     }else if($reportType=='user')
     {
@@ -38,7 +39,9 @@ if(session_status()!=PHP_SESSION_ACTIVE)
 
     }else if($reportType=='restrictedPosts')
     {
-        $getAllReported = "SELECT * FROM `reports` WHERE `type`='post' AND `component_id` IN (SELECT `post_id` FROM `posts` WHERE `status`='restricted') LIMIT $offset, 20";
+        $getAllReported = "SELECT *, (SELECT COUNT(report_id)
+        FROM `reports`
+        WHERE `report_response`='restricted' and `type`='post') AS total_count FROM `reports` WHERE `type`='post' AND `component_id` IN (SELECT `post_id` FROM `posts` WHERE `status`='restricted') LIMIT $offset, 20";
 
     }else if($reportType == "restrictedUser") {
         $getAllReported = "SELECT * FROM `reports` r 

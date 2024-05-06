@@ -1,6 +1,6 @@
 <?php
 
-    include_once("server/db_connection.php");
+    // include_once("server/db_connection.php");
 
     $getColor = mysqli_query($connection, "SELECT `themeSpecification` FROM `system_data` WHERE 1");
     $getColor = mysqli_fetch_assoc($getColor);

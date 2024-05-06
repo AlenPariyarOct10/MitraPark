@@ -31,7 +31,7 @@ $aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 
-$mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['system_logo'];
+$aboutSite['system_logo'];
 
 if(isset($_POST['email']) && isset($_POST['password']))
 {
@@ -64,7 +64,8 @@ if(isset($_POST['email']) && isset($_POST['password']))
 
 <body>
     <div class="left">
-        <img id="logo" src="<?php echo $mainLogo; ?>" alt="mitrapark-logo">
+ 
+        <img id="logo" src="<?php echo ".".$aboutSite['system_logo']; ?>" alt="logo">
         <h1>
             <?php echo $aboutSite['system_name']; ?>
         </h1>
@@ -115,8 +116,6 @@ if(isset($_POST['email']) && isset($_POST['password']))
     submitBtn.style.cursor = "not-allowed";
     submitBtn.style.backgroundColor = "#6c757d";
 
-
-    // Controls submit button by validating email and password field
     function controlSubmit()
     {
         if(allowEmail == true && allowPassword == true)

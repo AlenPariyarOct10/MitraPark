@@ -25,7 +25,10 @@
             {
                 $deleteComment = "DELETE FROM `comments` WHERE `comment_id`='$commentId'";
                 $result = mysqli_query($connection, $deleteComment);
-                removeNotification("like",$postId,$uid);
+
+                $deleteReplyCommentQuery = "DELETE FROM reply_comments WHERE parent_comment_id = '$commentId'";
+                $deleteReplyCommentResult = mysqli_query($connection, $deleteReplyCommentQuery);
+                removeNotification("comment",$postId,$uid);
             }
         }
 

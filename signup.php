@@ -4,7 +4,6 @@ include_once("./server/validation.php");
 include_once("./server/functions.php");
 $aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
-$mainLogo = 'http://' . $_SERVER['HTTP_HOST'] . $aboutSite['system_logo'];
 
 if (isset($_POST['submit'])) {
     $fname = htmlspecialchars($_POST['fname']);
@@ -53,7 +52,9 @@ if (isset($_POST['submit'])) {
 
 <body>
     <div class="left">
-        <img id="logo" src="<?php echo $mainLogo; ?>" alt="mitrapark-logo">
+        <img id="logo" src=" <?php echo ".".$aboutSite['system_logo']; ?>" alt="logo">
+       
+
         <h1>
             <?php echo $aboutSite['system_name']; ?>
         </h1>
@@ -96,9 +97,14 @@ if (isset($_POST['submit'])) {
                 <p><i id="checkLength" class="fa-solid fa-circle-xmark"></i>
                     Be at least 12 characters
                 </p>
+                <p><i id="checkCpassword" class="fa-solid fa-circle-xmark"></i>
+                    Password and Confirm password must match
+                </p>
             </span>
             <button type="submit" name="submit" id="submit" class="btn login-btn">Signup</button>
         </form>
+        <div id="underline"></div>
+        <a href="login.php" class="btn">Login</a>
     </div>
 </body>
 <script>
@@ -108,11 +114,14 @@ if (isset($_POST['submit'])) {
     let nameFields = document.querySelectorAll(".nameFields");
     let phoneField = document.getElementById("phone");
     let confirmPasswordField =document.getElementById("cpassword");
+    let fname =document.getElementById("fname");
+    let lname =document.getElementById("lname");
 
     let nameRule = /^[a-zA-Z]{2,10}$/;
-    let emailRule = /^[a-z0-9._-]+@[a-z0-9]+\.[a-z0-9]{2,4}$/;
+    let lnameRule = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
+    let emailRule = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     let errorText = document.querySelectorAll('.errorText');
-    let phoneRule = /[0-9]\d{9}/;
+    let phoneRule = /(98|97)\d{8}$/;
 
      // Rule for Email Field
     let allowEmail = false;
@@ -121,21 +130,43 @@ if (isset($_POST['submit'])) {
     let allowPhone = false;
     let allowCpassword = false;
 
-    nameFields.forEach((item) => {
-        item.addEventListener("keyup", () => {
-            let currentDiv = document.querySelector('.single-line');
-            if (nameRule.test(item.value) == false) {
+    fname.addEventListener("input", ()=>{
+        let currentDiv = document.querySelector('.single-line');
+            if (nameRule.test(fname.value) == false) {
+                allowName = false;
+                document.getElementById("namingError").innerHTML = "Numbers, Spaces, Special characters aren't allowed.";
+            } else {
+                allowName = true;
+                document.getElementById("namingError").innerHTML = "";
+            }
+            controlSubmit();
+    })
+
+    lname.addEventListener("input",()=>{
+        let currentDiv = document.querySelector('.single-line');
+            if (lnameRule.test(lname.value) == false) {
                 allowName = false;
                 document.getElementById("namingError").innerHTML = "Numbers and Special characters aren't allowed.";
             } else {
                 allowName = true;
                 document.getElementById("namingError").innerHTML = "";
             }
+
+            function countOccurrences(str, char) {
+                const regex = new RegExp(char, 'g');
+                return (str.match(regex) || []).length;
+            }
+
+            if(countOccurrences(lname.value, " ")>1)
+            {
+                allowName = false;
+                document.getElementById("namingError").innerHTML = "Only one space is allowed.";
+            }
             controlSubmit();
-        })
     })
 
-    phoneField.addEventListener("keyup",()=>{
+
+    phoneField.addEventListener("input",()=>{
         if(!phoneRule.test(phoneField.value))
         {
             allowPhone = false;
@@ -149,11 +180,15 @@ if (isset($_POST['submit'])) {
     });
 
     confirmPasswordField.addEventListener("keyup",()=>{
-        if(passwordField.value == confirmPasswordField.value)
+        if(passwordField.value === confirmPasswordField.value && allowPassword==true)
         {
             allowCpassword = true;
+            document.getElementById("checkCpassword").classList.remove("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.add("fa-circle-check");
         }else{
             allowCpassword = false;
+            document.getElementById("checkCpassword").classList.add("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.remove("fa-circle-check");
         }
         controlSubmit();
     })
@@ -163,20 +198,10 @@ if (isset($_POST['submit'])) {
     submitBtn.style.cursor = "not-allowed";
     submitBtn.style.backgroundColor = "#6c757d";
 
-    // Controls submit button by validating email and password field
-    function controlSubmit() {
-        if (allowEmail && allowPassword && allowName && allowPhone && allowCpassword ) {
-            submitBtn.disabled = false;
-            submitBtn.style.cursor = "pointer";
-            submitBtn.style.backgroundColor = "#28a745";
-        } else {
-            submitBtn.disabled = true;
-            submitBtn.style.cursor = "not-allowed";
-            submitBtn.style.backgroundColor = "#6c757d";
-        }
-    }
+   
+   
 
-    emailField.addEventListener("keyup", () => {
+    emailField.addEventListener("input", () => {
         if (emailRule.test(emailField.value)) {
             allowEmail = true;
             document.getElementById("emailError").innerHTML = "";
@@ -187,7 +212,7 @@ if (isset($_POST['submit'])) {
         controlSubmit();
     });
 
-    passwordField.addEventListener("keyup", () => {
+    passwordField.addEventListener("input", () => {
         if (passwordField.value.length >= 12 && passwordField.value.length <= 18) {
             document.getElementById("checkLength").classList.remove("fa-circle-xmark");
             document.getElementById("checkLength").classList.add("fa-circle-check");
@@ -252,8 +277,32 @@ if (isset($_POST['submit'])) {
             document.getElementById("checkLowerCase").classList.remove("fa-circle-check");
             allowCpassword = false;
         }
+
+        if(passwordField.value === confirmPasswordField.value && allowPassword==true)
+        {
+            allowCpassword = true;
+            document.getElementById("checkCpassword").classList.remove("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.add("fa-circle-check");
+        }else{
+            allowCpassword = false;
+            document.getElementById("checkCpassword").classList.add("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.remove("fa-circle-check");
+        }
+
         controlSubmit();
     });
+
+    function controlSubmit() {
+        if (allowEmail && allowPassword && allowName && allowPhone && allowCpassword ) {
+            submitBtn.disabled = false;
+            submitBtn.style.cursor = "pointer";
+            submitBtn.style.backgroundColor = "#28a745";
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.cursor = "not-allowed";
+            submitBtn.style.backgroundColor = "#6c757d";
+        }
+    }
 </script>
 
 </html>

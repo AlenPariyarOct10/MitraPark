@@ -8,10 +8,12 @@
     }
 
     $uid = $_SESSION['user']['uid'];
-    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `strictMode`=0 AND `endStrictDate`=CURDATE() AND `uid`='$uid'";
+    $checkStrictMode = "SELECT * FROM `strict_mode` WHERE `strictMode`=1 AND `endStrictDate`=CURDATE() AND `uid`='$uid'";
 
     $result = mysqli_query($connection, $checkStrictMode);
     $result = mysqli_fetch_assoc($result);
+
+  
 
     if($result != null)
     {

@@ -1,10 +1,17 @@
+<?php
+include_once("../server/db_connection.php");
+include_once("./parts/entryCheck.php");
+
+$aboutSite = $connection->query('SELECT * FROM `system_data`');
+$aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Dashboard ~ <?php echo $aboutSite['system_name']; ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Khand:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -179,7 +186,7 @@
     }
 
     /* -------------------------- Popular Post Card ------------------------------------- */
-    .popular-post{
+    .popular-post {
       margin-top: 10px;
       background-color: white;
       display: flex;
@@ -189,35 +196,49 @@
       width: 250px;
       box-shadow: 0.5px 0.5px 5px 0.5px rgba(78, 78, 78, 0.38);
     }
-    .post-header{
+
+    .post-header {
       display: flex;
       font-size: medium;
       align-items: center;
       justify-content: space-around;
     }
 
-    #profile-img{
+    #profile-img {
       height: 40px;
+      border-radius: 50%;
+
     }
 
-    .post-body{
+    .post-body {
       padding: 5px;
     }
 
-    .post-footer{
+    .post-footer {
       display: flex;
       justify-content: space-around;
     }
 
-    #media{
-      height: 150px;
+    #media {
+      width: 100%;
+      border-radius: 10px;
     }
 
-    #content, #likes, #comments{
+    #content,
+    #likes,
+    #comments {
       font-size: medium;
     }
-    
 
+    .flex-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space;
+    }
+
+    .graph-container {
+      width: 70%;
+    }
   </style>
 </head>
 
@@ -225,9 +246,10 @@
 
   <div class="body">
     <?php include_once("./parts/sidebar.php") ?>
+    <!-- /opt/lampp/htdocs/MitraPark/parts/testSidebar.php -->
     <div class="content">
       <div class="inner-header">
-        <p>Dashboard ~ MitraPark </p>
+        <p>Dashboard ~ <?php echo $aboutSite['system_name']; ?> </p>
       </div>
       <div class="inner-body">
         <div class="inner-body-section">
@@ -281,32 +303,10 @@
               </div>
             </div>
           </div>
-          <div class="popular-post">
-            Most Liked Post
-            <div class="post-header">
-              <div>
-                <img src="" alt="" id="profile-img">
-              </div>
-              <div>
-                <p id="uname"></p>
-                <div>
-                  <p id="visibility"></p>
-                  <p id="created_date_time"></p>
-                </div>
-              </div>
-              
-            </div>
-            <div class="post-body">
-              <p id="content">
+       
 
-              </p>
-              <img src="" alt="" id="media">
-            </div>
-            <div class="post-footer">
-              <p id="likes"></p>
-              <p id="comments"></p>
-            </div>
-          </div>
+
+
         </div>
       </div>
     </div>
@@ -316,28 +316,49 @@
 <script src="../assets/scripts/jquery.js"></script>
 
 <script>
+  function timeAgo(postedTime) {
+    const postedDate = new Date(postedTime);
+    const currentDate = new Date();
+    const timeDifference = currentDate - postedDate;
+
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    if (years > 0) {
+      return `${years} year${years > 1 ? 's' : ''} ago`;
+    } else if (months > 0) {
+      return `${months} month${months > 1 ? 's' : ''} ago`;
+    } else if (days > 0) {
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (minutes > 0) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else {
+      return 'just now';
+    }
+  }
   // Get dashboard data
   $.ajax({
     url: "./api/userInfo.php",
     type: "POST",
-    success:  async (response)=>{
-       const responseObj = await JSON.parse(response);
-      $("#total_users")[0].innerText =responseObj.total_users;
-      $("#uname")[0].innerText =responseObj.popular_post.uname;
-      $("#total_posts")[0].innerText =responseObj.total_posts;
-      $("#restricted_users")[0].innerText =responseObj.restricted_users;
-      $("#new_users")[0].innerText ="+"+responseObj.new_users;
-      $("#new_posts")[0].innerText ="+"+responseObj.new_posts;
-      $("#created_date_time")[0].innerText ="+"+responseObj.popular_post.created_date_time;
-      $("#media")[0].src="/MitraPark/"+responseObj.popular_post.media;
-      $("#content")[0].innerText=responseObj.popular_post.content;
-      $("#likes")[0].innerText="Likes : "+responseObj.popular_post.likes;
-      $("#comments")[0].innerText="Comments : "+responseObj.popular_post.comments;
-      $("#profile-img")[0].src="/MitraPark/"+responseObj.popular_post.profile_picture;
-   
+    success: async (response) => {
+      const responseObj = await JSON.parse(response);
+      $("#total_users")[0].innerText = responseObj.total_users;
+      
+      $("#total_posts")[0].innerText = responseObj.total_posts;
+      $("#restricted_users")[0].innerText = responseObj.restricted_users;
+      $("#new_users")[0].innerText = "+" + responseObj.new_users;
+      $("#new_posts")[0].innerText = "+" + responseObj.new_posts;
+
+
     }
   })
-  
+
   $('body').css({
     'height': $(this).height()
   });

@@ -9,13 +9,18 @@ $aboutSite = $connection->query('SELECT * FROM `system_data`');
 
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
+<?php
+            $chatUserId = htmlspecialchars($_GET['uid']);
+            $getUserQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, uid FROM `users` WHERE `uid`='$chatUserId'";
+            $getUserQuery = mysqli_query($connection, $getUserQuery);
+            $getChatUserData = mysqli_fetch_array($getUserQuery, MYSQLI_ASSOC);
+        ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/kurakani-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +29,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="./assets/css/navbar.css">
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./<?php echo $aboutSite['system_logo']; ?>" type="image/x-icon">
+
+
     <style>
         .mid-body {
             height: 90vh;
@@ -92,25 +101,90 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             position: absolute;
             bottom: 0;
         }
+
+        .mitra-request-list-item:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            margin: 1px;
+        }
+
+        .for-mobile{
+            display: none;
+            visibility: hidden;
+        }
+
+        @media screen and (max-width: 600px)
+        {
+            .hide-mobile{
+                visibility: hidden;
+                display: none;
+            }
+
+            .for-mobile{
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        /* ALEN : Kurakani-Style */
+        .recent-message{
+            font-size: small;
+            padding-left: 5px;
+        }
+
+        .chat-item-container{
+            color: rgb(62, 62, 62);
+            display: flex;
+            padding-left: 5px;
+            flex-direction: column;
+        }
+
+        .new-msg-dot {
+            height: 12px;
+            width: 12px;
+            background-color: #3da5ff;
+            border-radius: 50%;
+            display: inline-block;
+            }
+        .active-user-dot {
+            height: 15px;
+            width: 15px;
+            background-color: #2bff19;
+            border-radius: 50%;
+            display: inline-block;
+            position: absolute;
+            bottom: 5px;
+            right: 1px;
+            box-shadow: 0.5px 0.5px 2px 0.5px #78787892;
+            }
+
+        .text-time-label{
+            padding-left: 5px;
+            font-size: x-small;
+        }
+
+        .profile-holder{
+            position: relative;
+        }
         
     </style>
+
     <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <title>Kurakani Station</title>
+    <title> <?php echo $getChatUserData['uname']; ?> ~ Chat</title>
 </head>
 
 <body>
     <?php include_once("./parts/navbar.php"); ?>
     <div class="body">
-        <?php include_once("./parts/kurakani/leftNavPart.php") ?>
-        <?php
-            $chatUserId = htmlspecialchars($_GET['uid']);
-            $getUserQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, uid FROM `users` WHERE `uid`='$chatUserId'";
-            $getUserQuery = mysqli_query($connection, $getUserQuery);
-            $getChatUserData = mysqli_fetch_array($getUserQuery, MYSQLI_ASSOC);
-        ?>
+        <?php include_once ("./parts/kurakani/leftNavPart.php"); ?>
+
+        
+        
         <div class="mid-body">
+        <div id="chatUsersContainerMobile" class="mid-body for-mobile">
+        </div>
             <a href="kurakani.php" class="back">
                 < Go Back </a>
                 <?php
@@ -119,16 +193,21 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     $checkMitra = "SELECT * FROM `friends` WHERE (`sender_id`='$chatUserId' AND `acceptor_id`='$uid') OR (`sender_id`='$uid' AND `acceptor_id`='$chatUserId')";
                     $checkMitra = mysqli_query($connection, $checkMitra);
                     $checkMitra = mysqli_fetch_all($checkMitra);
+           
                     if($checkMitra){
 
                             $getHistory = "SELECT * FROM `chat_history` WHERE `user_1`='$uid' AND `user_2`='$chatUserId' OR `user_1`='$chatUserId' AND `user_2`='$uid'";
                             $getHistory = mysqli_query($connection, $getHistory);
                             $getHistory = mysqli_fetch_assoc($getHistory);
-                            if($getHistory['sender_id']!=$uid)
+                            if($getHistory)
                             {
-                                $history = "UPDATE `chat_history` SET `seen_status`=1 WHERE `user_1`='$uid' AND `user_2`='$chatUserId' OR `user_1`='$chatUserId' AND `user_2`='$uid'";
-                                mysqli_query($connection, $history);
+                                if($getHistory['sender_id']!=$uid)
+                                {
+                                    $history = "UPDATE `chat_history` SET `seen_status`=1 WHERE `user_1`='$uid' AND `user_2`='$chatUserId' OR `user_1`='$chatUserId' AND `user_2`='$uid'";
+                                    mysqli_query($connection, $history);
+                                }
                             }
+                            
 
                             
                         
@@ -170,7 +249,12 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     </div>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
+<?php include_once("./parts/kurakani/kurakani-scripts.php"); ?>
+
+
 <script>
+
+
     
     // ALEN : Check online status
 
@@ -213,38 +297,19 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         $.ajax({
             url: "./server/api/kurakani/deleteKurakani.php",
             data: {
-                message_id: id
+                message_id: id,
+                receiver_id: <?php echo $chatUserId; ?>,
             },
             type: "POST",
             success: function(response) {
-                console.log(response);
+                // console.log(response);
             }
         })
         clickedBtn.remove();
     }
 
     let receipientUserId = '<?php echo $chatUserId; ?>';
-    let chatUsersContainer = document.getElementById("chatUsersContainer");
-    $.ajax({
-        url: "./server/api/kurakani/getKurakaniUsers.php",
-        success: function(response) {
-            console.log(response);
-            let responseObj = JSON.parse(response);
-            responseObj =responseObj.filter(item => item.uid != <?php echo $_SESSION['user']['uid']; ?>);
-            console.log(responseObj);
-            responseObj.forEach((item) => {
-                console.log("name", item.uname);
-                chatUsersContainer.innerHTML += `<div class="mitra-request-list-item" id="kurakani-${item.uid}">
-                        <a class="redirect-to-profile" href="chat.php?uid=${item.uid}">
-                            <img class="mitra-request-profile-list" src="${(item.profile_picture) ? (item.profile_picture) : "/MitraPark/assets/images/user.png"}">
-                            <span class="uname">
-                                ${item.uname}
-                            </span>
-                        </a>
-                    </div>`;
-            });
-        }
-    })
+   
    
 
     let userChatList = document.getElementById("mitra-request-list-item");
@@ -257,6 +322,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     // ALEN : Refresh chat 
     function refreshMessages() {
+        getKurakaniUsers();
         $.ajax({
             url: "./server/api/kurakani/getMessage.php",
             type: "POST",
@@ -300,6 +366,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         });
         scrollToBottom();
         seenMessage();
+        // getKurakaniUsers();
     }
 
 // ALEN : get messages
@@ -348,16 +415,18 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 senderId: receipientUserId
             },
             success: (success)=>{
-                console.log(success);
+                // console.log(success);
             },
             error: (error)=>{
-                console.log(error);
+                // console.log(error);
             }
         })
+        scrollToBottom();
     }
 
     // ALEN : Send Message 
     function sendMessage() {
+
         let message = messageBox.value.trim();
         if (message !== "") {
             let newChat = `
@@ -379,8 +448,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     msg: message
                 },
                 success: function(status) {
-                    console.log(status);
-                    // Refresh messages after sending
+                    // console.log(status);
+
                     refreshMessages();
                 }
             });
@@ -394,36 +463,32 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     msg: message
                 },
                 success: function(status) {
-                    console.log(status);
+                    // console.log(status);
                 },
                 error: function(error) {
-                    console.log(error);
+                    // console.log(error);
                 }
             });
         }
+        
     }
 
     $(document).ready(() => {
         refreshMessages();
         scrollToBottom();
         seenMessage();
-    console.log("----------- ",$(".message-out"));
-
     })
     
-        scrollToBottom();
-
-  
-
-    // Set interval to refresh messages every 5 seconds (adjust as needed)
+    scrollToBottom();
     setInterval(refreshMessages, 5000);
 
     // Attach event listener to send button
     sendBtn.addEventListener("click", sendMessage);
     
 </script>
-<?php
-        include_once("./parts/js-script-files/js-script.php");
-    ?>
+
+    <?php include_once("./parts/js-script-files/js-script.php"); ?>
+<?php include_once("./parts/js-script-files/strict-and-activity-update.php"); ?>
+
 
 </html>

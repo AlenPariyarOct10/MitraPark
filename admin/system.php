@@ -1,3 +1,9 @@
+<?php 
+include_once("./parts/entryCheck.php");
+include_once("../server/db_connection.php");
+$aboutSite = $connection->query('SELECT * FROM `system_data`');
+$aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -381,16 +387,16 @@
                 </div>
                 <div class="form-item">
                     <label for="system_name">Maintenance Mode :</label>
-                    <label for="maintenance_on">Turn On</label>
-                    <input type="radio" name="maintainance_mode" value=1 id="maintenance_on">
-                    <label for="maintenance_off">Turn Off</label>
-                    <input type="radio" name="maintainance_mode" value=0 id="maintenance_off">
+                    <label for="maintenance_on">On</label>
+                    <input type="radio" name="maintainance_mode" value='1' id="maintenance_on">
+                    <label for="maintenance_off">Off</label>
+                    <input type="radio" name="maintainance_mode" value='0' id="maintenance_off">
                     <!-- <input name="maintenance_mode" value=0 type="button" id="maintenance_mode">Turn On</input> -->
                 </div>
                 <div class="form-item">
                     <label>System Logo :</label>
                     <input style="display: none;" type="file" name="logo_img" id="form_logo_img">
-                    <label id="changeLogoLabel" for="logo_img">
+                    <label id="changeLogoLabel" for="form_logo_img">
                         Change Logo
                     </label>
                 </div>
@@ -428,7 +434,7 @@
 
         <div class="content">
             <div class="inner-header">
-                <p>System ~ MitraPark </p>
+                <p>System ~ <?php echo $aboutSite['system_name']; ?> </p>
                 <div><button id="updateSystemBtn">Update System Info</button></div>
             </div>
             <div class="inner-body">
@@ -462,14 +468,7 @@
                             <div class="card-row">
                                 <p id="systemName"></p>
                             </div>
-                            <div class="card-row">
-                                <span style="cursor:pointer;" class="lite-dim underline showReportedUsers" data-num="1">View records</span>
-                                <span class="icon-cover bg-red">
-                                    <i><i class="bx bxs-user">
-                                            <div></div>
-                                        </i></i>
-                                </span>
-                            </div>
+                          
                         </div>
                         <div class="card">
                             <div class="card-row">
@@ -488,11 +487,9 @@
                                 <p id="maintenanceMode">Off</p>
                             </div>
                             <div class="card-row">
-                                <span style="cursor:pointer;" class="lite-dim underline showReportedUsers" data-num="1">Change mode</span>
+                            
                                 <span class="icon-cover bg-red">
-                                    <i><i class="bx bxs-user">
-                                            <div></div>
-                                        </i></i>
+                                  
                                 </span>
                             </div>
                         </div>
@@ -508,14 +505,7 @@
                                 </div>
 
                             </div>
-                            <div class="card-row">
-                                <span style="cursor:pointer;" class="lite-dim underline showReportedUsers" data-num="1">View records</span>
-                                <span class="icon-cover bg-red">
-                                    <i><i class="bx bxs-user">
-                                            <div></div>
-                                        </i></i>
-                                </span>
-                            </div>
+                            
                         </div>
                         <div class="card">
                             <div class="card-row">
@@ -557,9 +547,9 @@
             mode : "getSystemInfo"
         },
         success: (response)=>{
-            console.log(response);
+            // console.log(response);
             let responseObj = JSON.parse(response);
-            console.log(responseObj);
+            // console.log(responseObj);
         
             $("#form-system_name")[0].value =responseObj.system_name;
             $("#form-system_description")[0].value =responseObj.system_description;
@@ -605,8 +595,8 @@
 
     // ALEN : Color Selector Event
     $(".colorSelector").change((item)=>{
-        console.log(item.target.id);
-        console.log(item.target.value);
+        // console.log(item.target.id);
+        // console.log(item.target.value);
 
     })
 
@@ -618,17 +608,17 @@
             mode : "getSystemInfo"
         },
         success: (response)=>{
-            console.log(response);
+            // console.log(response);
             let responseObj = JSON.parse(response);
-            console.log(responseObj);
-            console.log($("#systemName").innerHTML);
+            // console.log(responseObj);
+            // console.log($("#systemName").innerHTML);
             $("#systemName")[0].innerHTML = responseObj.system_name;
             $("#maintenanceMode")[0].innerHTML = (responseObj.maintenance_mode==1)?"On":"Off";
             $("#system_description")[0].innerHTML = responseObj.system_description;
-            $("#system_logo")[0].src = responseObj.system_logo;
+            $("#system_logo")[0].src = ".."+responseObj.system_logo;
             $("#system_logo")[0].style.height = "60px";
             const colorTheme = JSON.parse(responseObj.themeSpecification);
-            console.log(colorTheme);
+            // console.log(colorTheme);
 
             $("#showPrimaryColor")[0].style.backgroundColor =colorTheme.primaryColor;
             $("#showSecondaryColor")[0].style.backgroundColor =colorTheme.secondaryColor;

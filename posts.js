@@ -33,7 +33,7 @@ async function fetchPosts() {
           url: "./server/api/posts/get-posts.php",
           type: "POST",
           success: (data) => {
-       
+            console.log("data -> ",data);
               resolve(JSON.parse(data));
           },
           error: (error) => {
@@ -111,6 +111,7 @@ function likeHandeler() {
 
               let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart.png":"./assets/images/heart-outline.png";
               console.log("index",likedState);
+              console.log("post -> ",postItem);
               generatePostHTML(postItem, likedState);
             },
             
@@ -138,7 +139,7 @@ function generatePostHTML(postItem, likedState) {
                 </div>
                 <div class="post-item-head-right">
                   <div class="post-user">
-                    <span>${postItem.fname + " " + postItem.lname}</span>
+                    <a href="user.php?id=${postItem.uid}">${postItem.fname + " " + postItem.lname}</a>
                   </div>
                   <div class="post-details">
                     <span>${postItem.visibility}</span>
@@ -157,8 +158,10 @@ function generatePostHTML(postItem, likedState) {
                   <span class="like-count">${postItem.like_count}</span>
                 </div>
                 <div class="comment-container">
-                  <a href="./post.php?postId=${postItem.post_id}#post-comment-${postItem.post_id}">
-                  <img height="30px" src="./assets/images/comment-outline.png"></a>
+                  <a href="./post.php?postId=${postItem.post_id}">
+                  <img height="30px" src="./assets/images/comment-outline.png">
+                  </a>
+                  <span class="like-count">${parseInt(postItem.comments_count)+parseInt(postItem.reply_comment_count)}</span>
                 </div>
               </div>
             </div>

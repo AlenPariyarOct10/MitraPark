@@ -26,7 +26,7 @@ WHERE
 ";
 
 $getMitras = "
-SELECT ch.ch_id, CONCAT(u.fname, ' ', u.lname) AS uname, ch.user_1 as sender_id, ch.user_2 as acceptor_id, ch.last_updated, u.uid, u.profile_picture, ch.last_message, ch.seen_status FROM `chat_history` ch LEFT JOIN `users` u on u.uid = ch.user_1 OR u.uid = ch.user_2 WHERE ch.user_1 = '$uid' OR ch.user_2 = '$uid' AND u.uid <> '$uid' ORDER BY ch.last_updated DESC
+SELECT ch.ch_id, CONCAT(u.fname, ' ', u.lname) AS uname, ch.user_1 as sender_id, ch.user_2 as acceptor_id, ch.last_updated, u.uid, u.profile_picture, ch.last_message, ch.seen_status, ch.sender_id as send_by FROM `chat_history` ch LEFT JOIN `users` u on u.uid = ch.user_1 OR u.uid = ch.user_2 WHERE ch.user_1 = '$uid' OR ch.user_2 = '$uid' AND u.uid <> '$uid' ORDER BY ch.last_updated DESC
 ";
 
     $result = mysqli_query($connection, $getMitras);
