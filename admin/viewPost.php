@@ -29,6 +29,16 @@ if(session_status()!=PHP_SESSION_ACTIVE){
     <link rel="stylesheet" href="../assets/css/profile.css" />
     <link rel="stylesheet" href="../assets/css/navbar.css">
     <link rel="stylesheet" href="../assets/css/boxicons/css/boxicons.min.css">
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../assets/css/mitras-style.css" />
+    <link rel="stylesheet" href="../assets/css/all.css" />
+    <link rel="stylesheet" href="../assets/css/fontawesome.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/profile.css" />
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/boxicons/css/boxicons.min.css">
 
 
 
@@ -149,6 +159,7 @@ if(session_status()!=PHP_SESSION_ACTIVE){
 
         #mid-body {
 
+
             height: 100%;
         }
 
@@ -233,10 +244,26 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         .row-caption-container {
             width: 100%;
         }
+        body {
+            color: black;
+        }
+
+        * {
+            font-family: 'poppins';
+            font-size: 1rem;
+        }
+
+        .row-caption-container {
+            width: 100%;
+        }
 
         .text-area {
             width: 80%;
         }
+        .text-area {
+            width: 80%;
+        }
+
 
 
 
@@ -252,7 +279,29 @@ if(session_status()!=PHP_SESSION_ACTIVE){
             padding: 5px;
             border-radius: 10px;
         }
+        .post-details>span {
+            font-size: small;
+        }
 
+        .text-area {
+            border: none;
+            resize: none;
+            justify-content: center;
+            align-items: center;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .pop-up-notification {
+
+            position: absolute;
+            bottom: 2%;
+            z-index: 1;
+            width: 70%;
+            box-shadow: 0.5px 0.5px 5px 0.5px #6d6d6d;
+            border-radius: 2px;
+            display: flex;
+        }
         .pop-up-notification {
 
             position: absolute;
@@ -280,11 +329,45 @@ if(session_status()!=PHP_SESSION_ACTIVE){
             flex-direction: row;
             width: 100%;
         }
+        .comment-container-row {
+            display: flex;
+            flex-direction: column;
+            padding: 3px;
+
+            border: 1px solid #a7a7a7;
+        }
+    </style>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
 
         .sidebar {
             height: 100vh;
         }
+        .sidebar {
+            height: 100vh;
+        }
 
+        .mid-body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            padding: 20px;
+            overflow: scroll;
+            height: 150vh;
+
+
+        }
+
+        #profile-img {
+            height: 150px;
+        }
         .mid-body {
             display: flex;
             justify-content: center;
@@ -308,7 +391,17 @@ if(session_status()!=PHP_SESSION_ACTIVE){
             height: 100vh;
             overflow: scroll;
         }
+        .inner-mid-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: scroll;
+        }
 
+        .dim-label {
+            font-size: medium;
+        }
         .dim-label {
             font-size: medium;
         }
@@ -321,7 +414,18 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         a {
             color: black;
         }
+        .label-underline {
+            border: 1px solid rgb(163, 163, 163);
+            width: 100%;
+        }
 
+        a {
+            color: black;
+        }
+
+        .post-item {
+            width: 40%;
+        }
         .post-item {
             width: 40%;
         }
@@ -336,7 +440,20 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         .like-count {
             width: 30px;
         }
+        .post-item-footer {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            align-items: center;
+        }
 
+        .like-count {
+            width: 30px;
+        }
+
+        .post-item-footer a {
+            width: 30px;
+        }
         .post-item-footer a {
             width: 30px;
         }
@@ -347,10 +464,17 @@ if(session_status()!=PHP_SESSION_ACTIVE){
             overflow: scroll;
         }
     </style>
+        .wrapper {
+            height: 100vh;
+            width: 100%;
+            overflow: scroll;
+        }
+    </style>
 
 </head>
 
 <body>
+    <?php include_once("./parts/sidebar.php"); ?>
     <?php include_once("./parts/sidebar.php"); ?>
 
     <?php
@@ -363,12 +487,16 @@ if(session_status()!=PHP_SESSION_ACTIVE){
     $postId = htmlspecialchars($_GET['postId']);
     $getPost = "SELECT *, concat(fname,' ',lname) as uname FROM `posts` INNER JOIN users u ON author_id=u.uid WHERE post_id='$postId'";
     $getAuthor = "SELECT `author_id` FROM `posts` WHERE post_id='$postId' ";
+    $getAuthor = "SELECT `author_id` FROM `posts` WHERE post_id='$postId' ";
 
     $getAuthor = mysqli_query($connection, $getAuthor);
     $getAuthor = mysqli_fetch_assoc($getAuthor);
     if ($getAuthor) {
+    if ($getAuthor) {
         $authorId = $getAuthor['author_id'];
 
+        $getPost = mysqli_query($connection, $getPost);
+        $getPost = mysqli_fetch_assoc($getPost);
         $getPost = mysqli_query($connection, $getPost);
         $getPost = mysqli_fetch_assoc($getPost);
 
@@ -376,13 +504,22 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         $reportId = mysqli_query($connection, $reportIdQuery);
         $reportId = mysqli_fetch_assoc($reportId);
         $reportId = $reportId['report_id'];
+        $reportIdQuery = "SELECT `report_id` FROM `reports` WHERE `component_id`='$postId' AND type='post'";
+        $reportId = mysqli_query($connection, $reportIdQuery);
+        $reportId = mysqli_fetch_assoc($reportId);
+        $reportId = $reportId['report_id'];
 
+        $isMitra = true;
         $isMitra = true;
 
     ?>
 
         <div id="mid-body" class="mid-body">
+        <div id="mid-body" class="mid-body">
 
+            <?php
+            if ($_SESSION['loggedInAdmin'] == true) {
+            ?>
             <?php
             if ($_SESSION['loggedInAdmin'] == true) {
             ?>
@@ -420,7 +557,43 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                             <span style="margin:5px;">
                                 <?php echo $getPost['content']; ?>
                             </span>
+                <div class="wrapper">
+                    <div class="left-inner-heading">
+                        <span class="dim-label">
+                            <?php echo "<b>" . $getPost['uname'] . "</b>'s post."; ?>
+                        </span>
+                        <hr class="label-underline">
+                    </div>
+                    <div class="post-item">
+                        <div class="post-item-head">
+                            <div class="post-item-head-left">
+                                <img class="profile-picture-holder" src="<?php echo '../' . $getPost['profile_picture']; ?>" alt="" srcset="">
+                            </div>
+                            <div class="post-item-head-right">
+                                <div class="post-user">
+                                    <span>
+                                        <?php echo $getPost['uname']; ?>
+                                    </span>
+                                </div>
+                                <div class="post-details">
+                                    <span>
+                                        <?php echo $getPost['visibility']; ?>
+                                    </span>
+                                    <span>|</span>
+                                    <span>
+                                        <?php echo $getPost['created_date_time']; ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-item-body">
+                            <span style="margin:5px;">
+                                <?php echo $getPost['content']; ?>
+                            </span>
 
+                            <img id="post-img" style="border-radius:10px;" src="<?php echo ".." . $getPost['media']; ?>" alt="" srcset="">
+                        </div>
+                        <div class="post-item-footer">
                             <img id="post-img" style="border-radius:10px;" src="<?php echo ".." . $getPost['media']; ?>" alt="" srcset="">
                         </div>
                         <div class="post-item-footer">
@@ -432,10 +605,24 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                             <div class="comment-container">
                                 <img height="30px" src="../assets/images/comment-outline.png">
                             </div>
+                            <div data-id=<?php echo $postId; ?> class="like-container">
+                                <img id="likeState" height="30px" src="">
+                                <span id="like-count" class="like-count">0</span>
+                            </div>
+                            <div class="comment-container">
+                                <img height="30px" src="../assets/images/comment-outline.png">
+                            </div>
 
                         </div>
                     </div>
+                        </div>
+                    </div>
 
+                    <div class="post-item">
+                        <div id="view-likes-comments" style="margin:5px;">
+                            <button id="restrictPost">Loading ....</button>
+                        </div>
+                    </div>
                     <div class="post-item">
                         <div id="view-likes-comments" style="margin:5px;">
                             <button id="restrictPost">Loading ....</button>
@@ -449,7 +636,19 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                             <button id="getComments">Comments</button>
                         </div>
                         <hr class="label-underline">
+                    <div class="post-item">
+                        <div id="view-likes-comments" style="margin:5px;">
+                            <button id="getLikes">Likes</button>
+                            <button id="getComments">Comments</button>
+                        </div>
+                        <hr class="label-underline">
 
+                        <div id="like-comment-container" class="post-item-body">
+                            <?php
+                            $postId = htmlspecialchars($_GET['postId']);
+                            $getLikesQuery = "SELECT uid, profile_picture, concat(fname,' ', lname) as uname FROM `users` WHERE `uid` IN ( SELECT `liked_by` FROM `likes` WHERE `post_id`='$postId')";
+                            $getLikers = mysqli_query($connection, $getLikesQuery);
+                            $getLikers = mysqli_fetch_all($getLikers, MYSQLI_ASSOC);
                         <div id="like-comment-container" class="post-item-body">
                             <?php
                             $postId = htmlspecialchars($_GET['postId']);
@@ -463,6 +662,7 @@ if(session_status()!=PHP_SESSION_ACTIVE){
             <span>' . $likes['uname'] . '</span>
         </a>';
                             }
+                            }
 
 
                             ?>
@@ -470,7 +670,15 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                     </div>
                 </div>
         </div>
+                            ?>
+                        </div>
+                    </div>
+                </div>
+        </div>
     <?php
+            } else {
+    ?>
+        <div id="mid-body" class="mid-body">
             } else {
     ?>
         <div id="mid-body" class="mid-body">
@@ -482,8 +690,18 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         </div>
         </div>
 
+            <div class="post-item">
+                Post not found
+            </div>
+        </div>
+        </div>
+
+    <?php
     <?php
             }
+        } else {
+    ?>
+    <div id="mid-body" class="mid-body">
         } else {
     ?>
     <div id="mid-body" class="mid-body">
@@ -494,13 +712,29 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         </div>
     </div>
 
+        <div class="post-item">
+            Post not found
+        </div>
+    </div>
 
+
+<?php
 <?php
         }
 
 ?>
 
+?>
 
+
+<script src='../assets/scripts/jquery.js'></script>
+<script>
+    let getLikes = document.getElementById("getLikes");
+    getLikes.classList.add("active-btn");
+    let getComments = document.getElementById("getComments");
+    let likedStateImg = document.getElementById("likeState");
+    let likeCount = document.getElementById("like-count");
+    let likeCommentContainer = document.getElementById("like-comment-container");
 <script src='../assets/scripts/jquery.js'></script>
 <script>
     let getLikes = document.getElementById("getLikes");
@@ -526,7 +760,15 @@ if(session_status()!=PHP_SESSION_ACTIVE){
 
                 if (restrictedStatus.status == "active") {
                     $("#restrictPost")[0].innerHTML = "Restrict Post";
+                if (restrictedStatus.status == "active") {
+                    $("#restrictPost")[0].innerHTML = "Restrict Post";
 
+                } else {
+                    $("#restrictPost")[0].innerHTML = "Unrestrict Post";
+                }
+            }
+        })
+    }
                 } else {
                     $("#restrictPost")[0].innerHTML = "Unrestrict Post";
                 }
@@ -541,10 +783,20 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         } else if ($("#restrictPost")[0].innerText == "Unrestrict Post") {
             unrestrictPost(<?php echo $reportId; ?>);
             updateRestrict();
+    $("#restrictPost").click(() => {
+        if ($("#restrictPost")[0].innerText == "Restrict Post") {
+            restrictPost(<?php echo $reportId; ?>);
+            updateRestrict();
+        } else if ($("#restrictPost")[0].innerText == "Unrestrict Post") {
+            unrestrictPost(<?php echo $reportId; ?>);
+            updateRestrict();
 
         }
     })
+        }
+    })
 
+    function restrictPost(reportId) {
     function restrictPost(reportId) {
         $.ajax({
             url: "./api/restrictPost.php",
@@ -573,6 +825,7 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                 // console.log(response);
 
                 updateRestrict();
+                updateRestrict();
             },
             error: (response) => {
                 // console.log(response);
@@ -585,6 +838,12 @@ if(session_status()!=PHP_SESSION_ACTIVE){
 
 
 
+
+
+
+    function fetchComments() {
+        let postId = <?php echo $postId; ?>;
+        let commentsContainer = document.getElementById("like-comment-container");
     function fetchComments() {
         let postId = <?php echo $postId; ?>;
         let commentsContainer = document.getElementById("like-comment-container");
@@ -599,7 +858,19 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                 },
                 success: function(response) {
                     const responseObj = JSON.parse(response);
+        $(document).ready(() => {
+            let commentBody = "";
+            $.ajax({
+                url: "../server/api/getComments.php",
+                type: "POST",
+                data: {
+                    postId: postId
+                },
+                success: function(response) {
+                    const responseObj = JSON.parse(response);
 
+                    responseObj.forEach((item) => {
+                        commentBody += `
                     responseObj.forEach((item) => {
                         commentBody += `
                     <div class="comment-container-row">
@@ -658,16 +929,25 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                        
                     </div>`;
                                 })
+                                })
 
                             }
+                            }
 
+                        })
+                    });
                         })
                     });
 
                     if (commentBody.length == 0) {
                         commentsContainer.innerHTML = "<p>No comments</p>";
                     } else {
+                    if (commentBody.length == 0) {
+                        commentsContainer.innerHTML = "<p>No comments</p>";
+                    } else {
 
+                        commentsContainer.innerHTML = commentBody;
+                    }
                         commentsContainer.innerHTML = commentBody;
                     }
 
@@ -677,6 +957,21 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                         const commentId = $(this).data("id");
                         // console.log(commentId);
 
+                        if (this.innerText != "Confirm Delete") {
+                            this.innerText = "Confirm Delete";
+                        } else {
+                            $.ajax({
+                                url: "../server/api/comments/deleteComment.php",
+                                type: 'POST',
+                                data: {
+                                    commentId: commentId
+                                },
+                                success: function(data) {
+                                    fetchComments();
+                                }
+                            })
+                        }
+                    });
                         if (this.innerText != "Confirm Delete") {
                             this.innerText = "Confirm Delete";
                         } else {
@@ -707,7 +1002,18 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         getComments.classList.add("active-btn");
         fetchComments();
     })
+    getComments.addEventListener("click", () => {
+        let getLikes = document.getElementById("getLikes");
+        getLikes.classList.remove("active-btn");
+        getComments.classList.add("active-btn");
+        fetchComments();
+    })
 
+    getLikes.addEventListener("click", () => {
+        getLikes.classList.add("active-btn");
+        getComments.classList.remove("active-btn");
+        getPostsLikes();
+    })
     getLikes.addEventListener("click", () => {
         getLikes.classList.add("active-btn");
         getComments.classList.remove("active-btn");
@@ -735,6 +1041,9 @@ if(session_status()!=PHP_SESSION_ACTIVE){
             let likesHtml = "";
             likesObj.forEach((item) => {
                 likesHtml += `
+            let likesHtml = "";
+            likesObj.forEach((item) => {
+                likesHtml += `
                 <a class="right-nav-item" href="user.php?id=${item.uid}">
             <img class="right-nav-item-img" src="../${item.profile_picture}">
             <span>${item.fname} ${item.lname}</span>
@@ -742,12 +1051,18 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                 `;
 
             })
+            })
 
             if (likesHtml.length == 0) {
                 likeCommentContainer.innerHTML = "<p>No likes</p>";
             } else {
                 likeCommentContainer = likesHtml;
+            if (likesHtml.length == 0) {
+                likeCommentContainer.innerHTML = "<p>No likes</p>";
+            } else {
+                likeCommentContainer = likesHtml;
 
+            }
             }
 
         },
@@ -783,13 +1098,18 @@ if(session_status()!=PHP_SESSION_ACTIVE){
                 let likesHtml = "";
                 likesObj.forEach((item) => {
                     likesHtml += `
+                let likesHtml = "";
+                likesObj.forEach((item) => {
+                    likesHtml += `
                                     <a class="right-nav-item" href="user.php?id=${item.uid}">
                                             <img class="right-nav-item-img" src=".${item.profile_picture}">
                                             <span>${item.fname} ${item.lname}</span>
                                     </a>
                                     `;
                 })
+                })
 
+                likeCommentContainer.innerHTML = likesHtml;
                 likeCommentContainer.innerHTML = likesHtml;
 
             },
@@ -799,6 +1119,8 @@ if(session_status()!=PHP_SESSION_ACTIVE){
         })
     }
 
+    updateRestrict();
+</script>
     updateRestrict();
 </script>
 </body>

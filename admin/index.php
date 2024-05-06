@@ -1,7 +1,5 @@
 <?php
 include_once("../server/db_connection.php");
-include_once("./parts/entryCheck.php");
-
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
@@ -303,7 +301,37 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
               </div>
             </div>
           </div>
-       
+          <div class="flex-row">
+            <div class="popular-post">
+              Most Liked Post
+              <div class="post-header">
+                <div>
+                  <img src="" alt="" id="profile-img">
+                </div>
+                <div>
+                  <p id="uname"></p>
+                  <div>
+                    <p id="visibility"></p>
+                    <p id="created_date_time"></p>
+                  </div>
+                </div>
+
+              </div>
+              <div class="post-body">
+                <p id="content">
+
+                </p>
+                <img src="" alt="" id="media">
+              </div>
+              <div class="post-footer">
+                <p id="likes"></p>
+                <p id="comments"></p>
+              </div>
+            </div>
+            <div class="graph-container">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
 
 
 
@@ -314,7 +342,48 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 </body>
 <script src="../assets/scripts/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart');
 
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ],
+      datasets: [{
+        label: ['User Statistics'],
+        data: [5, 59, 80, 81, 56, 55, 40],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 205, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(201, 203, 207, 0.2)'
+        ],
+        borderColor: [
+          'rgb(255, 159, 64)',
+          'rgb(255, 99, 132)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(54, 162, 235)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    },
+  });
+</script>
 <script>
   function timeAgo(postedTime) {
     const postedDate = new Date(postedTime);
@@ -349,12 +418,17 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     success: async (response) => {
       const responseObj = await JSON.parse(response);
       $("#total_users")[0].innerText = responseObj.total_users;
-      
+      $("#uname")[0].innerText = responseObj.popular_post.uname;
       $("#total_posts")[0].innerText = responseObj.total_posts;
       $("#restricted_users")[0].innerText = responseObj.restricted_users;
       $("#new_users")[0].innerText = "+" + responseObj.new_users;
       $("#new_posts")[0].innerText = "+" + responseObj.new_posts;
-
+      $("#created_date_time")[0].innerText = timeAgo(responseObj.popular_post.created_date_time);
+      $("#media")[0].src = "/MitraPark/" + responseObj.popular_post.media;
+      $("#content")[0].innerText = responseObj.popular_post.content;
+      $("#likes")[0].innerText = "Likes : " + responseObj.popular_post.likes;
+      $("#comments")[0].innerText = "Comments : " + responseObj.popular_post.comments;
+      $("#profile-img")[0].src = "/MitraPark/" + responseObj.popular_post.profile_picture;
 
     }
   })
