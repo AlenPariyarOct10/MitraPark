@@ -1063,7 +1063,10 @@ if($("#selected-post-img").attr("src")!=null && $("#selected-post-img").attr("sr
                         const commentId = $(this).data("id");
                         if (this.innerText != "Save") {
                             this.innerText = "Save";
-                            $(`#content-${commentId}`).append("<input type='text' id='updateText'/>");
+                            console.log(this);
+                            let commentContent = $(`#content-${commentId}`)[0].innerText;
+                           
+                            $(`#content-${commentId}`).append(`<input type='text' value='${commentContent}' id='updateText'/>`);
 
                         } else if (this.innerText == "Save") {
                             $.ajax({
