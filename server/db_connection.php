@@ -1,6 +1,6 @@
 <?php
     // Establishing a connection to the database
-    $connection = mysqli_connect("localhost", "root", "", "mitrapark");
+    $connection = mysqli_connect("localhost:1822", "root", "root", "mitrapark");
 
     // Checking for connection errors
     if(mysqli_connect_errno()) {
