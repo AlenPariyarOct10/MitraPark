@@ -10,7 +10,7 @@ function getOTP($length = 6) {
 $otp = getOTP();
 
 $receiver = "oct10.alenpariyar@gmail.com";
-$subject = "Email Test via PHP using Localhost";
+$subject = "Forgot password ~ OTP";
 $body = '
 <!DOCTYPE html>
 <html>

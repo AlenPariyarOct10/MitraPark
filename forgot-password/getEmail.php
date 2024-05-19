@@ -6,10 +6,9 @@ if(session_status()!=PHP_SESSION_ACTIVE)
     
 }
 
-
-include_once("./server/db_connection.php");
-include_once("./server/validation.php");
-include_once("./server/functions.php");
+include_once("../server/db_connection.php");
+include_once("../server/validation.php");
+include_once("../server/functions.php");
 
 if(isset($_SESSION['loggedInAdmin']))
 {
@@ -27,8 +26,8 @@ if(isset($_SESSION['loggedIn']))
     }
 }
 
-$aboutSite = mysqli_query($connection, "SELECT * FROM `system_data`");
-$aboutSite = mysqli_fetch_assoc($aboutSite);
+$aboutSite = $connection->query("SELECT * FROM `system_data`");
+$aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 
 $aboutSite['system_logo'];
@@ -57,15 +56,15 @@ if(isset($_POST['email']) && isset($_POST['password']))
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/login.css">
-    <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/login.css">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
 
 </head>
 
 <body>
     <div class="left">
  
-        <img id="logo" src="<?php echo ".".$aboutSite['system_logo']; ?>" alt="logo">
+        <img id="logo" src="<?php echo "..".$aboutSite['system_logo']; ?>" alt="logo">
         <h1>
             <?php echo $aboutSite['system_name']; ?>
         </h1>
@@ -78,17 +77,6 @@ if(isset($_POST['email']) && isset($_POST['password']))
     if(isset($_GET['1'])){echo '
     <div class="signup-success">Account created Successfully. Please Login to continue.</div>
         ';}
-    if(isset($_GET['change_password_status']))
-    {
-        if($_GET['change_password_status']==="1")
-        {
-            echo '<div class="signup-success">Password changed Successfully. Please Login to continue.</div>';
-        }
-        if($_GET['change_password_status']==="0")
-        {
-            echo '<div class="signup-error">Unable to change password.</div>';
-        }
-    }
     if(isset($_GET['loginFirst'])){
         echo '<div class="signup-success">Please Login to continue.</div>';
     }
@@ -100,12 +88,11 @@ if(isset($_POST['email']) && isset($_POST['password']))
     }
 
     ?>
-        <span class="page-title">Login</span>
-        <form action="login.php" method="post">
+        <span class="page-title">Forgot password</span>
+        <p style="padding: 15px; color:#524C42;">Please enter the email address associated with your MitraPark account. We'll send you an OTP to reset your password.</p>
+        <form action="sendMail.php" method="post">
             <input placeholder="Email" class="inp-fields" type="email" name="email" id="email">
-            <input placeholder="Password" class="inp-fields" type="password" name="password" id="password">
-            <button type="submit" id="submit" class="btn login-btn">Login</button>
-            <a href="./forgot-password/getEmail.php">Forgot password</a>
+            <button type="submit" id="submit" class="btn login-btn">Send</button>
         </form>
         
         <div id="underline"></div>
@@ -115,14 +102,12 @@ if(isset($_POST['email']) && isset($_POST['password']))
 </body>
 <script>
     let emailField = document.getElementById("email");
-    let passwordField = document.getElementById("password");
     let submitBtn =document.getElementById("submit");
 
     // Rule for Email Field
     let emailRule = /^[a-z0-9._-]+@[a-z0-9]+\.[a-z0-9]{2,4}$/;
 
     let allowEmail = false;
-    let allowPassword = false;
 
     submitBtn.disabled = true;
     submitBtn.style.cursor = "not-allowed";
@@ -130,7 +115,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
 
     function controlSubmit()
     {
-        if(allowEmail == true && allowPassword == true)
+        if(allowEmail == true)
         {
             submitBtn.disabled = false;
             submitBtn.style.cursor = "pointer";
@@ -142,7 +127,7 @@ if(isset($_POST['email']) && isset($_POST['password']))
         }
     }
 
-    emailField.addEventListener("keyup",()=>{
+    emailField.addEventListener("input",()=>{
         if(emailRule.test(emailField.value))
         {
             allowEmail = true;
@@ -154,15 +139,6 @@ if(isset($_POST['email']) && isset($_POST['password']))
     });
 
 
-    passwordField.addEventListener("keyup",()=>{
-        if(passwordField.value.length >= 8 && passwordField.value.length <=16 )
-        {
-            allowPassword = true;
-        }else{
-            allowPassword = false;
-        }
-        controlSubmit();
-    });
 </script>
 
 </html>

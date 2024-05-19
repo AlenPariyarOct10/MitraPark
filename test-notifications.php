@@ -72,6 +72,7 @@ include_once("./server/auto-routes.php");
             <span class="dim-label">
                 Notifications
             </span>
+            <button style="padding:0px 10px 0px 10px; border: none; border-radius: 50px 0px 0px 50px">Clear All</button>
             <hr class="label-underline">
             <div id="notifications-list"></div>
         </div>
