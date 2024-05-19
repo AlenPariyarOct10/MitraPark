@@ -43,7 +43,7 @@ include_once("./server/auto-routes.php");
         }
 
         .right-nav-item {
-            width: 60%;
+            width: 100%;
             justify-content: space-between;
         }
 
