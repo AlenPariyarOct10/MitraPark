@@ -137,7 +137,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <td>
                     ${(item.status === 'active') ? 
                         `<button class="table-option operation-btn" onclick="restrictPost(${item.report_id})">Restrict</button>`:
-                        `<button class="table-option operation-btn">Unrestrict</button>`
+                        `<button class="table-option operation-btn"  onclick="unrestrictPost(${item.report_id})">Unrestrict</button>`
                     }
                     <button class="table-option operation-btn" onclick="viewUser(${item.uid})">View</button>
                     <a class="table-option operation-btn" href="viewPost.php?postId=${item.post_id}">View Post</a>
@@ -180,7 +180,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <td>
                     ${(item.status === 'active') ? 
                         `<button class="table-option operation-btn" onclick="restrictPost(${item.post_id})">Restrict</button>`:
-                        `<button class="table-option operation-btn">Unrestrict</button>`
+                        `<button class="table-option operation-btn" onclick="unrestrictPost(${item.post_id})">Unrestrict</button>`
                     }
                     <button class="table-option" onclick="viewUser(${item.uid})" class="operation-btn">View</button>
                     <a class="table-option" href="viewUserPost.php?postId=${item.post_id}" class="operation-btn">View</a>
@@ -284,6 +284,24 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 postId: postId
             },
             success: (response) => {
+                getAllPosts(1);
+                removeModal();
+                
+            },
+            error: (response) => {
+                // console.log(response);
+            }
+        })
+    }
+        function unrestrictPost(postId) {
+        $.ajax({
+            url: "./api/unrestrictPost.php",
+            type: "GET",
+            data: {
+                postId: postId
+            },
+            success: (response) => {
+                console.log("unrestricted clicked");
                 getAllPosts(1);
                 removeModal();
                 
