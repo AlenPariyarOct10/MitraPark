@@ -283,7 +283,7 @@ include_once("./server/auto-routes.php");
   document
     .getElementById("profile-img-holder")
     .addEventListener("click", () => {
-      // let formData = new FormData();
+    
       updateProfile.style.display = "block";
 
     });
@@ -345,6 +345,7 @@ include_once("./server/auto-routes.php");
       }
     })
     form.reset();
+    window.location.reload();
   })
 
   // Update form elements

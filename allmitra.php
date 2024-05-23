@@ -40,7 +40,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             border-radius: 5px;
             margin: 1px;
         }
-
+        .mid-body > *{
+            width: 70%;
+        }
         #all-mitra-list {
             display: flex;
             flex-direction: column;

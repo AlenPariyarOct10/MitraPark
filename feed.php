@@ -128,6 +128,7 @@ include_once("./server/auto-routes.php");
 
     <?php
     include_once("./parts/navbar.php");
+
     include_once("./parts/leftSidebar.php");
 
     include_once("./parts/feed-midbody.php");
@@ -137,6 +138,20 @@ include_once("./server/auto-routes.php");
     include_once("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>
+
+    <?php
+    if($_SERVER['REQUEST_METHOD']==="GET")
+    {
+       
+        if(isset($_GET['invalid-post-file-type']))
+        {
+            echo "<script>alert('Unable to upload file. Make sure you only upload valid image files.');window.location.href = 'feed.php';</script>";
+        }if(isset($_GET['invalid-post-null']))
+        {
+            echo "<script>alert('Unable to upload post. Make sure you have uploaded images or text content.');window.location.href = 'feed.php';</script>";
+        }
+    }
+    ?>
 
     <script>
         $("#post-upload-file").change((event) => {
@@ -157,8 +172,9 @@ include_once("./server/auto-routes.php");
         })
 
         $("#post-text").click(() => {
+            
             $("#modal-wrapper").slideDown();
-            if($("#selected-post-img").attr("src") || $("#post-caption").value.length > 0)
+            if($("#selected-post-img").attr("src") || $("#post-caption")[0].value.length > 0)
             {
                 $("#post-share-btn").prop('disabled', false);
             }else{
@@ -166,6 +182,50 @@ include_once("./server/auto-routes.php");
             }
         
         });
+
+        
+
+        let postTestCaption = false;
+        let postTestImage = false;
+
+        function checkUploadBtn()
+        {
+            if(postTestCaption || postTestImage)
+            {
+                $("#post-share-btn").prop('disabled', false);
+            }else{
+                $("#post-share-btn").prop('disabled', true);
+            }
+        }
+
+        document.getElementById("post-caption").addEventListener("keyup", ()=>{
+            if(document.getElementById("post-caption").value.length > 0)
+            {
+                postTestCaption = true;
+            }else{
+                postTestCaption = false;
+            }
+            checkUploadBtn();
+        });
+
+        
+        document.getElementById("post-upload-file").addEventListener("change", ()=>{
+            console.log(document.getElementById("selected-post-img").getAttribute("src"));
+            if(document.getElementById("selected-post-img").getAttribute("src"))
+            {
+                postTestImage = true;
+            }else{
+                postTestCaption = false;
+            }
+            checkUploadBtn();
+        })
+
+        document.getElementById("remove-post-image").addEventListener("click",()=>{
+            postTestImage = false;
+            checkUploadBtn();
+        })
+
+
 
         let modalWrapper = document.getElementById("modal-wrapper");
         let closeModal = document.getElementById("closeModal");
@@ -179,7 +239,7 @@ include_once("./server/auto-routes.php");
     <script src='posts.js'></script>
     <?php
         include_once("./parts/js-script-files/js-script.php");
-
+        
     ?>
 <?php include_once("./parts/js-script-files/strict-and-activity-update.php"); ?>
 

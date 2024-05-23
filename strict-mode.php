@@ -1,65 +1,56 @@
 <?php
 
-include_once('./parts/entryCheck.php');
-include_once('./server/db_connection.php');
-include_once('./server/validation.php');
-include_once('./server/functions.php');
+include_once ('./parts/entryCheck.php');
+include_once ('./server/db_connection.php');
+include_once ('./server/validation.php');
+include_once ('./server/functions.php');
 
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
-include_once("./server/auto-routes.php");
+include_once ("./server/auto-routes.php");
+
 
 ?>
 
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    $uid = $_SESSION['user']['uid'];
+    $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE()";
+    $result = mysqli_query($connection, $getStrictModeInfo);
+    $result = mysqli_fetch_assoc($result);
 
-<?php 
-if($_SERVER['REQUEST_METHOD']=='POST')
-{
+  
 
-$uid = $_SESSION['user']['uid'];
-$getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE()";
-$result = mysqli_query($connection, $getStrictModeInfo);
-$result = mysqli_fetch_assoc($result);
-
-
-
-    if(session_status()!=PHP_SESSION_ACTIVE)
-    {
+    if (session_status() != PHP_SESSION_ACTIVE) {
         session_start();
     }
 
-    if($result==null)
-    {
-            if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
-            {
+    if ($result == null) {
+      
+        if (isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds'])) {
 
-                    $totalMax = ((int)$_POST['setMaxHours']*60*60)+((int)$_POST['setMaxMinutes']*60)+((int)$_POST['setMaxSeconds']);
-                    if($totalMax > 0)
-                    {
-                        $getNotifications = 0;
-                        $autoRenew = 0;
-            
-                        if(isset($_POST['exceedTimeWarning']))
-                        {
-                            $getNotifications = 1;
-                        }
-                        if(isset($_POST['auto-renew']))
-                        {
-                            $autoRenew = 1;
-                        }
-    
-                        $strictMode = 1;
+            $totalMax = ((int) $_POST['setMaxHours'] * 60 * 60) + ((int) $_POST['setMaxMinutes'] * 60) + ((int) $_POST['setMaxSeconds']);
+            if ($totalMax > 0) {
+                $getNotifications = 0;
+                $autoRenew = 0;
 
-                        $checkExisting = "SELECT * FROM `strict_mode` WHERE `uid`='$uid'";
-                        $checkExisting = mysqli_query($connection, $checkExisting);
-                        $checkExisting = mysqli_fetch_assoc($checkExisting);
+                if (isset($_POST['exceedTimeWarning'])) {
+                    $getNotifications = 1;
+                }
+                if (isset($_POST['auto-renew'])) {
+                    $autoRenew = 1;
+                }
 
-                        // var_dump($checkExisting);
+                $strictMode = 1;
 
-                        if($checkExisting !=null)
-                        {
-                            $insertStrictMode = "UPDATE `strict_mode` SET 
+                $checkExisting = "SELECT * FROM `strict_mode` WHERE `uid`='$uid'";
+                $checkExisting = mysqli_query($connection, $checkExisting);
+                $checkExisting = mysqli_fetch_assoc($checkExisting);
+
+          
+                if ($checkExisting != null) {
+                    $insertStrictMode = "UPDATE `strict_mode` SET 
                             `getWarning`='$getNotifications', 
                             `endStrictDate`=CURDATE(), 
                             `maxAccessSeconds`='$totalMax',
@@ -67,50 +58,52 @@ $result = mysqli_fetch_assoc($result);
                             `availableAccessSeconds`='$totalMax',
                             `autoRenew`='$autoRenew'
                         WHERE `uid`='$uid'";
-                        }else{
-                            $insertStrictMode = "INSERT INTO `strict_mode`(`uid`, `getWarning`, `endStrictDate`, `maxAccessSeconds`, `strictMode`, `availableAccessSeconds`, `autoRenew`) VALUES ('$uid','$getNotifications',CURDATE(),'$totalMax','$strictMode','$totalMax', '$autoRenew')";
+                } else {
+         
+                    $insertStrictMode = "INSERT INTO strict_mode (uid, getWarning, endStrictDate, maxAccessSeconds, strictMode, availableAccessSeconds, autoRenew, today_date)
+                    VALUES ('$uid', '$getNotifications', CURDATE(), '$totalMax', '$strictMode', '$totalMax', $autoRenew, CURDATE())";
+                }
+               
 
-                        }
-                        $result = mysqli_query($connection, $insertStrictMode);
-                    }
+                $result = mysqli_query($connection, $insertStrictMode);
+                echo $insertStrictMode;
+
+            }
 
         }
-    }else{
-        if(isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds']))
-            {
+    } else {
+        if (isset($_POST['setMaxHours']) && isset($_POST['setMaxMinutes']) && isset($_POST['setMaxSeconds'])) {
 
-                    $totalMax = ((int)$_POST['setMaxHours']*60*60)+((int)$_POST['setMaxMinutes']*60)+((int)$_POST['setMaxSeconds']);
-                    if($totalMax > 0)
-                    {
-                        $getNotifications = 0;
-                        $autoRenew = 0;
-            
-                        if(isset($_POST['exceedTimeWarning']))
-                        {
-                            $getNotifications = 1;
-                        }
-                        if(isset($_POST['auto-renew']))
-                        {
-                            $autoRenew = 1;
-                        }
-    
-                        $strictMode = 1;
-                        $updateStrictMode = "UPDATE `strict_mode` SET `getWarning`='$getNotifications', `endStrictDate`=CURDATE(), `maxAccessSeconds`='$totalMax', `strictMode`='$strictMode', `availableAccessSeconds`='$totalMax', `autoRenew`='$autoRenew' WHERE `uid`='$uid'";
-                        $result = mysqli_query($connection, $updateStrictMode);
-                    }
+            $totalMax = ((int) $_POST['setMaxHours'] * 60 * 60) + ((int) $_POST['setMaxMinutes'] * 60) + ((int) $_POST['setMaxSeconds']);
+            if ($totalMax > 0) {
+                $getNotifications = 0;
+                $autoRenew = 0;
+
+                if (isset($_POST['exceedTimeWarning'])) {
+                    $getNotifications = 1;
+                }
+                if (isset($_POST['auto-renew'])) {
+                    $autoRenew = 1;
+                }
+
+                $strictMode = 1;
+                $updateStrictMode = "UPDATE `strict_mode` SET `getWarning`='$getNotifications', `endStrictDate`=CURDATE(), `maxAccessSeconds`='$totalMax', `strictMode`='$strictMode', `availableAccessSeconds`='$totalMax', `autoRenew`='$autoRenew' WHERE `uid`='$uid'";
+                $result = mysqli_query($connection, $updateStrictMode);
+            }
 
         }
     }
 }
-    
-    
+
+
 
 ?>
 
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/kurakani-style.css">
@@ -153,35 +146,35 @@ $result = mysqli_fetch_assoc($result);
             border: 1px solid black;
         }
 
-        .time-item
-        {
+        .time-item {
             background-color: rebeccapurple;
         }
-        .timeSelector{
+
+        .timeSelector {
             padding: 8px;
             border: none;
         }
 
-        .mid-body{
+        .mid-body {
             justify-content: flex-start;
         }
 
-        .btn{
+        .btn {
             border: none;
             padding: 10px;
             width: 100%;
             background-color: var(--mp-color-1);
+            color: var(--mp-theme-bg);
             border-radius: 10px;
             cursor: pointer;
 
         }
 
-        .btn:hover{
-            box-shadow: 0.9px 0.9px 0.9px 0.5px rgb(118, 118, 118);
+        .btn:hover {
+            box-shadow: 0.9px 0.1px 5px 0.5px rgb(118, 118, 118);
         }
     </style>
-    <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
-   
+    <?php include_once ("../MitraPark/assets/css/dynamicColor.php"); ?>
 
     <?php echo "<script>localStorage.setItem('mp-uid','" . $_SESSION['user']['uid'] . "')</script>"; ?>
 
@@ -189,23 +182,61 @@ $result = mysqli_fetch_assoc($result);
 
 <body>
     <?php
-    include_once("./parts/navbar.php");
-    include_once("./parts/leftSidebar.php");
+    include_once ("./parts/navbar.php");
+    include_once ("./parts/leftSidebar.php");
     ?>
- 
+
 
     <?php
-        $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE() AND `strictMode`=1";
-        $result = mysqli_query($connection, $getStrictModeInfo);
-        $result = mysqli_fetch_assoc($result);
+    
+    $getStrictModeInfo = "SELECT * FROM `strict_mode` WHERE `uid`='$uid' AND `endStrictDate`=CURDATE() AND `strictMode`=1";
+    $result = mysqli_query($connection, $getStrictModeInfo);
+    $result = mysqli_fetch_assoc($result);
 
     ?>
     <div class='mid-body'>
-        <?php 
-            if($result==null)
-            {
-        ?>
-        <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <?php
+        if ($result == null) {
+            ?>
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <div class="left-inner-heading">
+                    <span class="dim-label">
+                        <b>Strict Mode</b>
+                    </span>
+                    <hr class="label-underline">
+                    <span class="dim-label">
+                        Strict Mode helps you to better focus on your work.
+                    </span>
+                </div>
+                <br>
+                <br>
+                <div>
+                    <label for="getEndDate">Set max access hours :</label>
+                    <select name="setMaxHours" class="timeSelector" id="setMaxHours"></select>
+                    <select name="setMaxMinutes" class="timeSelector" id="setMaxMinutes"></select>
+                    <select name="setMaxSeconds" class="timeSelector" id="setMaxSeconds"></select>
+                </div>
+
+                <p id="getBaki"></p>
+                <br>
+                <div class="warningWrapper">
+                    <label for="auto-renew">Automatically activate Strict Mode everyday :</label>
+                    <input type="checkbox" name="auto-renew" id="auto-renew">
+                </div>
+                <div class="warningWrapper">
+                    <label for="exceedTimeWarning">Get notified before 15 minutes of access limit time :</label>
+                    <input type="checkbox" name="exceedTimeWarning" id="exceedTimeWarning" disabled>
+                </div>
+                <br>
+                <div>
+                    <input class="btn" id="submitBtn" type="submit" name="send" value="Enter Strict Mode" disabled>
+                </div>
+                <p id="submitError"></p>
+            </form>
+            <?php
+        } else {
+
+            ?>
             <div class="left-inner-heading">
                 <span class="dim-label">
                     <b>Strict Mode</b>
@@ -215,153 +246,112 @@ $result = mysqli_fetch_assoc($result);
                     Strict Mode helps you to better focus on your work.
                 </span>
             </div>
-            <br>
+            Strict Mode is Running
+            <span id="showRemaining"></span> remaining for today.
+            <a style="background-color: crimson; color: white; padding:6px; border-radius: 20px;margin-top:10px;"
+                href="./server/api/strict-mode/removeStrictMode.php">Exit Strict Mode</a>
+            <?php
 
-            <br>
-            <div>
-                <label for="getEndDate">Set max access hours :</label>
-                <select name="setMaxHours" class="timeSelector" id="setMaxHours"></select>
-                <select name="setMaxMinutes" class="timeSelector" id="setMaxMinutes"></select>
-                <select name="setMaxSeconds" class="timeSelector" id="setMaxSeconds"></select>
-            </div>
-            
-            <p id="getBaki"></p>
-            <br>
-            <div class="warningWrapper">
-                <label for="auto-renew">Automatically activate Strict Mode everyday :</label>
-                <input type="checkbox" name="auto-renew" id="auto-renew">
-            </div>
-            <div class="warningWrapper">
-                <label for="exceedTimeWarning">Get notified before 15 minutes of access limit time :</label>
-                <input type="checkbox" name="exceedTimeWarning" id="exceedTimeWarning" disabled>
-            </div>
-            <br>
-            <div>
-                <input class="btn" id="submitBtn" type="submit" name="send" value="Enter Strict Mode" disabled>
-            </div>
-        </form>
-        <?php
-            }else{
-                
-                ?>
-                <div class="left-inner-heading">
-                <span class="dim-label">
-                    <b>Strict Mode</b>
-                </span>
-                <hr class="label-underline">
-                <span class="dim-label">
-                    Strict Mode helps you to better focus on your work.
-                </span>
-            </div>
-                    Strict Mode is Running
-                    <span id="showRemaining"></span> remaining for today.
-                    <a style="background-color: crimson; color: white; padding:6px; border-radius: 20px;margin-top:10px;" href="./server/api/strict-mode/removeStrictMode.php">Exit Strict Mode</a>
-                <?php
-            }
-            ?>
+
+        }
+        ?>
     </div>
     <?php
-    include_once("./parts/rightSidebar.php");
+    include_once ("./parts/rightSidebar.php");
+
     ?>
 
 </body>
 <script src='./assets/scripts/jquery.js'></script>
-<?php include_once("./parts/js-script-files/strict-and-activity-update.php"); ?>
-    <script>
-        function getRemainingTime()
-        {
-            $.ajax({
+<?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
+<script>
+    function getRemainingTime() {
+        $.ajax({
             url: "./server/api/strict-mode/check_strict_mode.php",
             type: "POST",
-            success: (result)=>{
-                let resultObj =JSON.parse(result);
-                if(resultObj['strict-mode']==true && resultObj['getWarning']=="1" && resultObj['availableAccessSeconds']<=900)
-                {
+            success: (result) => {
+                let resultObj = JSON.parse(result);
+                console.log(resultObj);
+                if (resultObj['strict-mode'] == true && resultObj['getWarning'] == "1" && resultObj['availableAccessSeconds'] <= 900) {
                     window.location.href = "timeOutWarn.php";
                 }
-                let hours = parseInt(Math.floor(resultObj['availableAccessSeconds']/(60*60)));
-                let minutes = Math.floor(resultObj['availableAccessSeconds']/(60) - (hours*60));
-                let seconds = resultObj['availableAccessSeconds'] - minutes*60 - hours*60*60;
-                $("#showRemaining")[0].innerHTML = "";
-                if(hours>0)
-                {
-                    $("#showRemaining")[0].innerHTML += hours+" Hours ";
-                }
-                if(minutes>0)
-                {
-                    $("#showRemaining")[0].innerHTML +=  minutes+" Minutes ";
-                }
-                if(seconds >0)
-                {
-                    $("#showRemaining")[0].innerHTML +=  seconds+" Seconds ";
-                }
+                let hours = parseInt(Math.floor(resultObj['availableAccessSeconds'] / (60 * 60)));
+                let minutes = Math.floor(resultObj['availableAccessSeconds'] / (60) - (hours * 60));
+                let seconds = resultObj['availableAccessSeconds'] - minutes * 60 - hours * 60 * 60;
+                try {
+                    $("#showRemaining")[0].innerHTML = "";
+                    if (hours > 0) {
+                        $("#showRemaining")[0].innerHTML += hours + " Hours ";
+                    }
+                    if (minutes > 0) {
+                        $("#showRemaining")[0].innerHTML += minutes + " Minutes ";
+                    }
+                    if (seconds > 0) {
+                        $("#showRemaining")[0].innerHTML += seconds + " Seconds ";
+                    }
+                } catch (ex) {
 
-                
+                }
             }
         })
-        }
+    }
+    getRemainingTime();
+    setInterval(() => {
         getRemainingTime();
-        setInterval(()=>{
-            getRemainingTime();
-        }, 5000);
-      
+    }, 5000);
 
-        let submitBtn =document.getElementById("submitBtn");
-       
-       
 
-        let dateObj = new Date();
+    let submitBtn = document.getElementById("submitBtn");
 
-        // Populating hours
-        let setMaxHours = document.getElementById("setMaxHours");
-        for (let currentHour = 0; currentHour <= 24; currentHour++) {
-            setMaxHours.innerHTML += `<option value="${currentHour}">${currentHour} Hours</option>`;
-        }
+    let dateObj = new Date();
 
-        // Populating minutes
-        let setMaxMinutes = document.getElementById("setMaxMinutes");
-        for (let currentMinute = 0; currentMinute <= 60; currentMinute++) {
-            setMaxMinutes.innerHTML += `<option value="${currentMinute}">${currentMinute} Minutes</option>`;
-        }
+    // Populating hours
+    let setMaxHours = document.getElementById("setMaxHours");
+    for (let currentHour = 0; currentHour <= 24; currentHour++) {
+        setMaxHours.innerHTML += `<option value="${currentHour}">${currentHour} Hours</option>`;
+    }
 
-        // Populating seconds
-        let setMaxSeconds = document.getElementById("setMaxSeconds");
-        for (let currentSecond = 0; currentSecond <= 60; currentSecond++) {
-            setMaxSeconds.innerHTML += `<option value="${currentSecond}">${currentSecond} Seconds</option>`;
-        }
+    // Populating minutes
+    let setMaxMinutes = document.getElementById("setMaxMinutes");
+    for (let currentMinute = 0; currentMinute <= 60; currentMinute++) {
+        setMaxMinutes.innerHTML += `<option value="${currentMinute}">${currentMinute} Minutes</option>`;
+    }
 
-        
-        let selectors = [setMaxHours, setMaxMinutes, setMaxSeconds];
-        selectors.forEach((selector)=>{
-        
-            selector.addEventListener("change",()=>{
-                
-                const totalMins = parseInt(document.getElementById("setMaxHours").value)*60+parseInt(document.getElementById("setMaxMinutes").value)+(parseInt(document.getElementById("setMaxSeconds").value)/60);
-                
-                // console.log("total->",totalMins);
-                if(totalMins<20)
-                {
-                    document.getElementById("exceedTimeWarning").disabled = true;
-                }else{
-                    document.getElementById("exceedTimeWarning").disabled = false;
+    // Populating seconds
+    let setMaxSeconds = document.getElementById("setMaxSeconds");
+    for (let currentSecond = 0; currentSecond <= 60; currentSecond++) {
+        setMaxSeconds.innerHTML += `<option value="${currentSecond}">${currentSecond} Seconds</option>`;
+    }
+    submitBtn.style.cursor = 'not-allowed';
 
-                }
 
-                if(totalMins>1)
-                {
-                    submitBtn.disabled = false;
-                }else{
-                    submitBtn.disabled  =true;
-                }
-            })
+    let selectors = [setMaxHours, setMaxMinutes, setMaxSeconds];
+    selectors.forEach((selector) => {
+
+        selector.addEventListener("change", () => {
+
+            const totalMins = parseInt(document.getElementById("setMaxHours").value) * 60 + parseInt(document.getElementById("setMaxMinutes").value) + (parseInt(document.getElementById("setMaxSeconds").value) / 60);
+
+            if (totalMins < 20) {
+                document.getElementById("exceedTimeWarning").disabled = true;
+
+            } else {
+                document.getElementById("exceedTimeWarning").disabled = false;
+
+            }
+
+            if (totalMins > 1) {
+                submitBtn.disabled = false;
+                submitBtn.style.cursor = 'pointer';
+
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.style.cursor = 'not-allowed';
+
+            }
         })
+    })
 
-       
-
-
-
-
-       
-    </script>
+</script>
 
 </html>

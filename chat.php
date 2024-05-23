@@ -10,6 +10,7 @@ $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
 <?php
+            (!isset($_GET['uid'])?header("Location: feed.php"):"");
             $chatUserId = htmlspecialchars($_GET['uid']);
             $getUserQuery = "SELECT concat(fname,' ',lname) as uname, profile_picture, uid FROM `users` WHERE `uid`='$chatUserId'";
             $getUserQuery = mysqli_query($connection, $getUserQuery);
@@ -166,6 +167,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         .profile-holder{
             position: relative;
         }
+
+
         
     </style>
 
@@ -197,7 +200,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     $checkMitra = mysqli_fetch_all($checkMitra);
            
                     if($checkMitra){
-
                             $getHistory = "SELECT * FROM `chat_history` WHERE `user_1`='$uid' AND `user_2`='$chatUserId' OR `user_1`='$chatUserId' AND `user_2`='$uid'";
                             $getHistory = mysqli_query($connection, $getHistory);
                             $getHistory = mysqli_fetch_assoc($getHistory);
@@ -209,12 +211,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                                     mysqli_query($connection, $history);
                                 }
                             }
-                            
-
-                            
-                        
-                       
-
                 ?>
                     <div class="message-head">
                         <div class="chat-user-profile" id="chat-user-<?php echo $chatUserId; ?>">
@@ -234,7 +230,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                     </div>
                     <div class="message-field">
-                        <textarea name="" id="message-text"></textarea>
+                        <textarea name="" maxlength="500" id="message-text"></textarea>
                         <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i>
                     </div>
                     <?php
@@ -247,17 +243,20 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     }
                     ?>
         </div>
+        <div id="chatUsersContainerMobile" class="mid-body for-mobile">
+            
+            </div>
         <?php include_once("./parts/rightSidebar.php") ?>
     </div>
 </body>
 <script src="./assets/scripts/jquery.js"></script>
 <?php include_once("./parts/kurakani/kurakani-scripts.php"); ?>
 
-
 <script>
 
 
-    
+
+
     // ALEN : Check online status
 
     $.ajax({
@@ -324,7 +323,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     // ALEN : Refresh chat 
     function refreshMessages() {
-        getKurakaniUsers();
+       
         $.ajax({
             url: "./server/api/kurakani/getMessage.php",
             type: "POST",
@@ -452,6 +451,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 success: function(status) {
                     console.log(status);
                     // Refresh messages after sending
+                    console.log(status);
                     refreshMessages();
                 }
             });

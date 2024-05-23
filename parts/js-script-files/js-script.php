@@ -40,7 +40,7 @@
             url: "./server/api/notification/getNewNotificationCount.php",
             success: function (getData) {
                 let newState = JSON.parse(getData);
-                // console.log(newState);
+                console.log("new -> ",newState);
                 if (parseInt(newState.unseen) > 0) {
 
                     if (!$("#new-notifications-count").hasClass("nav-icon")) {
@@ -52,7 +52,8 @@
                     }
                 } else {
                     if ($("#new-notifications-count").hasClass("nav-icon")) {
-                        $("#new-notifications-count").removeClass("nav-class");
+                        console.log("has nav icon");
+                        $("#new-notifications-count").removeClass("nav-icon");
                         $("#new-notifications-count").attr("current-count", 0);
                     }
                 }

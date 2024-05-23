@@ -97,7 +97,25 @@ include_once("./server/auto-routes.php");
         .profile-holder{
             position: relative;
         }
+
+        .search-field {
+    border: 1px solid rgb(97, 97, 97);
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#search-field-inp {
+    border: black;
+    outline: black;
+    height: 50%;
+    width: 80%;
+    font-size: large;
+}
     </style>
+    
+
         <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
   
 </head>

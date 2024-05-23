@@ -29,9 +29,10 @@ include_once("./server/auto-routes.php");
     <link rel="stylesheet" href="./assets/css/boxicons/css/boxicons.min.css">
     <title>Notifications -
         <?php echo $aboutSite['system_name']; ?>
-
     </title>
     <style>
+
+        
         #share-btn {
             border: none;
             background-color: white;
@@ -54,6 +55,27 @@ include_once("./server/auto-routes.php");
         .section-heading {
             width: 70%;
         }
+
+        #notifications-list{
+            width: 100%;
+        }
+
+        .notifications-item
+        {
+            width: 100%;
+        }
+
+        .pop-up-notification {
+
+position: absolute;
+bottom: 2%;
+z-index: 1;
+width: 70%;
+box-shadow: 0.5px 0.5px 5px 0.5px #6d6d6d;
+border-radius: 2px;
+display: flex;
+}
+       
     </style>
     <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
 
@@ -68,125 +90,17 @@ include_once("./server/auto-routes.php");
     
     ?>
     <div class="mid-body">
-        <div class="left-inner-heading section-heading">
+        <div  class="left-inner-heading section-heading">
             <span class="dim-label">
                 Notifications
             </span>
+            <button id="clearAllNotifications" style="padding:0px 10px 0px 10px; border: none; cursor: pointer; background-color: rgb(237, 100, 100); color:white; border-radius: 50px 0px 0px 50px">Clear All</button>
             <hr class="label-underline">
+            <div id="notifications-list"></div>
         </div>
         <?php
         $uid = $_SESSION['user']['uid'];
-
-        // Query for request-related notifications
-        $requestQuery = "SELECT CONCAT(fname, ' ',lname) as uname,
-                                profile_picture,
-                                type,
-                                created_date_time,
-                                component_id,
-                                triggered_by
-                            FROM notifications n
-                            INNER JOIN users u ON triggered_by = u.uid
-                            WHERE triggered_by <> '$uid' AND component_id = '$uid'
-                            ORDER BY created_Date_time DESC";
-
-        $result = mysqli_query($connection, $requestQuery);
-        $requestNotification = mysqli_affected_rows($connection);
-        
-            while ($row = mysqli_fetch_assoc($result)) {
-                if ($row['type'] == 'request_received') {
-                    displayRequestNotification($row);
-                } elseif ($row['type'] == 'request_accepted') {
-                    displayAcceptedNotification($row);
-                }
-    
-            }
-        
-
-        // Query for other notifications (likes, comments)
-        $otherQuery = "SELECT CONCAT(fname, ' ',lname) AS uname, 
-                                profile_picture, 
-                                type, 
-                                created_date_time,
-                                component_id  
-                            FROM notifications n 
-                            INNER JOIN users u ON triggered_by = u.uid 
-                            WHERE triggered_by <> '$uid' AND component_id IN (SELECT post_id FROM posts WHERE author_id = '$uid') 
-                            ORDER BY created_date_time DESC";
-
-        $result = mysqli_query($connection, $otherQuery);
-        $otherNotification = mysqli_affected_rows($connection);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            if ($row['type'] == 'like') {
-                displayLikeNotification($row);
-            } elseif ($row['type'] == 'comment') {
-                displayCommentNotification($row);
-            } elseif ($row['type'] == 'request_received') {
-                displayRequestNotification($row);
-            }
-        }
-
-        if($otherNotification + $requestNotification == 0)
-        {
-            echo "<p>No notifications found.</p>";
-        }
-
-        // Function to display a request notification
-        function displayRequestNotification($row)
-        {
-            echo '
-                <a class="right-nav-item" href="./user.php?id=' . $row['triggered_by'] . '">
-                    <img class="right-nav-item-img" src="./' . $row['profile_picture'] . '">
-                    <div class="notification-right-part" style="display:flex; flex-direction:column;">
-                        <span><b>' . $row['uname'] . '</b> sent you Mitra request.</span>
-                        <span style="font-size: small; color: #373737;">' . timeAgo($row['created_date_time']) . ' </span>
-                    </div>
-                </a>
-                ';
-        }
-
-        // Function to display an accepted notification
-        function displayAcceptedNotification($row)
-        {
-            echo '
-                <a class="right-nav-item" href="./user.php?id=' . $row['triggered_by'] . '">
-                    <img class="right-nav-item-img" src="./' . $row['profile_picture'] . '">
-                    <div class="notification-right-part" style="display:flex; flex-direction:column;">
-                        <span><b>' . $row['uname'] . '</b> accepted your Mitra request.</span>
-                        <span style="font-size: small; color: #373737;">' . timeAgo($row['created_date_time']) . ' </span>
-                    </div>
-                </a>
-                ';
-        }
-
-        // Function to display a like notification
-        function displayLikeNotification($row)
-        {
-            echo '
-                <a class="right-nav-item" href="./post.php?postId=' . $row['component_id'] . '">
-                    <img class="right-nav-item-img" src="./' . $row['profile_picture'] . '">
-                    <div class="notification-right-part" style="display:flex; flex-direction:column;">
-                        <span><b>' . $row['uname'] . '</b> liked your post.</span>
-                        <span style="font-size: small; color: #373737;">' . timeAgo($row['created_date_time']) . ' </span>
-                    </div>
-                </a>
-                ';
-        }
-
-        // Function to display a comment notification
-        function displayCommentNotification($row)
-        {
-            echo '
-                <a class="right-nav-item" href="./post.php?postId=' . $row['component_id'] . '">
-                    <img class="right-nav-item-img" src="./' . $row['profile_picture'] . '">
-                    <div class="notification-right-part" style="display:flex; flex-direction:column;">
-                        <span><b>' . $row['uname'] . '</b> commented in your post.</span>
-                        <span style="font-size: small; color: #373737;">' . timeAgo($row['created_date_time']) . ' </span>
-                    </div>
-                </a>
-                ';
-        }
-        ?>
+?>
 
     </div>
 
@@ -205,5 +119,148 @@ include_once("./server/auto-routes.php");
 
 
 </body>
+<script>
+function timeAgo(postedTime) {
+  const postedDate = new Date(postedTime);
+  const currentDate = new Date();
+  const timeDifference = currentDate - postedDate;
+
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (years > 0) {
+      return `${years} year${years > 1 ? 's' : ''} ago`;
+  } else if (months > 0) {
+      return `${months} month${months > 1 ? 's' : ''} ago`;
+  } else if (days > 0) {
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+  } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else if (minutes > 0) {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else {
+      return 'just now';
+  }
+}
+    function showSuccessNotification() {
+                let div = document.createElement("div");
+                div.innerHTML = `<div style="background-color: #D8EEBE; padding:10px; border-left:10px solid #75964A; display:flex;justify-content:space-between;" class="pop-up-notification">
+                        <div class="label">
+                            <p id="notification-text">Notifications deleted <b>Successfully </b>✅</p>
+                        </div>
+                    </div>`;
+                div.style.width = "100%";
+                document.getElementsByClassName("mid-body")[0].appendChild(div);
+                div.setAttribute("class", "popup-notification");
+
+                setTimeout(() => {
+                    div.remove();
+                }, 5000);
+            }
+
+
+    let clearNotificationsBtn = document.getElementById("clearAllNotifications");
+    clearNotificationsBtn.addEventListener("click",()=>{
+            console.log("clicked");    
+            $.ajax({
+            url: "./server/api/notifications/deleteNotifications.php",
+            type: "POST",
+            success: (response)=>
+            {
+               
+                showSuccessNotification();
+                let res = JSON.parse(response);
+                console.log(res);
+                if(res[0]==true)
+                {
+                    document.getElementById("notifications-list").innerHTML = "Notifications deleted";
+                }
+            },
+            error: (response)=>{
+                console.log(response);
+               
+                let res = JSON.parse(response);
+
+            }
+
+        })
+    })
+    function getNotifications(){
+    $.ajax({
+        url: "./server/api/notifications/getNotifications.php",
+        type: "POST",
+        success: (res)=>{
+            console.log(res);
+            let notifications = (JSON.parse(res));
+            console.log('length',notifications.length);
+            console.log('length',notifications);
+            if(notifications.length==0 || notifications[0]==null)
+            {
+                $("#notifications-list")[0].innerHTML = " No Notifications";
+            }else{
+                $("#notifications-list")[0].innerHTML = "";
+            notifications.map((item)=>{
+                if(item.type=='like')
+                {
+                    $("#notifications-list")[0].innerHTML += `
+                        <a class="right-nav-item notifications-item" href="./post.php?postId=${item.component_id}">
+                                <img class="right-nav-item-img" src="./${item.profile_picture}">
+                                <div class="notification-right-part" style="display:flex; flex-direction:column;">
+                                    <span><b>${item.uname}</b> liked your post.</span>
+                                    <span style="font-size: small; color: #373737;">💌${timeAgo(item.created_date_time)}</span>
+
+                                </div>
+                        </a>
+                    `;
+                }else if(item.type==='comment')
+                {
+                    $("#notifications-list")[0].innerHTML += `
+                        <a class="right-nav-item notifications-item" href="./post.php?postId=${item.component_id}">
+                                <img class="right-nav-item-img" src="./${item.profile_picture}">
+                                <div class="notification-right-part" style="display:flex; flex-direction:column;">
+                                    <span><b>${item.uname}</b> commented in your post.</span>
+                                    <span style="font-size: small; color: #373737;">💬${timeAgo(item.created_date_time)}</span>
+                                </div>
+                        </a>
+                    `;
+                }else if(item.type==="request_received")
+                {
+                    $("#notifications-list")[0].innerHTML += `
+                        <a class="right-nav-item notifications-item" href="./user.php?id=${item.triggered_by}">
+                                <img class="right-nav-item-img" src="./${item.profile_picture}">
+                                <div class="notification-right-part" style="display:flex; flex-direction:column;">
+                                    <span><b>${item.uname}</b> sent you mitra request.</span>
+                                    <span style="font-size: small; color: #373737;">➡️${timeAgo(item.created_date_time)}</span>
+                                </div>
+                        </a>
+                    `;
+                }else if(item.type === "request_accepted")
+                {
+                    $("#notifications-list")[0].innerHTML += `
+                        <a class="right-nav-item notifications-item" href="./user.php?id=${item.triggered_by}">
+                                <img class="right-nav-item-img" src="./${item.profile_picture}">
+                                <div class="notification-right-part" style="display:flex; flex-direction:column;">
+                                    <span><b>${item.uname}</b> accepted your mitra request.</span>
+                                    <span style="font-size: small; color: #373737;">✅${timeAgo(item.created_date_time)}</span>
+                                </div>
+                        </a>
+                    `;
+                }
+                
+            })
+        }
+
+           
+        }
+    })
+}
+getNotifications();
+setInterval(getNotifications, 5000);
+
+</script>
 
 </html>

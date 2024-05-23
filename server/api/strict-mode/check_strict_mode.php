@@ -16,7 +16,7 @@
     if($result['strictMode']==1 && $result['autoRenew']==1)
     {
         $today = date("Y-m-d");
-        if($result['today_date']!=$today)
+        if(strtotime($result['today_date'])!=strtotime($today))
         {
             $renewStrictMode = "UPDATE `strict_mode` SET `today_date`='$today',`endStrictDate`='$today', `availableAccessSeconds`=`maxAccessSeconds` WHERE `uid`='$uid'";
             mysqli_query($connection, $renewStrictMode);
@@ -24,7 +24,7 @@
     }else if($result['strictMode']==1 && $result['autoRenew']==0)
     {
         $today = date("Y-m-d");
-        if($result['today_date']!=$today)
+        if(strtotime($result['today_date'])!=strtotime($today))
         {
             $renewStrictMode = "DELETE FROM `strict_mode` WHERE `uid`='$uid'";
             mysqli_query($connection, $renewStrictMode);

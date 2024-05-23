@@ -11,7 +11,8 @@
 
     $uid = $_SESSION['user']['uid'];
     $receiverId = $_POST['receipientId'];
-    $message = $_POST['msg'];
+    $message = trim($_POST['msg']);
+    $message = htmlspecialchars($message);
     $dateTime = Date("Y-m-d H-i-s");
 
 

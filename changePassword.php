@@ -81,6 +81,14 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         input[type="submit"]:hover {
             background-color: #C6EBC5;
         }
+
+        .fa-circle-xmark{
+            color: red;
+        }
+
+        .fa-circle-check{
+            color: green;
+        }
     </style>
     <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
 
@@ -135,9 +143,34 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <div class="inp-field">
                     <input type="text" class="inp-field-item" name="newPassword2" id="newPassword2">
                 </div>
+                
             </div>
+            <span id="verification-status">
+                <p><i id="checkCurrentPassword" class="fa-solid fa-circle-xmark"></i>
+                    Valid current password
+                </p>
+                <p><i id="checkLowerCase" class="fa-solid fa-circle-xmark"></i>
+                    At least one lower case letter
+                </p>
+                <p><i id="checkUpperCase" class="fa-solid fa-circle-xmark"></i>
+                    At least one upper case letter
+                </p>
+                <p><i id="checkNumber" class="fa-solid fa-circle-xmark"></i>
+                    At least one number
+                </p>
+                <p><i id="checkSpecialChar" class="fa-solid fa-circle-xmark"></i>
+                    At least one special character
+                </p>
+                <p><i id="checkLength" class="fa-solid fa-circle-xmark"></i>
+                    Be at least 12 characters
+                </p>
+                <p><i id="checkCpassword" class="fa-solid fa-circle-xmark"></i>
+                    Password and Confirm password must match
+                </p>
+            </span>
+            
             <div class="form-item">
-                <input type="submit" value="Change">
+                <input type="submit" id="submit" value="Change">
             </div>
         </form>
     </div>
@@ -145,6 +178,170 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     include_once ("./parts/rightSidebar.php");
     ?>
     <script src='./assets/scripts/jquery.js'></script>
+    <script>
+    let currentPassword =document.getElementById("currentPassword");
+    let passwordField = document.getElementById("newPassword1");
+    let submitBtn = document.getElementById("submit");
+    let confirmPasswordField =document.getElementById("newPassword2");
+    let errorText = document.querySelectorAll('.errorText');
+
+    let allowPassword = false;
+    let allowCpassword = false;
+    let allowCurrentPassword = false;
+
+        currentPassword.addEventListener("keyup",()=>{
+            checkCurrentPassword();
+            controlSubmit();
+        })
+
+    confirmPasswordField.addEventListener("keyup",()=>{
+        if(passwordField.value === confirmPasswordField.value && allowPassword==true)
+        {
+            allowCpassword = true;
+            document.getElementById("checkCpassword").classList.remove("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.add("fa-circle-check");
+        }else{
+            allowCpassword = false;
+            document.getElementById("checkCpassword").classList.add("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.remove("fa-circle-check");
+        }
+        controlSubmit();
+    })
+   
+
+    submitBtn.disabled = true;
+    submitBtn.style.cursor = "not-allowed";
+    submitBtn.style.backgroundColor = "#6c757d";
+
+
+    passwordField.addEventListener("keyup", () => {
+        if (passwordField.value.length >= 12 && passwordField.value.length <= 18) {
+            document.getElementById("checkLength").classList.remove("fa-circle-xmark");
+            document.getElementById("checkLength").classList.add("fa-circle-check");
+            allowPassword = true;
+        } else {
+            allowPassword = false;
+            document.getElementById("checkLength").classList.remove("fa-circle-check");
+            document.getElementById("checkLength").classList.add("fa-circle-xmark");
+            
+        }
+
+        let specialCharRule = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        if(specialCharRule.test(passwordField.value))
+        {
+            
+            document.getElementById("checkSpecialChar").classList.remove("fa-circle-xmark");
+            document.getElementById("checkSpecialChar").classList.add("fa-circle-check");
+            allowPassword = true;
+
+        }else{
+            document.getElementById("checkSpecialChar").classList.add("fa-circle-xmark");
+            document.getElementById("checkSpecialChar").classList.remove("fa-circle-check");
+            allowPassword = false;
+
+        }
+
+        let checkNumberRule = /[0-9]/;
+        if(checkNumberRule.test(passwordField.value))
+        {
+            document.getElementById("checkNumber").classList.remove("fa-circle-xmark");
+            document.getElementById("checkNumber").classList.add("fa-circle-check");
+            allowPassword = true;
+
+        }else{
+            document.getElementById("checkNumber").classList.add("fa-circle-xmark");
+            document.getElementById("checkNumber").classList.remove("fa-circle-check");
+            allowPassword = false;
+
+        }
+
+        let checkUpperCase = /[A-Z]/;
+        if(checkUpperCase.test(passwordField.value))
+        {
+            document.getElementById("checkUpperCase").classList.remove("fa-circle-xmark");
+            document.getElementById("checkUpperCase").classList.add("fa-circle-check");
+            allowPassword = true;
+        }else{
+            document.getElementById("checkUpperCase").classList.add("fa-circle-xmark");
+            document.getElementById("checkUpperCase").classList.remove("fa-circle-check");
+            allowPassword = false;
+        }
+
+        let checkLowerCase = /[a-z]/;
+        if(checkLowerCase.test(passwordField.value))
+        {
+            document.getElementById("checkLowerCase").classList.remove("fa-circle-xmark");
+            document.getElementById("checkLowerCase").classList.add("fa-circle-check");
+            allowPassword = true;
+            
+        }else{
+            document.getElementById("checkLowerCase").classList.add("fa-circle-xmark");
+            document.getElementById("checkLowerCase").classList.remove("fa-circle-check");
+            allowCpassword = false;
+        }
+
+        if(passwordField.value === confirmPasswordField.value && allowPassword==true)
+        {
+            allowCpassword = true;
+            document.getElementById("checkCpassword").classList.remove("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.add("fa-circle-check");
+        }else{
+            allowCpassword = false;
+            document.getElementById("checkCpassword").classList.add("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.remove("fa-circle-check");
+        }
+
+        controlSubmit();
+    });
+
+    function checkCurrentPassword()
+    {
+        $.ajax({
+            url: "./server/api/other/check-password-api.php",
+            type: "GET",
+            data: {
+                uid: <?php echo $uid; ?>,
+                formPassword: currentPassword.value,
+            },
+            success: (response)=>{
+                let currentPasswordStatus = JSON.parse(response);
+                if(currentPasswordStatus.status === true)
+                {
+                    $("#checkCurrentPassword").removeClass("fa-circle-xmark");
+                    $("#checkCurrentPassword").addClass("fa-circle-check");
+                    allowCurrentPassword = true;
+                    controlSubmit();
+                }else{
+                    $("#checkCurrentPassword").removeClass("fa-circle-check");
+                    $("#checkCurrentPassword").addClass("fa-circle-xmark");
+                    allowCurrentPassword = false;
+                    controlSubmit();
+
+                }
+            },
+            error: (response)=>{
+                    $("#checkCurrentPassword").removeClass("fa-circle-check");
+                    $("#checkCurrentPassword").addClass("fa-circle-xmark");
+                    allowCurrentPassword = false;
+                    controlSubmit();
+
+            }
+        })
+    }
+    
+
+    function controlSubmit() {
+        if ( allowPassword && allowCpassword && allowCurrentPassword) {
+            submitBtn.disabled = false;
+            submitBtn.style.cursor = "pointer";
+            submitBtn.style.backgroundColor = "#28a745";
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.cursor = "not-allowed";
+            submitBtn.style.backgroundColor = "#6c757d";
+        }
+    }
+</script>
 </body>
 
 </html>

@@ -25,7 +25,7 @@
                 <hr class="section-break-hr">
                 <form action="./server/api/uploadPost.php" method="POST" enctype="multipart/form-data">
                     <div class="row-caption-container">
-                        <textarea name="post-text" style="color: #222831;" placeholder="Write something" id="post-caption"></textarea>
+                        <textarea name="post-text" style="color: #222831;" maxlength="200" placeholder="Write something" id="post-caption"></textarea>
                     </div>
                     <div class="post-image-holder">
                         <div class="inner-post-image-holder">

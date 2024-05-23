@@ -50,17 +50,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     }
 
     .sidebar-desktop {
-      width: 180px;
+      width: 200px;
 
     }
 
     .sidebar ul>*:hover {
       background-color: #535C91;
     }
-
-
-
-
 
     .sidebar ul>li {
 
@@ -97,6 +93,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     .inner-body-section {
       height: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
     }
 
     /* ---------------------------------------- */
@@ -127,8 +126,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
       box-shadow: 0px 0px 20px 1px #9f9f9f66;
       width: 20%;
       height: 100px;
-
+      justify-content: space-around;
     }
+
+    
 
     .card:hover {
 
@@ -145,7 +146,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     .lite-dim {
       font-weight: 500;
       font-size: small;
-      color: #535C91;
+      color: #ffffffd5;
     }
 
     .underline {
@@ -185,11 +186,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     /* -------------------------- Popular Post Card ------------------------------------- */
     .popular-post {
-      margin-top: 10px;
       background-color: white;
       display: flex;
-      padding: 10px;
-      border-radius: 5px;
+      
+      margin: 3px;
+      margin-top: 10px;
+      
+      border-radius: 10px;
       flex-direction: column;
       width: 250px;
       box-shadow: 0.5px 0.5px 5px 0.5px rgba(78, 78, 78, 0.38);
@@ -200,17 +203,16 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
       font-size: medium;
       align-items: center;
       justify-content: space-around;
+      padding: 2px;
     }
 
     #profile-img {
       height: 40px;
-      border-radius: 50%;
+      
 
     }
 
-    .post-body {
-      padding: 5px;
-    }
+    
 
     .post-footer {
       display: flex;
@@ -222,7 +224,12 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
       border-radius: 10px;
     }
 
-    #content,
+    #content{
+      text-align: center;
+      font-size: x-large;
+    }
+
+    
     #likes,
     #comments {
       font-size: medium;
@@ -231,17 +238,43 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     .flex-row {
       display: flex;
       flex-direction: row;
-      justify-content: space;
+      justify-content: space-around;
     }
 
     .graph-container {
-      width: 70%;
+      margin-top: 20px;
+      width: 65%;
+      background-color: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 20px 1px rgb(206, 206, 206);
+    }
+    .card-stats-count
+    {
+      font-size: xxx-large;
+      font-weight: bolder;
+    }
+
+   /* MitraPark : Stats card  */
+    .card-style-red {
+    background: -webkit-gradient(linear, left top, right top, from(#fe5d70), to(#fe909d));
+    background: linear-gradient(to right, #fe5d70, #fe909d);
+    color: white;
+    }
+    .card-style-yellow {
+    background: -webkit-gradient(linear, left top, right top, from(#f5c800), to(#ffea75));
+    background: linear-gradient(to right, #f5c800, #ffea75);
+    color: white;
+    }
+    .card-style-blue {
+    background: -webkit-gradient(linear, left top, right top, from(#0056f5), to(#aac0ff));
+    background: linear-gradient(to right, #0056f5, #aac0ff);
+    color: white;
     }
   </style>
 </head>
 
 <body>
-
   <div class="body">
     <?php include_once("./parts/sidebar.php") ?>
     <!-- /opt/lampp/htdocs/MitraPark/parts/testSidebar.php -->
@@ -253,15 +286,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         <div class="inner-body-section">
           <!-- ALEN : CARD -->
           <div class="card-grid">
-            <div class="card">
-              <div class="card-row">
+            <div class="card card-style-red">
+              <div class="card-row ">
                 <p class="lite-dim">TOTAL USERS</p>
                 <p id="new_users" class="lite-dim">+0</p>
               </div>
               <div class="card-row">
-                <p id="total_users">5K</p>
-              </div>
-              <div class="card-row">
+                <p class="card-stats-count" id="total_users">5K</p>
                 <span class="icon-cover bg-red">
                   <i><i class="bx bxs-user">
                       <div></div>
@@ -269,44 +300,52 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </span>
               </div>
             </div>
-            <div class="card">
+            <div class="card card-style-yellow">
               <div class="card-row">
                 <p class="lite-dim">TOTAL POSTS</p>
                 <p id="new_posts" class="lite-dim">+0</p>
               </div>
               <div class="card-row">
-                <p id="total_posts"></p>
-              </div>
-              <div class="card-row">
+                <p class="card-stats-count" id="total_posts"></p>
                 <span class="icon-cover bg-yellow">
-                  <i><i class="bx bxs-user">
+                  <i><i class="bx bx-grid-alt">
                       <div></div>
                     </i></i>
                 </span>
               </div>
+           
             </div>
-            <div class="card">
+            <div class="card card-style-blue">
               <div class="card-row">
                 <p class="lite-dim">RESTRICTED USERS</p>
               </div>
               <div class="card-row">
-                <p id="restricted_users"></p>
-              </div>
-              <div class="card-row">
+                <p class="card-stats-count" id="restricted_users"></p>
                 <span class="icon-cover bg-blue">
-                  <i><i class="bx bxs-user">
+                  <i><i class="bx bx-user-x">
                       <div></div>
                     </i></i>
                 </span>
               </div>
+              
             </div>
           </div>
           <div class="flex-row">
-            <div class="popular-post">
-              Most Liked Post
+
+            <div style="display: flex; justify-content: space-between;" class="popular-post">
+              <!-- <p class="card-style-yellow" style="font-size: small; background-color: #c6c6c6;padding: 10px;border-radius: 5px;">Most Liked Post</p> -->
+              <div style="height: 100%;display: flex; flex-direction: column; justify-content: space-between;">
+              <div class="post-body">
+                <img style="border-radius: 8px 8px 0px 0px;" src="" alt="" id="media"/>
+                <p id="content"></p>
+              </div>
+              <div class="post-footer">
+                <p id="likes"></p>
+                <p id="comments"></p>
+              </div>
               <div class="post-header">
                 <div>
-                  <img src="" alt="" id="profile-img">
+                  <img style="border-radius: 50%;" src="" alt="" id="profile-img">
                 </div>
                 <div>
                   <p id="uname"></p>
@@ -315,26 +354,16 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     <p id="created_date_time"></p>
                   </div>
                 </div>
-
               </div>
-              <div class="post-body">
-                <p id="content">
-
-                </p>
-                <img src="" alt="" id="media">
-              </div>
-              <div class="post-footer">
-                <p id="likes"></p>
-                <p id="comments"></p>
+            </div>
+              <div class="card-style-yellow">
+                <p style="font-size: x-large;">Popular Post</p>
               </div>
             </div>
             <div class="graph-container">
               <canvas id="myChart"></canvas>
             </div>
           </div>
-
-
-
         </div>
       </div>
     </div>
@@ -345,15 +374,26 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const ctx = document.getElementById('myChart');
+  let getStats = new XMLHttpRequest();
+
+  getStats.onreadystatechange = ()=>{
+    if(getStats.readyState == 4 && getStats.status == 200)
+    {
+      let response = JSON.parse(getStats.responseText);
+      console.log(response);
 
 
-  new Chart(ctx, {
+      new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", ],
+      labels: response.map((item)=>(
+        (item[0])
+      )),
       datasets: [{
         label: ['User Statistics'],
-        data: [5, 59, 80, 81, 56, 55, 40],
+        data: response.map((item)=>(
+        (parseInt(item[1]))
+      )),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 159, 64, 0.2)',
@@ -361,7 +401,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
           'rgba(75, 192, 192, 0.2)',
           'rgba(54, 162, 235, 0.2)',
           'rgba(153, 102, 255, 0.2)',
-          'rgba(201, 203, 207, 0.2)'
+          'rgba(201, 203, 207, 0.2)',
+          
         ],
         borderColor: [
           'rgb(255, 159, 64)',
@@ -383,6 +424,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
       }
     },
   });
+    }
+  }
+
+  getStats.open("GET", "./api/getUserStats.php", true);
+  getStats.send();
+
+  
 </script>
 <script>
   function timeAgo(postedTime) {
@@ -425,9 +473,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
       $("#new_posts")[0].innerText = "+" + responseObj.new_posts;
       $("#created_date_time")[0].innerText = timeAgo(responseObj.popular_post.created_date_time);
       $("#media")[0].src = "/MitraPark/" + responseObj.popular_post.media;
-      $("#content")[0].innerText = responseObj.popular_post.content;
+      $("#content")[0].innerText =  responseObj.popular_post.content;
       $("#likes")[0].innerText = "Likes : " + responseObj.popular_post.likes;
-      $("#comments")[0].innerText = "Comments : " + responseObj.popular_post.comments;
+
       $("#profile-img")[0].src = "/MitraPark/" + responseObj.popular_post.profile_picture;
 
     }

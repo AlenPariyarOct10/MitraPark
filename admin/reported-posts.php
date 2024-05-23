@@ -24,7 +24,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         <div class="content">
             <div class="inner-header">
                 <p>Reported Posts ~ <?php echo $aboutSite['system_name']; ?> </p>
-                <p>Reported Posts ~ <?php echo $aboutSite['system_name']; ?> </p>
             </div>
             <div class="inner-body">
                 <div class="inner-body-section">
@@ -33,8 +32,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <div class="card">
                             <div class="card-row">
                                 <p class="lite-dim">TOTAL REPORTED POSTS - Unique</p>
-                                <p class="lite-dim">TOTAL REPORTED POSTS - Unique</p>
-                                <p class="lite-dim">+0.00%</p>
+                         
                             </div>
                             <div class="card-row">
                                 <p id="reported_users">Loading...</p>
@@ -47,8 +45,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <div class="card">
                             <div class="card-row">
                                 <p class="lite-dim">TOTAL RESTRICTED POSTS - Unique</p>
-                                <p class="lite-dim">TOTAL RESTRICTED POSTS - Unique</p>
-                                <p class="lite-dim">+0.00%</p>
+                      
                             </div>
                             <div class="card-row">
                                 <p id="restricted_users">Loading...</p>
@@ -85,6 +82,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 <script src="../assets/scripts/jquery.js"></script>
 <script>
     getRestrictedInfo();
+    getReportedPosts(1);
 
     function getRestrictedInfo() {
         // ALEN : Get restricted and reported data

@@ -26,14 +26,12 @@
             $userData = mysqli_query($connection, $selectUser);
             $userData = mysqli_fetch_assoc($userData);
 
-            echo '<div class="mitra-request-list-item" id="request-'.$request['request_id'].'">
-        <a class="redirect-to-profile" href="user.php?id='.$request['sender_id'].'">
+            echo '<a class="redirect-to-profile" href="user.php?id='.$request['sender_id'].'">
             <img class="mitra-request-profile-list" src="./'.$userData['profile_picture'].'">
             <span class="uname">
                '.$userData["name"].'
             </span>
-        </a>
-    </div>';
+        </a>';
         }
         
     }

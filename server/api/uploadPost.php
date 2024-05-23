@@ -1,7 +1,7 @@
 <?php
 
 if (isset($_POST)) {
-
+    
     include_once("../db_connection.php");
     $text = htmlspecialchars($_POST['post-text']);
     $visibility = htmlspecialchars($_POST['visibile-mode']);
@@ -10,8 +10,8 @@ if (isset($_POST)) {
     $validPostText = false;
     $validImg = false;
     $validFile = false;
- 
-    
+    if(isset($_FILES['file']) ||  strlen($text)>0)
+    {
 
     if (isset($_FILES['file'])) {
         $img = $_FILES['file'];
@@ -28,7 +28,8 @@ if (isset($_POST)) {
             move_uploaded_file($fileTempName, $path . $newName);
             $_GLOBALS['fileName'] = '/user_uploads/' . $newName;
         } else {
-           
+            header("Location: ../../feed.php?invalid-post-file-type");
+            exit();
         }
     }
 
@@ -54,5 +55,8 @@ if (isset($_POST)) {
     } else {
         header("Location: ../../feed.php");
     }
+}
+}else{
+    header("Location: ../../feed.php?invalid-post-null");
 }
 ?>

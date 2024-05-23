@@ -70,7 +70,6 @@ $("#search-field-inp").focus(() => {
     }
     let chatUsersContainer = document.getElementById("chatUsersContainer");
     let chatUsersContainerMobile = document.getElementById("chatUsersContainerMobile");
-
     var getOnlineStatus = async (uid) => {
     try {
         const status = await $.ajax({
@@ -94,13 +93,16 @@ const getKurakaniUsers = async () => {
             url: "./server/api/kurakani/getKurakaniUsers.php",
             type: "GET" // Assuming it's a GET request, adjust if necessary
         });
-        // console.log(response);
+        console.log("hello");
+        console.log(response);
         let responseObj = JSON.parse(response);
         responseObj = responseObj.filter(item => item.uid != <?php echo $_SESSION['user']['uid']; ?>);
         if(responseObj.length!==0){ 
             chatUsersContainer.innerHTML = "";
             chatUsersContainerMobile.innerHTML = "";
+            console.log(responseObj);
         responseObj.forEach(async (item) => {
+
             // console.log("container ", item);
             const isOnline = await getOnlineStatus(item.uid);
             const activeDot = isOnline ? '<span class="active-user-dot"></span>' : '';
@@ -139,8 +141,7 @@ const getKurakaniUsers = async () => {
         console.error("Error while fetching Kurakani users:", error);
     }
 };
-
-
+getKurakaniUsers();
 
     let allUsersContainer = document.getElementById("allUsers");
 
@@ -194,7 +195,7 @@ const getKurakaniUsers = async () => {
                     if(countObj.messages_count != currentMessageCount)
                     {
                         chatUsersContainer.innerHTML = "";
-                        // getKurakaniUsers();
+                        getKurakaniUsers();
                         currentMessageCount =countObj.messages_count;
                         
                     }

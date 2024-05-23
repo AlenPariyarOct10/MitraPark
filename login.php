@@ -99,7 +99,15 @@ if(isset($_POST['email']) && isset($_POST['password']))
         }
     }
 
+        // $isWindows = str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "windows");
+        // $isIphone = str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "iphone");
+        // $isLinux = str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "linux");
+        // $isAndroid = str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "android");
+        // $isMac = str_contains(strtolower($_SERVER['HTTP_USER_AGENT']), "mac");
+    
+        
     ?>
+    
         <span class="page-title">Login</span>
         <form action="login.php" method="post">
             <input placeholder="Email" class="inp-fields" type="email" name="email" id="email">

@@ -1,16 +1,16 @@
 <?php
     include_once("db_connection.php");
     
-    function createUser($fname, $lname, $email, $phone, $password)
+    function createUser($fname, $lname, $email, $password)
     {
         
-        echo "called";
+       
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        echo "called";
+     
         
         $currentDateTime = date("Y-m-d H-i-s");
-        $insertQuery = "INSERT INTO `users`(`fname`, `lname`, `phone`, `email`, `password`, `createdDateTime`) VALUES 
-        ('$fname','$lname','$phone','$email','$hashedPassword','$currentDateTime')";
+        $insertQuery = "INSERT INTO `users`(`fname`, `lname`, `email`, `password`, `createdDateTime`) VALUES 
+        ('$fname','$lname','$email','$hashedPassword','$currentDateTime')";
         
         $GLOBALS['connection']->query($insertQuery);
         

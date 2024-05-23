@@ -362,12 +362,9 @@ session_start();
     <?php
     $postId = htmlspecialchars($_GET['postId']);
     $getPost = "SELECT *, concat(fname,' ',lname) as uname FROM `posts` INNER JOIN users u ON author_id=u.uid WHERE post_id='$postId'";
-    $getAuthor = "SELECT `author_id` FROM `posts` WHERE post_id='$postId' ";
-
-    $getAuthor = mysqli_query($connection, $getAuthor);
-    $getAuthor = mysqli_fetch_assoc($getAuthor);
-    if ($getAuthor) {
-        $authorId = $getAuthor['author_id'];
+   
+    if (1) {
+      
 
         $getPost = mysqli_query($connection, $getPost);
         $getPost = mysqli_fetch_assoc($getPost);
@@ -375,7 +372,7 @@ session_start();
         $reportIdQuery = "SELECT `report_id` FROM `reports` WHERE `component_id`='$postId' AND type='post'";
         $reportId = mysqli_query($connection, $reportIdQuery);
         $reportId = mysqli_fetch_assoc($reportId);
-        $reportId = $reportId['report_id'];
+        // $reportId = $reportId['report_id'];
 
         $isMitra = true;
 
@@ -544,41 +541,6 @@ session_start();
 
         }
     })
-
-    function restrictPost(reportId) {
-        $.ajax({
-            url: "./api/restrictPost.php",
-            type: "GET",
-            data: {
-                reportId: reportId
-            },
-            success: (response) => {
-                console.log(response);
-                updateRestrict();
-            },
-            error: (response) => {
-                console.log(response);
-            }
-        })
-    }
-
-    function unrestrictPost(reportId) {
-        $.ajax({
-            url: "./api/unrestrictPost.php",
-            type: "GET",
-            data: {
-                reportId: reportId
-            },
-            success: (response) => {
-                console.log(response);
-
-                updateRestrict();
-            },
-            error: (response) => {
-                console.log(response);
-            }
-        })
-    }
 
 
 

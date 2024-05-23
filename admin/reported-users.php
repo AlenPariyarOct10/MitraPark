@@ -84,7 +84,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 <script>
 
     getRestrictedInfo();
-
+    getReportedUsers(1);
     function getRestrictedInfo()
     {
         // ALEN : Get restricted and reported data

@@ -1,4 +1,5 @@
 <?php
+    include_once "db_connection.php";
     // ALEN : If available seconds is less than or equal to 0 : redirect to strict mode page 
 
 if(session_status()!=PHP_SESSION_ACTIVE)

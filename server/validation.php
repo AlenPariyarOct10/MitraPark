@@ -53,32 +53,16 @@
         }
     }
 
-    function validate_phone($phone)
-    {
-        $phone = htmlspecialchars($phone);
-        if(preg_match('/^\d{10}$/',$phone))
-        {
-            return true;
-        }else{
-            return false;
-        }
+  
 
-    }
-
-    function isExistingUser($email, $phone)
+    function isExistingUser($email)
     {
-        $phone = htmlspecialchars($phone);
+   
         $email = htmlspecialchars($email);
-        $hasPhone = false;
+       
         $hasEmail = false;
 
-        $checkPhone = "select * from users where `phone`='$phone'";
-        $checkPhone = $GLOBALS['connection']->query($checkPhone);
-        if(mysqli_affected_rows($GLOBALS['connection'])>0)
-        {
-            $hasPhone = true;
-        }
-
+       
         $checkEmail = "select * from users where `email`='$email'";
         $checkEmail = $GLOBALS['connection']->query($checkEmail);
         if(mysqli_affected_rows($GLOBALS['connection'])>0)
@@ -86,7 +70,7 @@
             $hasEmail = true;
         }
 
-        if($hasPhone || $hasEmail)
+        if($hasEmail)
         {
             return true;
         }else{
@@ -94,15 +78,15 @@
         }
     }
 
-    function validate_signup($fname, $lname,$email,$phone, $password, $cpassword)
+    function validate_signup($fname, $lname,$email, $password, $cpassword)
     {
-        if(isExistingUser($email, $phone))
+        if(isExistingUser($email))
         {
             if(!isset($_SESSION)){session_start();}
             
             $_SESSION['existingUser'] = '<div class="signup-error">User already exists.</div>';
         }
-        if(validate_name($fname) && validate_name($lname) && validate_phone($phone) && validate_password($password) && validate_cpassword($password,$cpassword) && validate_email($email) && !isExistingUser($email, $phone))
+        if(validate_name($fname) && validate_name($lname) && validate_password($password) && validate_cpassword($password,$cpassword) && validate_email($email) && !isExistingUser($email))
         {
             return true;
         }else{

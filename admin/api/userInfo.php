@@ -11,7 +11,7 @@
         $result['total_users'] = $usersCount['total_users'];
 
         // Get new users
-        $newUsersCount = "SELECT COUNT(uid) as new_users FROM `users` WHERE createdDateTime=NOW()";
+        $newUsersCount = "SELECT COUNT(uid) AS new_users FROM users WHERE DATE(createdDateTime) = CURDATE()";
         $newUsersCount = mysqli_query($connection, $newUsersCount);
         $newUsersCount = mysqli_fetch_assoc($newUsersCount);
         $result['new_users'] = $newUsersCount['new_users'];
@@ -35,7 +35,7 @@
         $result['total_restricted_posts'] = $postsCount['total_restricted_posts'];
 
         // Get new posts
-        $newPostsCount = "SELECT COUNT(post_id) as new_posts FROM `posts` WHERE created_date_time=NOW()";
+        $newPostsCount = "SELECT COUNT(post_id) AS new_posts FROM posts WHERE DATE(created_date_time) = CURDATE()";
         $newPostsCount = mysqli_query($connection, $newPostsCount);
         $newPostsCount = mysqli_fetch_assoc($newPostsCount);
         $result['new_posts'] = $newPostsCount['new_posts'];
@@ -55,13 +55,13 @@
         
 
         // Most liked post
-        $popularPostId = "SELECT post_id, COUNT(post_id) AS likes_count FROM `likes` GROUP BY post_id ORDER BY likes_count DESC LIMIT 1";
+        $popularPostId = "SELECT post_id, COUNT(DISTINCT post_id) AS likes_count FROM `likes` GROUP BY post_id ORDER BY likes_count DESC LIMIT 1";
         $popularPostId = mysqli_query($connection, $popularPostId);
         $popularPostId = mysqli_fetch_assoc($popularPostId);
         // var_dump($popularPostId);
         $postId = $popularPostId['post_id'];
 
-        $popularPost = "SELECT concat(u.fname,' ', u.lname) as uname, p.visibility, p.media, p.created_date_time, p.content, p.author_id, p.post_id, u.profile_picture, count(c.post_id) as comments, count(l.post_id) as likes FROM posts p INNER JOIN users u ON p.author_id = u.uid INNER JOIN likes l ON l.post_id=p.post_id INNER JOIN comments c ON c.post_id=p.post_id WHERE p.post_id= '$postId'";
+        $popularPost = "SELECT concat(u.fname,' ', u.lname) as uname, p.visibility, p.media, p.created_date_time, p.content, p.author_id, p.post_id, u.profile_picture, count(l.post_id) as likes FROM posts p INNER JOIN users u ON p.author_id = u.uid INNER JOIN likes l ON l.post_id=p.post_id INNER JOIN comments c ON c.post_id=p.post_id WHERE p.post_id= '$postId'";
 
         $popularPost = mysqli_query($connection, $popularPost);
         $popularPost = mysqli_fetch_assoc($popularPost);

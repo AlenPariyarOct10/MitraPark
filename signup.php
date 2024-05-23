@@ -5,29 +5,7 @@ include_once("./server/functions.php");
 $aboutSite = $connection->query("SELECT * FROM `system_data`");
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
-if (isset($_POST['submit'])) {
-    $fname = htmlspecialchars($_POST['fname']);
-    $lname = htmlspecialchars($_POST['lname']);
-    $email = htmlspecialchars($_POST['email']);
-    $phone = htmlspecialchars($_POST['phone']);
-    $password = htmlspecialchars($_POST['password']);
-    $cpassword = htmlspecialchars($_POST['cpassword']);
-    
-    if(isExistingUser($email, $phone))
-    {
-        header("signup.php?userExists");
-    }
-    $check = false;
-    $check = validate_signup($fname, $lname, $email, $phone, $password, $cpassword);
 
-    
-
-    if($check && !isExistingUser($email, $phone))
-    {
-        createUser($fname, $lname, $email, $phone, $password);
-    }
-
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +47,7 @@ if (isset($_POST['submit'])) {
             if(isset($check)){if(!$check){echo '<div class="signup-error">Unable to signup. x Please check your input and try again later.</div>';}}
         ?>
         
-        <form action="signup.php" autocomplete="false" method="post">
+        <form action="./auth/verify-email.php" autocomplete="false" method="post">
             <div class="single-line">
                 <input placeholder="First Name" class="inp-fields nameFields" type="text" name="fname" id="fname">
                 <input placeholder="Last Name" class="inp-fields nameFields" type="text" name="lname" id="lname">
@@ -77,8 +55,7 @@ if (isset($_POST['submit'])) {
             <span id="namingError"></span>
             <input class="inp-fields" type="email" placeholder="Email" name="email" id="email">
             <span id="emailError"></span>
-            <input class="inp-fields" type="number" placeholder="Phone" name="phone" id="phone">
-            <span id="phoneError"></span>
+           
             <input class="inp-fields" type="password" placeholder="Password" name="password" id="password">
             <input class="inp-fields" type="password" placeholder="Confirm Password" name="cpassword" id="cpassword">
             <span id="verification-status">
@@ -101,7 +78,7 @@ if (isset($_POST['submit'])) {
                     Password and Confirm password must match
                 </p>
             </span>
-            <button type="submit" name="submit" id="submit" class="btn login-btn">Signup</button>
+            <button type="submit" name="check" id="submit" class="btn login-btn">Signup</button>
         </form>
         <div id="underline"></div>
         <a href="login.php" class="btn">Login</a>
@@ -112,7 +89,6 @@ if (isset($_POST['submit'])) {
     let passwordField = document.getElementById("password");
     let submitBtn = document.getElementById("submit");
     let nameFields = document.querySelectorAll(".nameFields");
-    let phoneField = document.getElementById("phone");
     let confirmPasswordField =document.getElementById("cpassword");
     let fname =document.getElementById("fname");
     let lname =document.getElementById("lname");
@@ -121,13 +97,11 @@ if (isset($_POST['submit'])) {
     let lnameRule = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/;
     let emailRule = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     let errorText = document.querySelectorAll('.errorText');
-    let phoneRule = /(98|97)\d{8}$/;
 
      // Rule for Email Field
     let allowEmail = false;
     let allowPassword = false;
     let allowName = false;
-    let allowPhone = false;
     let allowCpassword = false;
 
     fname.addEventListener("input", ()=>{
@@ -166,18 +140,6 @@ if (isset($_POST['submit'])) {
     })
 
 
-    phoneField.addEventListener("input",()=>{
-        if(!phoneRule.test(phoneField.value))
-        {
-            allowPhone = false;
-            document.getElementById("phoneError").innerText = "Invalid Phone number";
-        }else{
-            allowPhone = true;
-            document.getElementById("phoneError").innerText = "";
-
-        }
-        controlSubmit();
-    });
 
     confirmPasswordField.addEventListener("keyup",()=>{
         if(passwordField.value === confirmPasswordField.value && allowPassword==true)
@@ -293,7 +255,7 @@ if (isset($_POST['submit'])) {
     });
 
     function controlSubmit() {
-        if (allowEmail && allowPassword && allowName && allowPhone && allowCpassword ) {
+        if (allowEmail && allowPassword && allowName && allowCpassword ) {
             submitBtn.disabled = false;
             submitBtn.style.cursor = "pointer";
             submitBtn.style.backgroundColor = "#28a745";

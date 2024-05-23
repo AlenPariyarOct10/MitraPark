@@ -74,7 +74,7 @@ if(mysqli_affected_rows($connection)>0)
 </body>
 <script>
     document.getElementById("goBack").addEventListener("click",()=>{
-        window.location.href = history.back();
+        window.location.href = history.go(-1);
     })
 </script>
 

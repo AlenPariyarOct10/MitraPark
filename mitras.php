@@ -38,6 +38,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             justify-content: space-between;
         }
 
+        .mid-body > *{
+            width: 70%;
+        }
+
         .mitra-request-list-item:hover {
             background-color: rgba(0, 0, 0, 0.2);
             border-radius: 5px;

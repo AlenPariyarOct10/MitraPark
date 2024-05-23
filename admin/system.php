@@ -486,12 +486,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                             <div class="card-row">
                                 <p id="maintenanceMode">Off</p>
                             </div>
-                            <div class="card-row">
                             
-                                <span class="icon-cover bg-red">
-                                  
-                                </span>
-                            </div>
                         </div>
                         <div class="card">
                             <div class="card-row">
@@ -512,7 +507,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                                 <p class="lite-dim">System description</p>
                             </div>
                             <div class="card-row">
-                                <p id="system_description"></p>
+                                <p style="font-size: x-large;" id="system_description"></p>
                             </div>
                         
                         </div>

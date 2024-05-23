@@ -40,6 +40,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             border-radius: 5px;
             margin: 1px;
         }
+        .mid-body > *{
+            width: 70%;
+        }
     </style>
         <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
 

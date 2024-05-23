@@ -9,9 +9,20 @@ $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 include_once("./server/auto-routes.php");
 
+if(!isset($_GET['postId'])){
+        
+    header("Location: feed.php");
+    exit();
+}
+$pid = $_GET['postId'];
+$hasPost = "SELECT * FROM `posts` WHERE post_id='$pid'";
+    $hasPost = mysqli_query($connection, $hasPost);
+    if(mysqli_affected_rows($connection)==0)
+    {
+        header("Location: feed.php");
+        exit();
+    }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang='en'>
@@ -324,16 +335,22 @@ include_once("./server/auto-routes.php");
     ?>
 
     <?php
+    
+
+    
     $postId = htmlspecialchars($_GET['postId']);
+    
     $getPost = "SELECT *, concat(fname,' ',lname) as uname FROM `posts` INNER JOIN users u ON author_id=u.uid WHERE post_id='$postId'";
     $getAuthor = "SELECT `author_id` FROM `posts` WHERE post_id='$postId' AND `status`='active' ";
 
     $getAuthor = mysqli_query($connection, $getAuthor);
+
     $getAuthor = mysqli_fetch_assoc($getAuthor);
     if ($getAuthor) {
         $authorId = $getAuthor['author_id'];
 
         $getPost = mysqli_query($connection, $getPost);
+       
         $getPost = mysqli_fetch_assoc($getPost);
 
         $authorMitras = "SELECT * FROM `friends` WHERE (`sender_id`='$uid' AND `acceptor_id`='$authorId') OR (`sender_id`='$authorId' AND `acceptor_id`='$uid')";
@@ -470,7 +487,7 @@ include_once("./server/auto-routes.php");
                     </div>
 
                     <div class="comment-inp">
-                        <input class="post-comment-inp" id="post-comment-<?php echo $postId; ?>" placeholder="Write comment" type="text" />
+                        <input maxlength="254" class="post-comment-inp" id="post-comment-<?php echo $postId; ?>" placeholder="Write comment" type="text" />
                         <button style="cursor:pointer;" class="post-comment" onclick="postComment(<?php echo $postId; ?>)" id="comment-btn-<?php echo $postId; ?>"> <i id="sendBtn" class="fa fa-paper-plane" aria-hidden="true"></i> </button>
                     </div>
                 </div>
@@ -520,7 +537,6 @@ include_once("./server/auto-routes.php");
                         ?>
                     </div>
                 </div>
-
 
                 <!-- Edit Post Modal -->
                 <div id="editPostModal" class="modal">
@@ -581,7 +597,6 @@ include_once("./server/auto-routes.php");
                         </div>
                     </div>
                 </div>
-
                 <!-- Delete Post Modal -->
                 <div id="deletePostModal" class="modal">
                     <div class="modal-content">
@@ -605,7 +620,6 @@ include_once("./server/auto-routes.php");
                         </div>
                     </div>
                 </div>
-
                 <!-- Delete Comment Modal -->
                 <div id="deleteCommentModal" class="modal">
                     <div class="modal-content">
@@ -625,10 +639,6 @@ include_once("./server/auto-routes.php");
                         </div>
                     </div>
                 </div>
-
-
-
-
         </div>
     <?php
             } else {
@@ -638,16 +648,16 @@ include_once("./server/auto-routes.php");
 
         <div class="post-item">
     <?php
-    $activeStatus = "SELECT `status` FROM `posts` WHERE `post_id`='$postId'";
-    $activeStatus = mysqli_query($connection, $activeStatus);
-    $aboutPost = mysqli_fetch_assoc($activeStatus);
+        $activeStatus = "SELECT `status` FROM `posts` WHERE `post_id`='$postId'";
+        $activeStatus = mysqli_query($connection, $activeStatus);
+        $aboutPost = mysqli_fetch_assoc($activeStatus);
 
 
-    if ($aboutPost['status'] == "restricted") {
-        echo "This post has been restricted due to violation of community guidelines and standards.";
-    } else {
-        echo "Post not found.";
-    }
+        if ($aboutPost['status'] == "restricted") {
+            echo "This post has been restricted due to violation of community guidelines and standards.";
+        } else {
+            echo "Post not found.";
+        }
     ?>
 </div>
 
@@ -802,7 +812,6 @@ include_once("./server/auto-routes.php");
 
     })
 
-    // ------------------------------------------------------
    
     $("#post-upload-file").change((event) => {
         const file = event.target.files[0];
@@ -818,7 +827,7 @@ include_once("./server/auto-routes.php");
 
     $("#post-text").click(() => {
         $("#modal-wrapper").slideDown();
-        if ($("#selected-post-img").attr("src") || $("#post-caption").value.length > 0) {
+        if ($("#selected-post-img").attr("src") || $("#post-caption")[0].value.length > 0) {
             $("#post-share-btn").prop('disabled', false);
         } else {
             $("#post-share-btn").prop('disabled', true);
@@ -1025,7 +1034,8 @@ if($("#selected-post-img").attr("src")!=null && $("#selected-post-img").attr("sr
                                         const commentId = $(this).data("id");
                                         if (this.innerText != "Save") {
                                             this.innerText = "Save";
-                                            $(`#reply-content-${commentId}`).append("<input type='text' id='updateText'/>");
+                                            let rcommentContent = $(`#reply-content-${commentId}`)[0].innerText;
+                                            $(`#reply-content-${commentId}`).append(`<input maxlength='254' value='${rcommentContent}' type='text' id='updateText'/>`);
 
                                         } else if (this.innerText == "Save") {
                                             $.ajax({
@@ -1066,7 +1076,7 @@ if($("#selected-post-img").attr("src")!=null && $("#selected-post-img").attr("sr
                             console.log(this);
                             let commentContent = $(`#content-${commentId}`)[0].innerText;
                            
-                            $(`#content-${commentId}`).append(`<input type='text' value='${commentContent}' id='updateText'/>`);
+                            $(`#content-${commentId}`).append(`<input maxlength='254' type='text' value='${commentContent}' id='updateText'/>`);
 
                         } else if (this.innerText == "Save") {
                             $.ajax({

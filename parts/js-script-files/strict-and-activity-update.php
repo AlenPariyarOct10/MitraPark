@@ -3,7 +3,7 @@ function update_activity_datetime() {
         $.ajax({
             url: "./server/api/update_activity_dateTime.php",
             success: function (lastActive) {
-                
+                console.log(lastActive);
             }
         })
     }
@@ -14,7 +14,7 @@ function update_activity_datetime() {
             success: function (msg) {
                 // console.log(msg);
                 const strictModeStatus = JSON.parse(msg);
-               // console.log("alen->",strictModeStatus);
+               console.log("alen->",strictModeStatus);
 
                 if (strictModeStatus['strict-mode'] == true && strictModeStatus['strict-lock'] == true) {
                     window.location.href = "feed.php";  
