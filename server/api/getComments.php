@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         echo json_encode($result);
     } else {
-        echo "User not logged in.";
+        echo "User xyz not logged in.";
     }
 }
 ?>

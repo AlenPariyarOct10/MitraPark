@@ -14,7 +14,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Khand:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/boxicons/css/boxicons.css">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/fontawesome.css">
     <style>
         body {
             margin: 0px;
@@ -250,6 +251,16 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             display: none;
         }
 
+        .change-password-wrapper{
+            position: absolute;
+            background-color: #295fff5e;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+
         .modal{
             background-color: #ffffff;
             padding: 20px;
@@ -361,6 +372,26 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             padding: 10px;
             border-left: 4px solid #b90000;
         }
+
+        #verification-status{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #verification-status > p{
+            font-size: medium;
+            width: 70%;
+            text-align: left;
+        }
+
+        .fa-circle-xmark{
+            color: red;
+        }
+
+        .fa-circle-check{
+            color: green;
+        }
     </style>
 </head>
 
@@ -430,12 +461,61 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             </form>
         </div>
     </div>
+    <div class="change-password-wrapper">
+        <div class="modal">
+            <span class="modal-close">x</span>
+            <form action="changePassword.php" method="POST">
+            <div class="modal-head">
+                <p class="modal-title">Change Password</p>
+            </div>
+            <hr>
+            <div class="modal-body">
+                <div class="form-item">
+                    <label for="system_name">Current Password :</label>
+                    <input type="password" maxlength="18" minlength="12" name="current_password" id="current_password" required>
+                </div>
+                <div class="form-item">
+                    <label for="system_name">New Password :</label>
+                    <input type="password" maxlength="18" minlength="12" name="new_password" id="new_password" required>
+                </div>
+                <div class="form-item">
+                    <label for="system_name">Confirm Password :</label>
+                    <input type="password" maxlength="18" minlength="12" name="confirm_password" id="confirm_password" required>
+                </div>
+            </div>
+            <span id="verification-status">
+                <p><i id="checkCurrentPassword" class="fa-solid fa-circle-xmark"></i>
+                    Valid current password
+                </p>
+                <p><i id="checkLowerCase" class="fa-solid fa-circle-xmark"></i>
+                    At least one lower case letter
+                </p>
+                <p><i id="checkUpperCase" class="fa-solid fa-circle-xmark"></i>
+                    At least one upper case letter
+                </p>
+                <p><i id="checkNumber" class="fa-solid fa-circle-xmark"></i>
+                    At least one number
+                </p>
+                <p><i id="checkSpecialChar" class="fa-solid fa-circle-xmark"></i>
+                    At least one special character
+                </p>
+                <p><i id="checkLength" class="fa-solid fa-circle-xmark"></i>
+                    Be at least 12 characters
+                </p>
+                <p><i id="checkCpassword" class="fa-solid fa-circle-xmark"></i>
+                    Password and Confirm password must match
+                </p>
+            </span>
+            <input type="submit" id="submit" value="Save">
+            </form>
+        </div>
+    </div>
     <?php include_once("./parts/sidebar.php") ?>
 
         <div class="content">
             <div class="inner-header">
                 <p>System ~ <?php echo $aboutSite['system_name']; ?> </p>
-                <div><button id="updateSystemBtn">Update System Info</button></div>
+                <div><button style="margin-right: 5px;" id="changePassword">Change Password</button><button id="updateSystemBtn">Update System Info</button></div>
             </div>
             <div class="inner-body">
             <?php 
@@ -447,6 +527,25 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 </div>
                     ';
                 }
+
+                if(isset($_GET['changePassword']))
+                {
+                    if($_GET['changePassword']=="success")
+                    {
+                        echo '
+                        <div class="label-success">
+                            Admin password changed successfully.
+                        </div>';
+                    }else if($_GET['changePassword']=="failed")
+                    {
+                        echo '
+                        <div style="background-color: #ff7070;" class="label-success">
+                            Unable to change admin password.
+                        </div>';
+                    }
+                   
+                }
+
                 if(isset($_GET['updateFailed']))
                 {
                     echo '
@@ -523,14 +622,185 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 </body>
 <script src="../assets/scripts/jquery.js"></script>
 <script>
+    let currentPassword =document.getElementById("current_password");
+    let passwordField = document.getElementById("new_password");
+    let submitBtn = document.getElementById("submit");
+    let confirmPasswordField =document.getElementById("confirm_password");
+    let errorText = document.querySelectorAll('.errorText');
+
+    let allowPassword = false;
+    let allowCpassword = false;
+    let allowCurrentPassword = false;
+
+        currentPassword.addEventListener("keyup",()=>{
+            checkCurrentPassword();
+            controlSubmit();
+        })
+
+    confirmPasswordField.addEventListener("keyup",()=>{
+        if(passwordField.value === confirmPasswordField.value && allowPassword==true)
+        {
+            allowCpassword = true;
+            document.getElementById("checkCpassword").classList.remove("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.add("fa-circle-check");
+        }else{
+            allowCpassword = false;
+            document.getElementById("checkCpassword").classList.add("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.remove("fa-circle-check");
+        }
+        controlSubmit();
+    })
+   
+
+    submitBtn.disabled = true;
+    submitBtn.style.cursor = "not-allowed";
+    submitBtn.style.backgroundColor = "#6c757d";
+
+
+    passwordField.addEventListener("keyup", () => {
+        if (passwordField.value.length >= 12 && passwordField.value.length <= 18) {
+            document.getElementById("checkLength").classList.remove("fa-circle-xmark");
+            document.getElementById("checkLength").classList.add("fa-circle-check");
+            allowPassword = true;
+        } else {
+            allowPassword = false;
+            document.getElementById("checkLength").classList.remove("fa-circle-check");
+            document.getElementById("checkLength").classList.add("fa-circle-xmark");
+            
+        }
+
+        let specialCharRule = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        if(specialCharRule.test(passwordField.value))
+        {
+            
+            document.getElementById("checkSpecialChar").classList.remove("fa-circle-xmark");
+            document.getElementById("checkSpecialChar").classList.add("fa-circle-check");
+            allowPassword = true;
+
+        }else{
+            document.getElementById("checkSpecialChar").classList.add("fa-circle-xmark");
+            document.getElementById("checkSpecialChar").classList.remove("fa-circle-check");
+            allowPassword = false;
+
+        }
+
+        let checkNumberRule = /[0-9]/;
+        if(checkNumberRule.test(passwordField.value))
+        {
+            document.getElementById("checkNumber").classList.remove("fa-circle-xmark");
+            document.getElementById("checkNumber").classList.add("fa-circle-check");
+            allowPassword = true;
+
+        }else{
+            document.getElementById("checkNumber").classList.add("fa-circle-xmark");
+            document.getElementById("checkNumber").classList.remove("fa-circle-check");
+            allowPassword = false;
+
+        }
+
+        let checkUpperCase = /[A-Z]/;
+        if(checkUpperCase.test(passwordField.value))
+        {
+            document.getElementById("checkUpperCase").classList.remove("fa-circle-xmark");
+            document.getElementById("checkUpperCase").classList.add("fa-circle-check");
+            allowPassword = true;
+        }else{
+            document.getElementById("checkUpperCase").classList.add("fa-circle-xmark");
+            document.getElementById("checkUpperCase").classList.remove("fa-circle-check");
+            allowPassword = false;
+        }
+
+        let checkLowerCase = /[a-z]/;
+        if(checkLowerCase.test(passwordField.value))
+        {
+            document.getElementById("checkLowerCase").classList.remove("fa-circle-xmark");
+            document.getElementById("checkLowerCase").classList.add("fa-circle-check");
+            allowPassword = true;
+            
+        }else{
+            document.getElementById("checkLowerCase").classList.add("fa-circle-xmark");
+            document.getElementById("checkLowerCase").classList.remove("fa-circle-check");
+            allowCpassword = false;
+        }
+
+        if(passwordField.value === confirmPasswordField.value && allowPassword==true)
+        {
+            allowCpassword = true;
+            document.getElementById("checkCpassword").classList.remove("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.add("fa-circle-check");
+        }else{
+            allowCpassword = false;
+            document.getElementById("checkCpassword").classList.add("fa-circle-xmark");
+            document.getElementById("checkCpassword").classList.remove("fa-circle-check");
+        }
+
+        controlSubmit();
+    });
+
+    function checkCurrentPassword()
+    {
+        $.ajax({
+            url: "./api/check-password-api.php",
+            type: "GET",
+            data: {
+                formPassword: currentPassword.value,
+            },
+            success: (response)=>{
+                console.log(response);
+                console.log(currentPassword.value);
+                let currentPasswordStatus = JSON.parse(response);
+                if(currentPasswordStatus.status === true)
+                {
+                    $("#checkCurrentPassword").removeClass("fa-circle-xmark");
+                    $("#checkCurrentPassword").addClass("fa-circle-check");
+                    allowCurrentPassword = true;
+                    controlSubmit();
+                }else{
+                    $("#checkCurrentPassword").removeClass("fa-circle-check");
+                    $("#checkCurrentPassword").addClass("fa-circle-xmark");
+                    allowCurrentPassword = false;
+                    controlSubmit();
+
+                }
+            },
+            error: (response)=>{
+                    $("#checkCurrentPassword").removeClass("fa-circle-check");
+                    $("#checkCurrentPassword").addClass("fa-circle-xmark");
+                    allowCurrentPassword = false;
+                    controlSubmit();
+
+            }
+        })
+    }
+    
+
+    function controlSubmit() {
+        if ( allowPassword && allowCpassword && allowCurrentPassword) {
+            submitBtn.disabled = false;
+            submitBtn.style.cursor = "pointer";
+            submitBtn.style.backgroundColor = "#28a745";
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.style.cursor = "not-allowed";
+            submitBtn.style.backgroundColor = "#6c757d";
+        }
+    }
+</script>
+<script>
     // ALEN : Update Modal Button -> Show Modal
     $("#updateSystemBtn").click(()=>{
         $(".wrapper").css({"display":"flex"});
+    })
+    $("#changePassword").click(()=>{
+        $(".change-password-wrapper").css({"display":"flex"});
     })
 
     // ALEN : Hide Modal
     $(".modal-close").click(()=>{
         $(".wrapper").css({"display":"none"});
+    })
+     $(".modal-close").click(()=>{
+        $(".change-password-wrapper").css({"display":"none"});
     })
 
     // ALEN : Modal Data Load
@@ -587,13 +857,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     })
 
-
-    // ALEN : Color Selector Event
-    $(".colorSelector").change((item)=>{
-        // console.log(item.target.id);
-        // console.log(item.target.value);
-
-    })
 
     // ALEN : FETCH System Data
     $.ajax({

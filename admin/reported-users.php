@@ -1,5 +1,15 @@
 <?php 
-include_once("./parts/entryCheck.php");
+
+if(session_status()!=PHP_SESSION_ACTIVE)
+{
+    session_start();
+}
+
+if(!isset($_SESSION['loggedInAdmin']))
+{
+header('Location: login.php?loginFirst1');
+    exit();
+}
 include_once("../server/db_connection.php");
 $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
@@ -32,7 +42,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <div class="card">
                             <div class="card-row">
                                 <p class="lite-dim">TOTAL REPORTED USERS</p>
-                                <p class="lite-dim">+0.00%</p>
                             </div>
                             <div class="card-row">
                                 <p id="reported_users">Loading...</p>
@@ -45,7 +54,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         <div class="card">
                             <div class="card-row">
                                 <p class="lite-dim">TOTAL RESTRICTED USERS</p>
-                                <p class="lite-dim">+0.00%</p>
                             </div>
                             <div class="card-row">
                                 <p id="restricted_users">Loading...</p>

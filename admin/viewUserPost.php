@@ -507,6 +507,40 @@ session_start();
     let likeCount = document.getElementById("like-count");
     let likeCommentContainer = document.getElementById("like-comment-container");
 
+    function restrictPost(postId) {
+        $.ajax({
+            url: "./api/restrictPost.php",
+            type: "GET",
+            data: {
+                postId: postId
+            },
+            success: (response) => {
+              
+                
+            },
+            error: (response) => {
+                // console.log(response);
+            }
+        })
+    }
+        function unrestrictPost(postId) {
+        $.ajax({
+            url: "./api/unrestrictPost.php",
+            type: "GET",
+            data: {
+                postId: postId
+            },
+            success: (response) => {
+                console.log("unrestricted clicked");
+                
+                
+            },
+            error: (response) => {
+                // console.log(response);
+            }
+        })
+    }
+
 
     function updateRestrict() {
         $.ajax({
@@ -533,12 +567,13 @@ session_start();
 
     $("#restrictPost").click(() => {
         if ($("#restrictPost")[0].innerText == "Restrict Post") {
-            restrictPost(<?php echo $reportId; ?>);
-            updateRestrict();
+            restrictPost(<?php echo $postId; ?>);
+            $("#restrictPost")[0].innerHTML = "Unrestrict Post";
+     
         } else if ($("#restrictPost")[0].innerText == "Unrestrict Post") {
-            unrestrictPost(<?php echo $reportId; ?>);
-            updateRestrict();
-
+            unrestrictPost(<?php echo $postId; ?>);
+            $("#restrictPost")[0].innerHTML = "Restrict Post";
+         
         }
     })
 
@@ -561,7 +596,7 @@ session_start();
                 },
                 success: function(response) {
                     const responseObj = JSON.parse(response);
-
+                    console.log(responseObj);
                     responseObj.forEach((item) => {
                         commentBody += `
                     <div class="comment-container-row">
@@ -579,7 +614,7 @@ session_start();
                             </div>
                         </div>
                         <div class="post-item-body">
-                            
+                            ${item.content}
                         </div>
                         <div id="rcomment-${item.comment_id}">
                         </div>
@@ -615,7 +650,7 @@ session_start();
                             </div>
                         </div>
                         <div class="post-item-body">
-                           
+                           ${item.content}
                         </div>
                        
                     </div>`;
@@ -746,7 +781,7 @@ session_start();
                 likesObj.forEach((item) => {
                     likesHtml += `
                                     <a class="right-nav-item" href="user.php?id=${item.uid}">
-                                            <img class="right-nav-item-img" src=".${item.profile_picture}">
+                                            <img class="right-nav-item-img" src="../${item.profile_picture}">
                                             <span>${item.fname} ${item.lname}</span>
                                     </a>
                                     `;

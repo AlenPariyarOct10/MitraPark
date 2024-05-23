@@ -61,7 +61,28 @@
         // var_dump($popularPostId);
         $postId = $popularPostId['post_id'];
 
-        $popularPost = "SELECT concat(u.fname,' ', u.lname) as uname, p.visibility, p.media, p.created_date_time, p.content, p.author_id, p.post_id, u.profile_picture, count(l.post_id) as likes FROM posts p INNER JOIN users u ON p.author_id = u.uid INNER JOIN likes l ON l.post_id=p.post_id INNER JOIN comments c ON c.post_id=p.post_id WHERE p.post_id= '$postId'";
+        $popularPost = "SELECT 
+        CONCAT(u.fname, ' ', u.lname) AS uname, 
+        p.visibility, 
+        p.media, 
+        p.created_date_time, 
+        p.content, 
+        p.author_id, 
+        p.post_id, 
+        u.profile_picture, 
+        COALESCE(likes.likes_count, 0) AS likes
+    FROM 
+        posts p
+    INNER JOIN 
+        users u ON p.author_id = u.uid
+    LEFT JOIN 
+        (SELECT post_id, COUNT(*) AS likes_count FROM likes GROUP BY post_id) likes 
+        ON p.post_id = likes.post_id
+    LEFT JOIN 
+        comments c ON c.post_id = p.post_id
+    ORDER BY 
+        likes_count DESC
+    LIMIT 1";
 
         $popularPost = mysqli_query($connection, $popularPost);
         $popularPost = mysqli_fetch_assoc($popularPost);

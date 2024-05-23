@@ -1,5 +1,8 @@
 <?php
-include_once("./parts/entryCheck.php");
+if(session_status()!=PHP_SESSION_ACTIVE)
+{
+    session_start();
+}
 include_once('../server/functions.php');
 include_once('../server/db_connection.php');
 

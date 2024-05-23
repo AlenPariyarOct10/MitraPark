@@ -139,7 +139,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         `<button class="table-option operation-btn" onclick="restrictPost(${item.report_id})">Restrict</button>`:
                         `<button class="table-option operation-btn"  onclick="unrestrictPost(${item.report_id})">Unrestrict</button>`
                     }
-                    <button class="table-option operation-btn" onclick="viewUser(${item.uid})">View</button>
                     <a class="table-option operation-btn" href="viewPost.php?postId=${item.post_id}">View Post</a>
                     </td>
                 </tr>`;
@@ -182,7 +181,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                         `<button class="table-option operation-btn" onclick="generateRestrictUserModal(${item.post_id})">Restrict</button>`:
                         `<button class="table-option operation-btn" onclick="generateUnrestrictPostModal(${item.post_id})">Unrestrict</button>`
                     }
-                    <button class="table-option" onclick="viewUser(${item.uid})" class="operation-btn">View</button>
                     <a class="table-option" href="viewUserPost.php?postId=${item.post_id}" class="operation-btn">View</a>
                 </td>
                 </tr>`;
@@ -410,34 +408,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         }
     }
 
-    function generateModal() {
-        if ($("#modal-wrapper")[0] === undefined) {
-            $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
-            $("#modal-wrapper")[0].innerHTML = `
-            
-            <!-- ALEN Report post modal -->
-            <div class="modal">
-                <img class="modal-popup-head" height="80px" src="" alt="" srcset="">
-                <div class="post-uploader">
-                    <div class="post-uploader-head">
-                        <h3></h3>
-                    </div>
-                    <hr class="section-break-hr">
-                    <div class="modal-body">
-                        model body
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-red close-modal">Close</button>
-                        <button class="btn btn-green">Hello</button>
-                    </div>
-                </div>
-            </div>
-            <!-- End Report post modal -->
-     
-            `;
-            $(".close-modal").click(removeModal);
-        }
-    }
 
     function removeModal() {
         try {
