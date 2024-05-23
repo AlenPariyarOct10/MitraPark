@@ -1,8 +1,18 @@
 <?php
 
     include_once("../../server/db_connection.php");
+    if (isset($_GET['userId'])) {
+        $userId = htmlspecialchars($_GET['userId']);
     
-    if(isset($_GET['reportId'])) {
+        $setRestricted = "UPDATE `users` SET `status`='active' WHERE `uid`='$userId'";
+        $setRestricted = mysqli_query($connection, $setRestricted);
+    
+        if ($setRestricted) {
+            echo json_encode(array("success" => true));
+        } else {
+            echo json_encode(array("user" => false));
+        }
+    }else if(isset($_GET['reportId'])) {
     
         $reportId = $_GET['reportId'];
     

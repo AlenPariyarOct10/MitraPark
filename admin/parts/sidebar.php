@@ -11,7 +11,7 @@
       "class" => "bx bxs-user",
     ],
     [
-      "title"=>"Users",
+      "title"=>"All Users",
       "href"=>"users.php",
       "class" => "bx bxs-user",
     ],
@@ -20,7 +20,7 @@
       "href"=>"reported-posts.php",
       "class" => "bx bxs-card",
     ], [
-      "title"=>"Posts",
+      "title"=>"All Posts",
       "href"=>"posts.php",
       "class" => "bx bxs-card",
     ],

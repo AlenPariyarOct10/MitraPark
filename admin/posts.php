@@ -179,8 +179,8 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <td>${item.status}</td>
                 <td>
                     ${(item.status === 'active') ? 
-                        `<button class="table-option operation-btn" onclick="restrictPost(${item.post_id})">Restrict</button>`:
-                        `<button class="table-option operation-btn" onclick="unrestrictPost(${item.post_id})">Unrestrict</button>`
+                        `<button class="table-option operation-btn" onclick="generateRestrictUserModal(${item.post_id})">Restrict</button>`:
+                        `<button class="table-option operation-btn" onclick="generateUnrestrictPostModal(${item.post_id})">Unrestrict</button>`
                     }
                     <button class="table-option" onclick="viewUser(${item.uid})" class="operation-btn">View</button>
                     <a class="table-option" href="viewUserPost.php?postId=${item.post_id}" class="operation-btn">View</a>
@@ -312,7 +312,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         })
     }
 
-    function generateUnrestrictUserModal(reportId) {
+    function generateUnrestrictPostModal(uid) {
         if ($("#modal-wrapper")[0] === undefined) {
             $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
             $("#modal-wrapper")[0].innerHTML = `
@@ -322,19 +322,19 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <img class="modal-popup-head" height="80px" src="../assets/images/restriction.png" alt="" srcset="">
                 <div class="post-uploader">
                     <div class="post-uploader-head">
-                        <h3>Are you sure you want to unrestrict this user?</h3>
+                        <h3>Are you sure you want to unrestrict this post?</h3>
                     </div>
 
                     <div class="modal-footer">
                         <button class="btn btn-red close-modal">No</button>
-                        <button onclick="restrictUser(${reportId})" class="btn btn-green">Yes</button>
+                        <button onclick="unrestrictPost(${uid})" class="btn btn-green">Yes</button>
                     </div>
                 </div>
             </div>
        
             `;
             $(".close-modal").click(removeModal);
-            getRestrictedInfo();
+          
         }
     }
 
@@ -384,7 +384,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         }
     }
 
-    function generateRestrictUserModal(reportId) {
+    function generateRestrictUserModal(uid) {
         if ($("#modal-wrapper")[0] === undefined) {
             $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
             $("#modal-wrapper")[0].innerHTML = `
@@ -394,19 +394,19 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <img class="modal-popup-head" height="80px" src="../assets/images/restriction.png" alt="" srcset="">
                 <div class="post-uploader">
                     <div class="post-uploader-head">
-                        <h3>Are you sure you want to restrict this user?</h3>
+                        <h3>Are you sure you want to restrict this post?</h3>
                     </div>
 
                     <div class="modal-footer">
                         <button class="btn btn-red close-modal">No</button>
-                        <button onclick="restrictUser(${reportId})" class="btn btn-green">Yes</button>
+                        <button onclick="restrictPost(${uid})" class="btn btn-green">Yes</button>
                     </div>
                 </div>
             </div>
             <!-- End delete modal -->
             `;
             $(".close-modal").click(removeModal);
-            getRestrictedInfo();
+        
         }
     }
 
@@ -416,7 +416,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
             $("#modal-wrapper")[0].innerHTML = `
             
             <!-- ALEN Report post modal -->
-
             <div class="modal">
                 <img class="modal-popup-head" height="80px" src="" alt="" srcset="">
                 <div class="post-uploader">

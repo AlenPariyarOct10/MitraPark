@@ -131,7 +131,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 
                 <td>${item.status}</td>
                 <td>
-                    <button class="table-option" onclick="unstrictUser(${item.report_id})" class="operation-btn">Unrestrict</button>
+                    ${(item.status === 'active') ? 
+                        `<button class="table-option operation-btn" onclick="restrictUser(${item.uid})">Restrict</button>`:
+                        `<button class="table-option operation-btn" onclick="unrestrictUser(${item.uid})">Unrestrict</button>`
+                    }
                     <button class="table-option" onclick="viewUser(${item.uid})" class="operation-btn">View</button>
                     <a class="table-option" href="viewUser.php?uid=${item.uid}" class="operation-btn">View</a>
                 </td>
@@ -172,8 +175,10 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 
                 <td>${item.status}</td>
                 <td>
-                    <button class="table-option" onclick="unstrictUser(${item.report_id})" class="operation-btn">Unrestrict</button>
-                    <button class="table-option" onclick="viewUser(${item.uid})" class="operation-btn">View</button>
+                ${(item.status === 'active') ? 
+                        `<button class="table-option operation-btn" onclick="generateRestrictUserModal(${item.uid})">Restrict</button>`:
+                        `<button class="table-option operation-btn" onclick="generateUnrestrictUserModal(${item.uid})">Unrestrict</button>`
+                    }
                     <a class="table-option" href="viewUser.php?uid=${item.uid}" class="operation-btn">View</a>
                 </td>
                 </tr>`;
@@ -267,17 +272,16 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
 
 
-    function restrictUser(reportId) {
+    function restrictUser(uid) {
         $.ajax({
             url: "./api/restrictUser.php",
             type: "GET",
             data: {
-                reportId: reportId
+                userId: uid
             },
             success: (response) => {
-                getReportedUsers(1);
+                getAllUsers(1);
                 removeModal();
-                getRestrictedInfo();
             },
             error: (response) => {
                 // console.log(response);
@@ -285,7 +289,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         })
     }
 
-    function generateUnrestrictUserModal(reportId) {
+    function generateUnrestrictUserModal(userId) {
         if ($("#modal-wrapper")[0] === undefined) {
             $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
             $("#modal-wrapper")[0].innerHTML = `
@@ -300,7 +304,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                     <div class="modal-footer">
                         <button class="btn btn-red close-modal">No</button>
-                        <button onclick="restrictUser(${reportId})" class="btn btn-green">Yes</button>
+                        <button onclick="unrestrictUser(${userId})" class="btn btn-green">Yes</button>
                     </div>
                 </div>
             </div>
@@ -312,17 +316,19 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     }
 
 
-    function unstrictUser(reportId) {
+    function unrestrictUser(userId) {
         $.ajax({
             url: "./api/unrestrictUser.php",
             type: "GET",
             data: {
-                reportId: reportId
+                userId: userId,
             },
             success: (response) => {
-                getRestrictedUsers(1);
+                console.log(response);
+                console.log("clicked -> "+userId);
+                getAllUsers(1);
                 removeModal();
-                getRestrictedInfo();
+             
             },
             error: (response) => {
                 // console.log(response);
@@ -357,7 +363,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         }
     }
 
-    function generateRestrictUserModal(reportId) {
+    function generateRestrictUserModal(uid) {
         if ($("#modal-wrapper")[0] === undefined) {
             $(".body")[0].innerHTML += "<div id='modal-wrapper'></div>";
             $("#modal-wrapper")[0].innerHTML = `
@@ -372,14 +378,13 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
                     <div class="modal-footer">
                         <button class="btn btn-red close-modal">No</button>
-                        <button onclick="restrictUser(${reportId})" class="btn btn-green">Yes</button>
+                        <button onclick="restrictUser(${uid})" class="btn btn-green">Yes</button>
                     </div>
                 </div>
             </div>
             <!-- End delete modal -->
             `;
             $(".close-modal").click(removeModal);
-            getRestrictedInfo();
         }
     }
 
