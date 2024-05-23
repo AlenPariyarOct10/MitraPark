@@ -1,8 +1,21 @@
 <?php
 
     include_once("../../server/db_connection.php");
-    
-    if(isset($_GET['reportId'])) {
+    if(isset($_GET['postId']))
+    {
+        $postId = htmlspecialchars($_GET['postId']);
+
+        $setRestricted = "UPDATE `posts` SET `status`='restricted' WHERE `post_id`='$postId'";
+        $setRestricted = mysqli_query($connection, $setRestricted);
+
+        if($setRestricted)
+        {
+            echo json_encode(array("success"=>true));
+        }else{
+            echo json_encode(array("success"=>false));
+
+        }
+    }else if(isset($_GET['reportId'])) {
     
         $reportId = htmlspecialchars($_GET['reportId']);
         echo $reportId;

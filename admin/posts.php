@@ -136,7 +136,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <td>${item.status}</td>
                 <td>
                     ${(item.status === 'active') ? 
-                        `<button class="table-option operation-btn" onclick="restrictUser(${item.report_id})">Restrict</button>`:
+                        `<button class="table-option operation-btn" onclick="restrictPost(${item.report_id})">Restrict</button>`:
                         `<button class="table-option operation-btn">Unrestrict</button>`
                     }
                     <button class="table-option operation-btn" onclick="viewUser(${item.uid})">View</button>
@@ -179,7 +179,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                 <td>${item.status}</td>
                 <td>
                     ${(item.status === 'active') ? 
-                        `<button class="table-option operation-btn" onclick="restrictUser(${item.post_id})">Restrict</button>`:
+                        `<button class="table-option operation-btn" onclick="restrictPost(${item.post_id})">Restrict</button>`:
                         `<button class="table-option operation-btn">Unrestrict</button>`
                     }
                     <button class="table-option" onclick="viewUser(${item.uid})" class="operation-btn">View</button>
@@ -278,15 +278,15 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     function restrictPost(postId) {
         $.ajax({
-            url: "./api/restrictUser.php",
+            url: "./api/restrictPost.php",
             type: "GET",
             data: {
-                reportId: reportId
+                postId: postId
             },
             success: (response) => {
-                getReportedUsers(1);
+                getAllPosts(1);
                 removeModal();
-                getRestrictedInfo();
+                
             },
             error: (response) => {
                 // console.log(response);
