@@ -141,7 +141,7 @@ include_once("./server/auto-routes.php");
 
 <?php
 // ALEN : JS scripts to get chat history and suggested users
-?>
+?><?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 <?php include_once("./parts/kurakani/kurakani-scripts.php"); ?>
 <?php
         include_once("./parts/js-script-files/js-script.php");

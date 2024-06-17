@@ -154,6 +154,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     }, 5000);
 </script>
 <?php // include_once("./parts/js-script-files/js-script.php"); ?>
+<?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 
 
 </html>

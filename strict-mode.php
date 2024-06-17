@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                
 
                 $result = mysqli_query($connection, $insertStrictMode);
-                echo $insertStrictMode;
+     
 
             }
 
@@ -353,5 +353,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     })
 
 </script>
+<?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 
 </html>

@@ -367,6 +367,7 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         });
         scrollToBottom();
         seenMessage();
+        
         // getKurakaniUsers();
     }
 
@@ -483,13 +484,17 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
     
     scrollToBottom();
     setInterval(refreshMessages, 5000);
+    setInterval(getKurakaniUsers, 5000);
 
     // Attach event listener to send button
     sendBtn.addEventListener("click", sendMessage);
     
 </script>
+<?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 <?php
+
         include_once("./parts/js-script-files/js-script.php");
+
     ?>
 
 </html>

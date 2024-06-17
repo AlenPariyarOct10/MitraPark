@@ -1,4 +1,10 @@
 <script>
+    <?php
+    if(session_status()!==PHP_SESSION_ACTIVE)
+    {
+        session_start();
+    }
+    ?>
 function update_activity_datetime() {
         $.ajax({
             url: "./server/api/update_activity_dateTime.php",
@@ -36,6 +42,7 @@ function update_activity_datetime() {
             url: "./server/api/check-maintenance-mode.php",
             success:function(status)
             {
+                console.log("maintenance -> "+status);
                 const maintenanceStatus = JSON.parse(status);
                 if(maintenanceStatus['maintenance-mode']==true)
                 {
@@ -45,10 +52,33 @@ function update_activity_datetime() {
         })
     }
 
+    function check_user_restricted_status()
+    {
+        $.ajax({
+            url: "./server/api/other/check-user-restricted.php",
+            type: "POST",
+            data: {
+                userId: <?php echo $_SESSION['user']['uid']; ?>,
+            },
+            success: function(status)
+            {
+                
+                let statusOBJ = JSON.parse(status);
+
+                if(statusOBJ["restricted-status"]==true)
+                {
+     console.log(statusOBJ)
+                    window.location.href = "user-restricted.php";
+                }
+            }
+        })
+    }
+
     setInterval(()=>{
         check_maintenance_mode();
         update_strict_mode_timeout();
         update_activity_datetime();
+        check_user_restricted_status();
     },5000)
     
     </script>

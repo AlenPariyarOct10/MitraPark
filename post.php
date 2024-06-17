@@ -1137,6 +1137,10 @@ if($("#selected-post-img").attr("src")!=null && $("#selected-post-img").attr("sr
 
                     });
 
+                    $(".closeModal").click(()=>{
+                        $(".modal-wrapper").slideUp();
+                    })
+
 
 
 
@@ -1305,6 +1309,7 @@ if($("#selected-post-img").attr("src")!=null && $("#selected-post-img").attr("sr
     }
 </script>
 <?php include_once("./parts/js-script-files/js-script.php");?>
+<?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 
 </body>
 

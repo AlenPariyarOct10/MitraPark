@@ -117,6 +117,10 @@ if (isset($_GET['id'])) {
                     width: 80%;
                 }
 
+                .reportUserModal{
+                    /* display: none; */
+                }
+
                 .closeModal {
                     position: relative;
                     top: -40%;
@@ -156,6 +160,15 @@ if (isset($_GET['id'])) {
                 .left-inner-body.inner-mid-body {
                     width: 90%;
                 }
+
+                .reportUserModal{
+                    display: relative;
+                }
+
+                #popup-report-user{
+                    display: fixed;
+                    top: 50%;
+                }
             </style>
             <?php include_once("../MitraPark/assets/css/dynamicColor.php"); ?>
 
@@ -177,7 +190,7 @@ if (isset($_GET['id'])) {
                         <div id="popup-report-user" class="modal-body">
                             <img class="modal-popup-head" height="80px" src="./assets/images/warning.png" alt="" srcset="">
                             <div class="post-uploader">
-                                <div class="closeModal">
+                                <div onclick="closeModal()" class="closeModal">
                                     <p>x</p>
                                 </div>
                                 <div class="post-uploader-head">
@@ -251,7 +264,7 @@ if (isset($_GET['id'])) {
 
 
                         if ($IsFrientResult !== null) {
-                            echo '<div style="display:flex;" id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
+                            echo '<div style="display:flex;" onclick="updateMitraBtn()" id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
                                 <div data-mode="removeMitra" class="mitra-request-control-btn">
                                     <img src="./assets/images/remove.png" height="30px" alt="" />
                                     <span>Remove Mitra</span>
@@ -266,13 +279,13 @@ if (isset($_GET['id'])) {
                         } else {
                             if ($received_requestStatus == null) {
                                 if ($requestStatus === null) {
-                                    echo '<div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
+                                    echo '<div id="mitraRequestHandleBtn" onclick="updateMitraBtn()" data-uid="' . $profileUid . '">
                                 <div  data-mode="sendRequest"  class="mitra-request-control-btn">
                                     <img src="./assets/images/add-mitra.png" height="30px" alt="" />
                                     <span>Add Mitra</span>
                                 </div></div>';
                                 } else {
-                                    echo '<div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
+                                    echo '<div id="mitraRequestHandleBtn" onclick="updateMitraBtn()" data-uid="' . $profileUid . '">
                                 <div data-mode="cancelRequest"  class="mitra-request-control-btn">
                                     <img src="./assets/images/remove.png" height="30px" alt="" />
                                     <span>Cancel Request</span>
@@ -280,7 +293,7 @@ if (isset($_GET['id'])) {
                                 }
                             } else {
                                 echo '
-                                <div id="mitraRequestHandleBtn" data-uid="' . $profileUid . '">
+                                <div id="mitraRequestHandleBtn" onclick="updateMitraBtn()" data-uid="' . $profileUid . '">
                                 <div data-mode="acceptRequest"  class="mitra-request-control-btn accept-reject">
                                     <img src="./assets/images/accept-request.png" height="30px" alt="" />
                                     <span>Accept Request</span>
@@ -292,7 +305,7 @@ if (isset($_GET['id'])) {
                     </div>
 
                     <hr class="label-underline" />
-                    <button id="reportUser">Report User</button>
+                    <button onclick="reportUser()" id="reportUser">Report User</button>
                     <hr class="label-underline" />
 
                     <div style="display:flex; flex-direction:column;">
@@ -325,11 +338,17 @@ if (isset($_GET['id'])) {
 
 
         <script>
+            
             var profileUid = <?php echo $profileUid; ?>
 
-            // console.log(profileUid);
+            function closeModal()
+            {
+                $(".reportUserModal").hide();
 
-            // ---------------------------------------------------------
+            }
+
+        
+
 
             function timeAgo(postedTime) {
                 const postedDate = new Date(postedTime);
@@ -519,9 +538,7 @@ if (isset($_GET['id'])) {
             }
 
             setTimeout(renderPosts, 1000);
-            // renderPosts().catch(error => {
-            //     console.error("Error rendering posts:", error);
-            // });
+            
 
 
 
@@ -560,9 +577,9 @@ if (isset($_GET['id'])) {
                 }, 5000);
             }
 
-            $(".reportUserModal").css({
-                "display": "none"
-            });
+            // $(".reportUserModal").css({
+            //     "display": "none"
+            // });
 
             $("#reportUserForm").submit((form) => {
                 form.preventDefault();
@@ -593,20 +610,30 @@ if (isset($_GET['id'])) {
                 })
             })
 
-            $(".closeModal").click(() => {
+
+            $(".closeModal")[0].click(() => {
+                console.log("clicked");
+
                 $("#reportUserForm")[0].reset();
 
                 $(".reportUserModal").css({
                     "display": "none"
                 });
+
+                console.log("clicked");
             })
-            $("#reportUser").click(() => {
+
+            function reportUser()
+            {
                 $(".modal-body").slideDown();
-
                 $(".reportUserModal").show();
+                
+            }
+            // $("#reportUser")[0].click(() => {
+                
 
-            })
-            // console.log(document.getElementById("mitraRequestHandleBtn").childNodes[1].dataset.mode);
+            // })
+        
 
             function updateMitraBtn() {
                 $.ajax({
@@ -627,11 +654,13 @@ if (isset($_GET['id'])) {
             }
             let requestHandleBtn = document.getElementById("mitraRequestHandleBtn");
             requestHandleBtn.addEventListener("click", () => {
+                console.log("clicked");
                 updateMitraBtn();
+
             })
         </script>
     <?php include_once("./parts/js-script-files/js-script.php");?>
-        
+    <?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 
         </html>
 

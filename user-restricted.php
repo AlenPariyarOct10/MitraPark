@@ -23,6 +23,8 @@ $aboutSite = $connection->query('SELECT * FROM `system_data`');
 $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 ?>
 <!doctype html>
+<html>
+    <head>
 <title><?php echo "🚫".$aboutSite['system_name']; ?> ~ Restricted</title>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 <link rel="shortcut icon" href="./assets/images/favicon.ico" type="image/x-icon">
@@ -102,6 +104,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     }
 </style>
+</head>
+<body>
+    
 
 <article>
     <img height="100px" src="./assets/images/blocked.png" alt="">
@@ -114,3 +119,33 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
         </div>
     </div>
 </article>
+<script src="./assets/scripts/jquery.js"></script>
+
+<script>
+       function check_user_restricted_status()
+    {
+        $.ajax({
+            url: "./server/api/other/check-user-restricted.php",
+            type: "POST",
+            data: {
+                userId: <?php echo $_SESSION['user']['uid']; ?>,
+            },
+            success: function(status)
+            {
+                
+                let statusOBJ = JSON.parse(status);
+
+                if(statusOBJ["restricted-status"]==true)
+                {
+                    console.log(statusOBJ)
+                    window.location.href = "user-restricted.php";
+                }else{
+                    window.location.href = "feed.php";
+                }
+            }
+        })
+    }
+
+    setInterval(check_user_restricted_status, 5000);
+</script>
+</body>

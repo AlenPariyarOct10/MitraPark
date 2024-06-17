@@ -164,5 +164,6 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
 
     $(document).ready(getAllMitras);
 </script>
+<?php  include_once ("./parts/js-script-files/strict-and-activity-update.php"); ?>
 
 </html>

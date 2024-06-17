@@ -7,7 +7,7 @@ if(session_status()!=PHP_SESSION_ACTIVE)
 
 if(!isset($_SESSION['loggedInAdmin']))
 {
-header('Location: login.php?loginFirst1');
+    header('Location: login.php?loginFirst1');
     exit();
 }
 include_once("../server/db_connection.php");
