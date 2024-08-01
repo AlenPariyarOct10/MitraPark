@@ -44,12 +44,16 @@
       <ul>
        
           <?php
+          $done = false;
             foreach ($adminMenu as $item) {
                 echo '<li ';
-                if (str_contains($_SERVER['REQUEST_URI'], $item['href'])) {
+                if (str_contains($_SERVER['REQUEST_URI'], $item['href']) && $done==false) {
                     echo 'class="active-tab"';
+                    $done = true;
+                    
                 }
                 echo '><i class="' . $item["class"] . '"></i><a class="sidebar-links" href="./' . $item['href'] . '">' . $item['title'] . '</a></li>';
+
             }
           ?>
 

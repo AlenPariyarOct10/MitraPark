@@ -1,4 +1,3 @@
-
 function timeAgo(postedTime) {
   const postedDate = new Date(postedTime);
   const currentDate = new Date();
@@ -12,122 +11,108 @@ function timeAgo(postedTime) {
   const years = Math.floor(days / 365);
 
   if (years > 0) {
-      return `${years} year${years > 1 ? 's' : ''} ago`;
+    return `${years} year${years > 1 ? "s" : ""} ago`;
   } else if (months > 0) {
-      return `${months} month${months > 1 ? 's' : ''} ago`;
+    return `${months} month${months > 1 ? "s" : ""} ago`;
   } else if (days > 0) {
-      return `${days} day${days > 1 ? 's' : ''} ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
   } else if (hours > 0) {
-      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
   } else if (minutes > 0) {
-      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   } else {
-      return 'just now';
+    return "just now";
   }
 }
-
 
 async function fetchPosts() {
   return new Promise((resolve, reject) => {
-      $.ajax({
-          url: "./server/api/posts/get-posts.php",
-          type: "POST",
-          success: (data) => {
-            console.log("data -> ",data);
-              resolve(JSON.parse(data));
-          },
-          error: (error) => {
-     
-              reject(error);
-          }
-      });
+    $.ajax({
+      url: "./server/api/posts/get-posts.php",
+      type: "POST",
+      success: (data) => {
+        // console.log("data -> ", data);
+        resolve(JSON.parse(data));
+      },
+      error: (error) => {
+        reject(error);
+      },
+    });
   });
 }
 
-
-  
-
 function likeHandeler() {
   let postLikes = document.querySelectorAll(".like-container");
-  
+
   postLikes.forEach((item) => {
-      item.addEventListener("click", () => {
-          let id = item.dataset.id;
-          let src = item.childNodes[1].src;
-          let likeCount = item.childNodes[3];
+    item.addEventListener("click", () => {
+      let id = item.dataset.id;
+      let src = item.childNodes[1].src;
+      let likeCount = item.childNodes[3];
 
-          if (src.includes("assets/images/heart.png")) {
-              likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
-            
-              item.childNodes[1].src = "./assets/images/heart-outline.png";
-          } else {
-              likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
-          
-              item.childNodes[1].src = "./assets/images/heart.png";
-          }
+      if (src.includes("assets/images/heart.png")) {
+        likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
 
-          $.ajax({
-              url: "./server/api/addLike.php",
-              type: "POST",
-              data: { postId: id },
-              success: (msg) => {
-                  console.log(msg);
+        item.childNodes[1].src = "./assets/images/heart-outline.png";
+      } else {
+        likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
 
-              },
-              error: (msg) => {
-                  console.log(msg);
-                  localStorage.getItem("mp-uid");
-              }
-          });
-      })
-      console.log(item);
-  })
-}
-  
-  async function renderPosts() {
-    try {
-      const postData = await fetchPosts();
-      const postPlace = document.querySelector(".mid-body");
-      console.log(postData.length);
-      if(postData.length > 0)
-      {
-
-        postData.forEach(postItem => {
-
-          if(postItem.profile_picture == null)
-          {
-            postItem.profile_picture = "/MitraPark/assets/images/user.png";
-          }
-          $.ajax({
-            url: "./server/api/getLikes.php",
-            type: "POST",
-            data: {postId: postItem.post_id},
-            success: function(data)
-            {
-              let likesObj = JSON.parse(data);
-      
-              let liked_byObj= likesObj.map((item)=>item.liked_by);
-          
-
-              let likedState = (liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1)?"./assets/images/heart.png":"./assets/images/heart-outline.png";
-              console.log("index",likedState);
-              console.log("post -> ",postItem);
-              generatePostHTML(postItem, likedState);
-            },
-            
-          })
-           
-        });
-
-        
-      }else{
-        postPlace.innerHTML += "No Posts";
+        item.childNodes[1].src = "./assets/images/heart.png";
       }
-      
-    } catch (error) {
-      console.error("Error fetching or rendering posts:", error);
+
+      $.ajax({
+        url: "./server/api/addLike.php",
+        type: "POST",
+        data: { postId: id },
+        success: (msg) => {
+          // console.log(msg);
+        },
+        error: (msg) => {
+          // console.log(msg);
+          localStorage.getItem("mp-uid");
+        },
+      });
+    });
+    // console.log(item);
+  });
+}
+
+async function renderPosts() {
+  try {
+    const postData = await fetchPosts();
+    const postPlace = document.querySelector(".mid-body");
+    // console.log(postData.length);
+    if (postData.length > 0) {
+      postData.forEach((postItem) => {
+        if (postItem.profile_picture == null) {
+          postItem.profile_picture = "/MitraPark/assets/images/user.png";
+        }
+        $.ajax({
+          url: "./server/api/getLikes.php",
+          type: "POST",
+          data: { postId: postItem.post_id },
+          success: function (data) {
+            let likesObj = JSON.parse(data);
+
+            let liked_byObj = likesObj.map((item) => item.liked_by);
+
+            let likedState =
+              liked_byObj.indexOf(localStorage.getItem("mp-uid")) != -1
+                ? "./assets/images/heart.png"
+                : "./assets/images/heart-outline.png";
+            // console.log("index", likedState);
+            // console.log("post -> ", postItem);
+            generatePostHTML(postItem, likedState);
+          },
+        });
+      });
+    } else {
+      postPlace.innerHTML += "No Posts";
     }
+  } catch (error) {
+    console.error("Error fetching or rendering posts:", error);
   }
+}
 
 // Each Post Card parameters(postId, likedState)
 function generatePostHTML(postItem, likedState) {
@@ -135,22 +120,43 @@ function generatePostHTML(postItem, likedState) {
             <div class="post-item">
               <div class="post-item-head">
                 <div class="post-item-head-left">
-                  <img class="profile-picture-holder" src="${postItem.profile_picture}" alt="" srcset="">
+                  <img class="profile-picture-holder" src="${
+                    postItem.profile_picture
+                  }" alt="" srcset="">
                 </div>
                 <div class="post-item-head-right">
                   <div class="post-user">
-                    <a href="user.php?id=${postItem.uid}">${postItem.fname + " " + postItem.lname}</a>
+                    <a href="user.php?id=${postItem.uid}">${
+                      postItem.fname + " " + postItem.lname
+                    }</a>
                   </div>
                   <div class="post-details">
                     <span>${postItem.visibility}</span>
                     <span>|</span>
                     <span>${timeAgo(postItem.created_date_time)}</span>
                   </div>
+                  <div>
+          ${
+            postItem.uid == localStorage.getItem("mp-uid")
+              ? `<select onchange="updatePost(this.options[selectedIndex])" id="updatePost">
+                  <option>Update</option>
+                  <option data-id="${postItem.post_id}" value="edit">Edit</option>
+                  <option data-id="${postItem.post_id}" value="delete">Delete</option>
+                 </select>`
+              : ""
+          }
+          </div>
                 </div>
+                
               </div>
-              <a href="./post.php?postId=${postItem.post_id}" class="post-item-body">
+              
+              <a href="./post.php?postId=${
+                postItem.post_id
+              }" class="post-item-body">
                 <span style="margin:5px;">${postItem.content}</span>
-                <img style="border-radius:10px;" src=".${postItem.media}" alt="" srcset="">
+                <img style="border-radius:10px;" src=".${
+                  postItem.media
+                }" alt="" srcset="">
               </a>
               <div class="post-item-footer">
                 <div data-id=${postItem.post_id} class="like-container">
@@ -161,7 +167,10 @@ function generatePostHTML(postItem, likedState) {
                   <a href="./post.php?postId=${postItem.post_id}">
                   <img height="30px" src="./assets/images/comment-outline.png">
                   </a>
-                  <span class="like-count">${parseInt(postItem.comments_count)+parseInt(postItem.reply_comment_count)}</span>
+                  <span class="like-count">${
+                    parseInt(postItem.comments_count) +
+                    parseInt(postItem.reply_comment_count)
+                  }</span>
                 </div>
               </div>
             </div>
@@ -171,10 +180,31 @@ function generatePostHTML(postItem, likedState) {
   document.querySelector("#post-container").innerHTML += postHTML;
   likeHandeler();
 }
-  
 
-renderPosts().catch(error => {
+renderPosts().catch((error) => {
   console.error("Error rendering posts:", error);
 });
-  
 
+function updatePost(th)
+{
+  let postId = th.dataset.id;
+  let mode = th.value;
+  if(mode==="edit")
+  {
+    editPost(postId);
+    
+  }else if(mode==="delete")
+  {
+    deletePost(postId)
+  }
+  document.getElementById('updatePost').selectedIndex = 0;
+}
+
+function editPost(postId)
+{
+  window.location.href = `post.php?postId=${postId}#edit`;
+}
+function deletePost(postId)
+{
+  window.location.href = `post.php?postId=${postId}#delete`;
+}

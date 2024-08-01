@@ -450,9 +450,9 @@ $aboutSite = $aboutSite->fetch_array(MYSQLI_ASSOC);
                     msg: message
                 },
                 success: function(status) {
-                    console.log(status);
+                    // console.log(status);
                     // Refresh messages after sending
-                    console.log(status);
+                    // console.log(status);
                     refreshMessages();
                 }
             });

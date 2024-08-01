@@ -126,6 +126,7 @@ include_once("./server/auto-routes.php");
 
 <body>
 
+
     <?php
     include_once("./parts/navbar.php");
 
@@ -158,9 +159,17 @@ include_once("./server/auto-routes.php");
             const file = event.target.files[0];
             if (file) {
                 const imgUrl = URL.createObjectURL(file);
-        
-                $("#selected-post-img").attr("src", imgUrl);
-                $(".post-image-holder")[0].style.display = "block";
+                const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+                if (file.size > maxSizeInBytes) {
+                    alert("The selected file is too large. Please select a file smaller than 5MB.");
+                    $("#post-share-btn").prop('disabled', true);
+                }else{
+                    $("#post-share-btn").prop('disabled', false);
+                    $("#selected-post-img").attr("src", imgUrl);
+                    $(".post-image-holder")[0].style.display = "block";
+      
+                }
+                
                 
               
             }
@@ -210,7 +219,7 @@ include_once("./server/auto-routes.php");
 
         
         document.getElementById("post-upload-file").addEventListener("change", ()=>{
-            console.log(document.getElementById("selected-post-img").getAttribute("src"));
+            // console.log(document.getElementById("selected-post-img").getAttribute("src"));
             if(document.getElementById("selected-post-img").getAttribute("src"))
             {
                 postTestImage = true;

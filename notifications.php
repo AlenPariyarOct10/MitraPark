@@ -165,7 +165,7 @@ function timeAgo(postedTime) {
 
     let clearNotificationsBtn = document.getElementById("clearAllNotifications");
     clearNotificationsBtn.addEventListener("click",()=>{
-            console.log("clicked");    
+            // console.log("clicked");    
             $.ajax({
             url: "./server/api/notifications/deleteNotifications.php",
             type: "POST",
@@ -174,14 +174,14 @@ function timeAgo(postedTime) {
                
                 showSuccessNotification();
                 let res = JSON.parse(response);
-                console.log(res);
+                // console.log(res);
                 if(res[0]==true)
                 {
                     document.getElementById("notifications-list").innerHTML = "Notifications deleted";
                 }
             },
             error: (response)=>{
-                console.log(response);
+                // console.log(response);
                
                 let res = JSON.parse(response);
 
@@ -194,10 +194,10 @@ function timeAgo(postedTime) {
         url: "./server/api/notifications/getNotifications.php",
         type: "POST",
         success: (res)=>{
-            console.log(res);
+            // console.log(res);
             let notifications = (JSON.parse(res));
-            console.log('length',notifications.length);
-            console.log('length',notifications);
+            // console.log('length',notifications.length);
+            // console.log('length',notifications);
             if(notifications.length==0 || notifications[0]==null)
             {
                 $("#notifications-list")[0].innerHTML = " No Notifications";

@@ -65,16 +65,16 @@ function timeAgo(postedTime) {
                 type: "POST",
                 data: { postId: id },
                 success: (msg) => {
-                    console.log(msg);
+                    // console.log(msg);
   
                 },
                 error: (msg) => {
-                    console.log(msg);
+                    // console.log(msg);
                     localStorage.getItem("mp-uid");
                 }
             });
         })
-        console.log(item);
+        // console.log(item);
     })
   }
     
@@ -103,7 +103,7 @@ function timeAgo(postedTime) {
                         generatePostHTML(postItem, likedState);
                     },
                     error: function (error) {
-                        console.error("Error fetching likes:", error);
+                        // console.error("Error fetching likes:", error);
                     }
                 });
             });
@@ -112,7 +112,7 @@ function timeAgo(postedTime) {
             postPlace.innerHTML = "No Posts";
         }
     } catch (error) {
-        console.error("Error rendering posts:", error);
+        // console.error("Error rendering posts:", error);
     }
 }
 
